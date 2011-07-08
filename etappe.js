@@ -129,7 +129,7 @@ var etappe = function() {
         }
         function segmentsUpdated() {
             var trip = {};
-            trip.orgin = "bart:MONT";
+            trip.origin = "bart:MONT";
             trip.destination = "sfmuni:14075";
             //var anchorTime = Date();
             trip.plans = [];
@@ -138,6 +138,9 @@ var etappe = function() {
                 var ride1 = {};
                 ride1.segment = bartTrip2Segment(schedule1.trips[i]);
                 ride1.waitDuration = Math.floor((ride1.segment.originTime - waitBeginTime) / 60000);
+                if (ride1.waitDuration < 1) {
+                    continue;
+                }
                 waitBeginTime = ride1.segment.destinationTime;
                 for (var j=0; j<segments1.list.length; j++) {
                     var segment = segments1.list[j];
@@ -154,18 +157,57 @@ var etappe = function() {
                     }
                 }
             }
+            trip.plans.sort(function(plan1, plan2) {
+                return plan1.rides[1].waitDuration - plan2.rides[1].waitDuration;
+            });
             callback(trip);
         }
         function bartTrip2Segment(trip) {
             segment = {};
             segment.carrier = "bart";
-            segment.route = bart.findRoute(trip.legs[0].line).abbr;
-            segment.vehicle = trip.route;
+            var route = bart.findRoute(trip.legs[0].line);
+            segment.route = route.abbr;
+            segment.vehicle = route.name;
             segment.orgin = trip.origin;
             segment.destination = trip.destination;
             segment.originTime = trip.origDatetime;
             segment.destinationTime = trip.destDatetime;
             return segment;
+        }
+    }
+    function strategy6(options, callback) {
+        options.origin = "muni:14076";
+        options.destination = "bart:mont";
+        options.direction = "outbound";
+        var strategies = {
+            outbound: function(options, callback) {}, // muni segments, bart segments, plans
+            inbound: function(options, callback) {} // bart segments, muni segments, plans
+        };
+        try {
+            strategies[options.direction](options, callback);
+        }
+        catch (e) {
+            alert(e);
+        }
+        // find segments for given carrier, stops, time
+        function template1() {
+        }
+        // find sequence of segment lists for given endpoints
+        function template2() {
+        }
+        // find sequence of subroutes for given endpoints and direction
+        function template3(options, callback) {
+            // directions, time, origin, destination
+            return {
+                outbound: [
+                    { carrier: "sf-muni", route: "33", origin: "14076", destination: "13292" },
+                    { carrier: "bart", route: "1", origin: "16th", destination: "mont" }
+                ],
+                inbound: [
+                    {},
+                    {}
+                ]
+            }[options.direction];
         }
     }
     function findSegments(options, callback) {
@@ -220,6 +262,7 @@ var etappe = function() {
         strategy3: strategy3,
         strategy4: strategy4,
         strategy5: strategy5,
+        strategy6: strategy6,
         findSegments: findSegments
     };
     return api;
