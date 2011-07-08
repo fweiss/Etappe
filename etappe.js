@@ -132,6 +132,7 @@ var etappe = function() {
             trip.origin = "bart:MONT";
             trip.destination = "sfmuni:14075";
             //var anchorTime = Date();
+            trip.originTime = new Date();
             trip.plans = [];
             for (var i=0; i<schedule1.trips.length; i++) {
                 var waitBeginTime = new Date();
@@ -153,6 +154,7 @@ var etappe = function() {
                         plan.rides = [];
                         plan.rides.push(ride1);
                         plan.rides.push(ride2);
+                        plan.destinationTime = ride2.segment.destinationTime;
                         trip.plans.push(plan);
                     }
                 }
@@ -167,12 +169,17 @@ var etappe = function() {
             segment.carrier = "bart";
             var route = bart.findRoute(trip.legs[0].line);
             segment.route = route.abbr;
-            segment.vehicle = route.name;
-            segment.orgin = trip.origin;
-            segment.destination = trip.destination;
+            segment.vehicle = bartVehicle(route.name);
+            segment.origin = { id: trip.origin, name: trip.origin, abbr: trip.origin };
+            segment.destination = { id: trip.destination, name: trip.destination, abbr: trip.destination };
             segment.originTime = trip.origDatetime;
             segment.destinationTime = trip.destDatetime;
             return segment;
+        }
+        // annunciator map SFIA/Milbrae -> SFO AIRPORT
+        function bartVehicle(route, direction) {
+            var p1 = route.indexOf(" - ");
+            return (p1 > -1) ? route.substring(p1 + 3) : route;
         }
     }
     function strategy6(options, callback) {
@@ -247,8 +254,8 @@ var etappe = function() {
                         segment.carrier = "sfmuni";
                         segment.route = route;
                         segment.vehicle = prediction1.vehicle;
-                        segment.origStop = {};
-                        segment.destStop = {};
+                        segment.origin = { id: 0, name: "", abbr: "Montgomery" };
+                        segment.destination = { id: "16TH", name: "16th", abbr: "16th Street" };
                         segments.list.push(segment);
                     }
                 }
