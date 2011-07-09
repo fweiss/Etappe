@@ -187,7 +187,12 @@ var etappe = function() {
         options.destination = "bart:mont";
         options.direction = "outbound";
         var strategies = {
-            outbound: function(options, callback) {}, // muni segments, bart segments, plans
+            outbound: function(options, callback) { // muni segments, bart segments, plans
+                var subRoutes = getSubroutes(options);
+                var segments1 = getSegments(subRoutes[0], function(segments) {
+                    callback(segments);
+                });
+            }, 
             inbound: function(options, callback) {} // bart segments, muni segments, plans
         };
         try {
@@ -199,11 +204,13 @@ var etappe = function() {
         // find segments for given carrier, stops, time
         function template1() {
         }
-        // find sequence of segment lists for given endpoints
-        function template2() {
+        // find sequence of segment lists for given subroute
+        function getSegments(subroute, callback) {
+            var adaptor = getCarrierAdaptor(subroute.carrier);
+            adaptor.getSegments(subroute, callback);
         }
         // find sequence of subroutes for given endpoints and direction
-        function template3(options, callback) {
+        function getSubroutes(options) {
             // directions, time, origin, destination
             return {
                 outbound: [
@@ -216,6 +223,18 @@ var etappe = function() {
                 ]
             }[options.direction];
         }
+    }
+    function getCarrierAdaptor(carrier) {
+        // TODO: for carrier
+        return {
+            getSegments: function(subroute, callback) {
+                var options = {};
+                options.route = subroute.route;
+                options.orig = subroute.origin;
+                options.dest = subroute.destination;
+                findSegments(options, callback);
+            }
+        };
     }
     function findSegments(options, callback) {
         var route = options.route; //"33";

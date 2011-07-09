@@ -25,8 +25,19 @@ var view = function() {
             }
         }
     }
+    function updateSegments(id, segments, datetime) {
+        var d = $(id);
+        d.empty();
+        $("<div>").appendTo(d).append(segments.agency + ": " + segments.origin + " to " + segments.destination);
+        for (var i=0; i<segments.list.length; i++) {
+            var segment = segments.list[i];
+            var wait = Math.floor((segment.originTime - datetime) / 60000);
+            $("<div>").appendTo(d).append("(" + wait + ") " + segment.route + "/" + segment.vehicle +  ": " + segment.originTime.toLocaleTimeString() + "-" + segment.destinationTime.toLocaleTimeString());
+        }
+    }
     var api = {
-        updateTrip: updateTrip
+        updateTrip: updateTrip,
+        updateSegments: updateSegments
     };
     return api;
 }();
