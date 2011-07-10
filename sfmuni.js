@@ -53,6 +53,30 @@ var sfmuni = function() {
         });
         return predictions;
     }
+    function parseRoutes(data) {
+        var routes = [];
+        $("route", data).each(function() {
+            var route = {};
+            route.tag = $(this).attr("tag");
+            route.title = $(this).attr("title");
+            routes.push(route);
+        });
+        return routes;
+    }
+    function parseRouteConfig(data) {
+        var route = {};
+        route.stops = [];
+        $("stop", data).each(function() {
+            var stop = {};
+            stop.tag = $(this).attr("tag");
+            stop.title = $(this).attr("title");
+            stop.lat = $(this).attr("lat");
+            stop.lon = $(this).attr("lon");
+            stop.stopId = $(this).attr("stopId");
+            route.stops.push(stop);
+        });
+        return route;
+    }
     function request(options, callback) {
         //$.ajax("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=sf-muni&stopId=14075", {
         $.ajax("http://webservices.nextbus.com/service/publicXMLFeed", {
@@ -67,6 +91,20 @@ var sfmuni = function() {
             options.a = "sf-muni";
             request(options, function(data, textStatus, jqXHR) {
                 callback(parsePredictions($("predictions", data)));
+            });
+        },
+        getRoutes: function(options, callback) {
+            options.command = "routeList";
+            options.a = "sf-muni";
+            request(options, function(data, textStatus, jqXHR) {
+                callback(parseRoutes($("body", data)));
+            });
+        },
+        getRouteConfig: function(options, callback) {
+            options.command = "routeConfig";
+            options.a = "sf-muni";
+            request(options, function(data, textStatus, jqXHR) {
+                callback(parseRouteConfig($("route", data)));
             });
         }
     };   

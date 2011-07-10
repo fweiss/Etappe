@@ -164,23 +164,23 @@ var etappe = function() {
             });
             callback(trip);
         }
-        function bartTrip2Segment(trip) {
-            segment = {};
-            segment.carrier = "bart";
-            var route = bart.findRoute(trip.legs[0].line);
-            segment.route = route.abbr;
-            segment.vehicle = bartVehicle(route.name);
-            segment.origin = { id: trip.origin, name: trip.origin, abbr: trip.origin };
-            segment.destination = { id: trip.destination, name: trip.destination, abbr: trip.destination };
-            segment.originTime = trip.origDatetime;
-            segment.destinationTime = trip.destDatetime;
-            return segment;
-        }
+    }
+    function bartTrip2Segment(trip) {
         // annunciator map SFIA/Milbrae -> SFO AIRPORT
         function bartVehicle(route, direction) {
             var p1 = route.indexOf(" - ");
             return (p1 > -1) ? route.substring(p1 + 3) : route;
         }
+        segment = {};
+        segment.carrier = "bart";
+        var route = bart.findRoute(trip.legs[0].line);
+        segment.route = route.abbr;
+        segment.vehicle = bartVehicle(route.name);
+        segment.origin = { id: trip.origin, name: trip.origin, abbr: trip.origin };
+        segment.destination = { id: trip.destination, name: trip.destination, abbr: trip.destination };
+        segment.originTime = trip.origDatetime;
+        segment.destinationTime = trip.destDatetime;
+        return segment;
     }
     function strategy6(options, callback) {
         options.origin = "muni:14076";
@@ -189,7 +189,7 @@ var etappe = function() {
         var strategies = {
             outbound: function(options, callback) { // muni segments, bart segments, plans
                 var subRoutes = getSubroutes(options);
-                var segments1 = getSegments(subRoutes[0], function(segments) {
+                var segments1 = getSegments(subRoutes[1], function(segments) {
                     callback(segments);
                 });
             }, 
@@ -214,8 +214,8 @@ var etappe = function() {
             // directions, time, origin, destination
             return {
                 outbound: [
-                    { carrier: "sf-muni", route: "33", origin: "14076", destination: "13292" },
-                    { carrier: "bart", route: "1", origin: "16th", destination: "mont" }
+                    { carrier: "sfmuni", route: "33", origin: "14076", destination: "13292" },
+                    { carrier: "bart", route: "1", origin: "16TH", destination: "MONT" }
                 ],
                 inbound: [
                     {},
@@ -224,17 +224,38 @@ var etappe = function() {
             }[options.direction];
         }
     }
+    /**
+     * Get an 
+     */
     function getCarrierAdaptor(carrier) {
-        // TODO: for carrier
-        return {
-            getSegments: function(subroute, callback) {
-                var options = {};
-                options.route = subroute.route;
-                options.orig = subroute.origin;
-                options.dest = subroute.destination;
-                findSegments(options, callback);
+        var adaptors = {
+            sfmuni: {
+                getSegments: function(subroute, callback) {
+                    var options = {};
+                    options.route = subroute.route;
+                    options.orig = subroute.origin;
+                    options.dest = subroute.destination;
+                    findSegments(options, callback);
+                }
+            },
+            bart: {
+                getSegments: function(subroute, callback) {
+                    bart.getSchedule({ cmd: "depart", orig: subroute.origin, dest: subroute.destination, b: 0, a: 4 }, function(schedule) {
+                        var segments = {};
+                        segments.agency = "bart";
+                        segments.origin = subroute.origin;
+                        segments.destination = subroute.destination;
+                        segments.list = [];
+                        for (var i=0; i<schedule.trips.length; i++) {
+                            var segment = bartTrip2Segment(schedule.trips[i]);
+                            segments.list.push(segment);
+                        }
+                        callback(segments);
+                    });
+                }
             }
         };
+        return adaptors[carrier];
     }
     function findSegments(options, callback) {
         var route = options.route; //"33";
@@ -243,6 +264,11 @@ var etappe = function() {
         // FIXME: check if stops and route make sense
         var predictions1;
         var predictions2;
+        var routeConfig;
+        sfmuni.getRouteConfig({r: route }, function(rc) {
+            routeConfig = rc;
+            predictionsUpdated();
+        });
         sfmuni.getPredictions({ stopId: origStop }, function(predictions) {
             predictions1 = predictions;
             predictionsUpdated();
@@ -252,8 +278,16 @@ var etappe = function() {
             predictionsUpdated();
         });
         function predictionsUpdated() {
-            if (predictions1 && predictions2) {
+            if (predictions1 && predictions2 && routeConfig) {
                 result();
+            }
+        }
+        function getStop(stopId) {
+            for (var i=0; i<routeConfig.stops.length; i++) {
+                var stop = routeConfig.stops[i];
+                if (stop.stopId == stopId) {
+                    return stop;
+                }
             }
         }
         function result() {
@@ -273,7 +307,7 @@ var etappe = function() {
                         segment.carrier = "sfmuni";
                         segment.route = route;
                         segment.vehicle = prediction1.vehicle;
-                        segment.origin = { id: 0, name: "", abbr: "Montgomery" };
+                        segment.origin = { id: 0, name: "", abbr: getStop(origStop).title };
                         segment.destination = { id: "16TH", name: "16th", abbr: "16th Street" };
                         segments.list.push(segment);
                     }
