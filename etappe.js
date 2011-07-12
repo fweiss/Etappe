@@ -189,9 +189,21 @@ var etappe = function() {
         var strategies = {
             outbound: function(options, callback) { // muni segments, bart segments, plans
                 var subRoutes = getSubroutes(options);
-                var segments1 = getSegments(subRoutes[1], function(segments) {
-                    callback(segments);
+                var segemnts0;
+                var segments1;
+                getSegments(subRoutes[0], function(segments) {
+                    segments0 = segments;
+                    segmentsUpdated();
                 });
+                getSegments(subRoutes[1], function(segments) {
+                    segments1 = segments;
+                    segmentsUpdated();
+                });
+                function segmentsUpdated() {
+                    if (segments0 && segments1) {
+                        callback(segments0);
+                    }
+                }
             }, 
             inbound: function(options, callback) {} // bart segments, muni segments, plans
         };
