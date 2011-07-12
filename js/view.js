@@ -1,4 +1,5 @@
 var view = function() {
+    var routeColor = [ "#7fff7f", "#7f7fff" ];
     /** Time of Day */
     function tod(time) {
         // 3:34:00 PM - 3:34 PM
@@ -28,6 +29,7 @@ var view = function() {
     function updateSegments(id, segments, datetime) {
         var d = $(id);
         d.empty();
+        //d.css("background-color", routeColor[0]);
         $("<div>").appendTo(d).append(segments.agency + ": " + segments.origin + " to " + segments.destination);
         for (var i=0; i<segments.list.length; i++) {
             var segment = segments.list[i];
@@ -39,16 +41,16 @@ var view = function() {
         var canvas = document.getElementById("graph");
         var ctx = canvas.getContext("2d");
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
-        //canvas.width = canvas.width;
+        canvas.width = canvas.width;
         var trackWidth = 6;
         var nexusWidth = 6;
         var routeHeight = 100;
-        var routeColor = [ "#7fff7f", "#7f7fff" ];
+        var hourMillis = 60 * 60 * 1000;
         var t0 = new Date().getTime();
-        var t1 = t0 + 2 * 60 * 60 * 1000; 
+        var t1 = t0 + 2 * hourMillis; 
         
         function timeToX(time) {
-            return 600 * (time.getTime() - t0) / (t1 - t0);
+            return Math.floor(600 * (time.getTime() - t0) / (t1 - t0));
         }
         function drawRoute(index, segments) {
             ctx.save();
@@ -71,9 +73,28 @@ var view = function() {
             }
             ctx.restore();
         }
+        function drawTicks() {
+            var s = new Date((Math.floor(t0 / hourMillis) + 0) * hourMillis);
+            var x = timeToX(new Date((Math.floor(t0 / hourMillis) + 1) * hourMillis));
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#000000";
+            ctx.beginPath();
+            ctx.globalAlpha = 0.5;
+            for (var t=s.getTime(); t<t1; t+=15 * 60 * 1000) {
+                var dd = new Date(t);
+                var dtt = tod(dd);
+                var xx = timeToX(dd);
+                var metricst = ctx.measureText(dtt);
+                ctx.fillText(dtt, xx - metricst.width / 2, 20);
+                ctx.moveTo(xx, 0);
+                ctx.lineTo(xx, 220);
+                ctx.stroke();
+           }
+        }
         ctx.beginPath();
         drawRoute(0, segments[0]);
         drawRoute(1, segments[1]);
+        drawTicks();
     }
     var api = {
         updateTrip: updateTrip,
