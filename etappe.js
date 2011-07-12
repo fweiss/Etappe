@@ -131,6 +131,8 @@ var etappe = function() {
             var trip = {};
             trip.origin = "bart:MONT";
             trip.destination = "sfmuni:14075";
+            trip.segments = [];
+            trip.segments.push(segments1);
             //var anchorTime = Date();
             trip.originTime = new Date();
             trip.plans = [];
@@ -188,20 +190,28 @@ var etappe = function() {
         options.direction = "outbound";
         var strategies = {
             outbound: function(options, callback) { // muni segments, bart segments, plans
-                var subRoutes = getSubroutes(options);
-                var segemnts0;
+                var subroutes = getSubroutes(options);
+                var segments0;
                 var segments1;
-                getSegments(subRoutes[0], function(segments) {
+                getSegments(subroutes[0], function(segments) {
                     segments0 = segments;
-                    segmentsUpdated();
-                });
-                getSegments(subRoutes[1], function(segments) {
-                    segments1 = segments;
-                    segmentsUpdated();
+                    var t;
+                    for (var i=0; i<segments.list.length; i++) {
+                        if ( ! t)
+                            t = segments.list[i].destinationTime;
+                    }
+                    subroutes[1].startTime = t;
+                    getSegments(subroutes[1], function(segments) {
+                        segments1 = segments;
+                        segmentsUpdated();
+                    });
                 });
                 function segmentsUpdated() {
                     if (segments0 && segments1) {
-                        callback(segments0);
+                        var segments = [];
+                        segments.push(segments0);
+                        segments.push(segments1);
+                        callback(segments);
                     }
                 }
             }, 
@@ -252,7 +262,8 @@ var etappe = function() {
             },
             bart: {
                 getSegments: function(subroute, callback) {
-                    bart.getSchedule({ cmd: "depart", orig: subroute.origin, dest: subroute.destination, b: 0, a: 4 }, function(schedule) {
+                    var startTime = subroute.startTime || new Date();
+                    bart.getSchedule({ cmd: "depart", orig: subroute.origin, dest: subroute.destination, b: 0, a: 4, time: startTime }, function(schedule) {
                         var segments = {};
                         segments.agency = "bart";
                         segments.origin = subroute.origin;

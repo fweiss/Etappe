@@ -35,9 +35,50 @@ var view = function() {
             $("<div>").appendTo(d).append("(" + wait + ") " + segment.route + "/" + segment.vehicle +  ": " + segment.originTime.toLocaleTimeString() + "-" + segment.destinationTime.toLocaleTimeString());
         }
     }
+    function updateGraph(segments) {
+        var canvas = document.getElementById("graph");
+        var ctx = canvas.getContext("2d");
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //canvas.width = canvas.width;
+        var trackWidth = 6;
+        var nexusWidth = 6;
+        var routeHeight = 100;
+        var routeColor = [ "#7fff7f", "#7f7fff" ];
+        var t0 = new Date().getTime();
+        var t1 = t0 + 2 * 60 * 60 * 1000; 
+        
+        function timeToX(time) {
+            return 600 * (time.getTime() - t0) / (t1 - t0);
+        }
+        function drawRoute(index, segments) {
+            ctx.save();
+            var y0 = index * (routeHeight + nexusWidth);
+            var y1 = y0 + routeHeight;
+            ctx.fillStyle = routeColor[index];
+            ctx.fillRect(0, y0, 600, (y1 - y0));
+            //ctx.fill();
+            ctx.lineCap = "square";
+                        
+            for(var i=0; i<segments.list.length; i++) {
+                var segment = segments.list[i];
+                var x0 = timeToX(segment.originTime);
+                var x1 = timeToX(segment.destinationTime);
+                ctx.strokeStyle = "#FFFFFF";
+                ctx.lineWidth = trackWidth;
+                ctx.moveTo(x0, y0);
+                ctx.lineTo(x1, y1);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+        ctx.beginPath();
+        drawRoute(0, segments[0]);
+        drawRoute(1, segments[1]);
+    }
     var api = {
         updateTrip: updateTrip,
-        updateSegments: updateSegments
+        updateSegments: updateSegments,
+        updateGraph: updateGraph
     };
     return api;
 }();
