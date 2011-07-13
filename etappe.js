@@ -215,7 +215,27 @@ var etappe = function() {
                     }
                 }
             }, 
-            inbound: function(options, callback) {} // bart segments, muni segments, plans
+            inbound: function(options, callback) {  // bart segments, muni segments, plans
+                                var subroutes = getSubroutes(options);
+                var segments0;
+                var segments1;
+                getSegments(subroutes[0], function(segments) {
+                    segments0 = segments;
+                    getSegments(subroutes[1], function(segments) {
+                        segments1 = segments;
+                        segmentsUpdated();
+                    });
+                });
+                function segmentsUpdated() {
+                    if (segments0 && segments1) {
+                        var segments = [];
+                        segments.push(segments0);
+                        segments.push(segments1);
+                        callback(segments);
+                    }
+                }
+
+            }
         };
         try {
             strategies[options.direction](options, callback);
@@ -240,8 +260,8 @@ var etappe = function() {
                     { carrier: "bart", route: "1", origin: "16TH", destination: "MONT" }
                 ],
                 inbound: [
-                    {},
-                    {}
+                    { carrier: "bart", route: "1", origin: "MONT", destination: "16TH" },
+                    { carrier: "sfmuni", route: "33", origin: "15552", destination: "14075" }
                 ]
             }[options.direction];
         }

@@ -13,7 +13,7 @@ $(function() {
         etappe.strategy5(function(trip) {
             ageEpoch = new Date();
             view.updateTrip("#ib", trip);
-            view.updateGraph(trip.segments[0]);
+            //view.updateGraph(trip.segments[0]);
         });
     });
     var ageRefresh;

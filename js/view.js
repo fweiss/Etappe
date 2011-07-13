@@ -41,20 +41,21 @@ var view = function() {
         var canvas = document.getElementById("graph");
         var ctx = canvas.getContext("2d");
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
-        canvas.width = canvas.width;
+        canvas.width = canvas.width; // clear canvas
         var trackWidth = 6;
-        var nexusWidth = 6;
+        var nexusWidth = 12;
+        var topLegendHeight = 12;
         var routeHeight = 100;
         var hourMillis = 60 * 60 * 1000;
         var t0 = new Date().getTime();
-        var t1 = t0 + 2 * hourMillis; 
+        var t1 = t0 + 1 * hourMillis; 
         
         function timeToX(time) {
             return Math.floor(600 * (time.getTime() - t0) / (t1 - t0));
         }
         function drawRoute(index, segments) {
             ctx.save();
-            var y0 = index * (routeHeight + nexusWidth);
+            var y0 = index * (routeHeight + nexusWidth) + topLegendHeight;
             var y1 = y0 + routeHeight;
             ctx.fillStyle = routeColor[index];
             ctx.fillRect(0, y0, 600, (y1 - y0));
@@ -73,27 +74,34 @@ var view = function() {
             }
             ctx.restore();
         }
+        function drawNexusLabels(labels) {
+            for (var i=0; i<labels.length; i++) {
+                var x = 100;
+                var y = topLegendHeight + i * (routeHeight + nexusWidth);
+                ctx.fillText(labels[i], x, y);            
+            }
+        }
         function drawTicks() {
             var s = new Date((Math.floor(t0 / hourMillis) + 0) * hourMillis);
             var x = timeToX(new Date((Math.floor(t0 / hourMillis) + 1) * hourMillis));
             ctx.lineWidth = 1;
-            ctx.strokeStyle = "#000000";
+            ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
             ctx.beginPath();
-            ctx.globalAlpha = 0.5;
             for (var t=s.getTime(); t<t1; t+=15 * 60 * 1000) {
                 var dd = new Date(t);
                 var dtt = tod(dd);
                 var xx = timeToX(dd);
                 var metricst = ctx.measureText(dtt);
-                ctx.fillText(dtt, xx - metricst.width / 2, 20);
-                ctx.moveTo(xx, 0);
-                ctx.lineTo(xx, 220);
-                ctx.stroke();
-           }
+                ctx.fillText(dtt, xx - metricst.width / 2, 10);
+                ctx.moveTo(xx + 0.5, topLegendHeight);
+                ctx.lineTo(xx + 0.5, 220);
+            }
+            ctx.stroke();
         }
         ctx.beginPath();
         drawRoute(0, segments[0]);
         drawRoute(1, segments[1]);
+        drawNexusLabels([ "Montgomery", "16th and Mission", "Clayton and Corbett"]);
         drawTicks();
     }
     var api = {
