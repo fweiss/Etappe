@@ -187,7 +187,6 @@ var etappe = function() {
     function strategy6(options, callback) {
         options.origin = "muni:14076";
         options.destination = "bart:mont";
-        options.direction = "outbound";
         var strategies = {
             outbound: function(options, callback) { // muni segments, bart segments, plans
                 var subroutes = getSubroutes(options);

@@ -37,8 +37,8 @@ var view = function() {
             $("<div>").appendTo(d).append("(" + wait + ") " + segment.route + "/" + segment.vehicle +  ": " + segment.originTime.toLocaleTimeString() + "-" + segment.destinationTime.toLocaleTimeString());
         }
     }
-    function updateGraph(segments) {
-        var canvas = document.getElementById("graph");
+    function updateGraph(id, segments) {
+        var canvas = document.getElementById(id);
         var ctx = canvas.getContext("2d");
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
         canvas.width = canvas.width; // clear canvas
@@ -47,6 +47,7 @@ var view = function() {
         var topLegendHeight = 12;
         var routeHeight = 100;
         var hourMillis = 60 * 60 * 1000;
+        var minuteMillis = 60 * 1000;
         var t0 = new Date().getTime();
         var t1 = t0 + 1 * hourMillis; 
         
@@ -82,21 +83,33 @@ var view = function() {
             }
         }
         function drawTicks() {
-            var s = new Date((Math.floor(t0 / hourMillis) + 0) * hourMillis);
-            var x = timeToX(new Date((Math.floor(t0 / hourMillis) + 1) * hourMillis));
+            var s = new Date((Math.floor(t0 / hourMillis) - 1) * hourMillis);
+            //var x = timeToX(new Date((Math.floor(t0 / hourMillis) + 1) * hourMillis));
             ctx.lineWidth = 1;
-            ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
-            ctx.beginPath();
             for (var t=s.getTime(); t<t1; t+=15 * 60 * 1000) {
                 var dd = new Date(t);
                 var dtt = tod(dd);
                 var xx = timeToX(dd);
-                var metricst = ctx.measureText(dtt);
-                ctx.fillText(dtt, xx - metricst.width / 2, 10);
+                var metrics = ctx.measureText(dtt);
+                ctx.fillText(dtt, xx + 0, 10);
+                
+                ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
                 ctx.moveTo(xx + 0.5, topLegendHeight);
                 ctx.lineTo(xx + 0.5, 220);
+                ctx.stroke();
+                
+                ctx.strokeStyle = "rgba(0, 0, 0, 0.10)";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                for (var td=5; td<15; td+=5) {
+                    xx = timeToX(new Date(t + td * minuteMillis));
+                    ctx.moveTo(xx + 0.5, topLegendHeight);
+                    ctx.lineTo(xx + 0.5, 220);
+                }
+                ctx.stroke();
             }
-            ctx.stroke();
         }
         ctx.beginPath();
         drawRoute(0, segments[0]);
