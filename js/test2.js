@@ -1,7 +1,9 @@
 $(function() {
     $("#tabs").tabs();
     $("#obRefresh").click(function(event) {
+        view.updateBusy(true);
         etappe.strategy6({ direction: "outbound" }, function(trip) {
+            view.updateBusy(false);
             ageEpoch = new Date();
             //view.updateTrip("#ob", trip);
             view.updateTripSummary("#obtrip", trip);
@@ -11,7 +13,9 @@ $(function() {
         });
     });
     $("#ibRefresh").click(function(event) {
+        view.updateBusy(true);
         etappe.strategy6({ direction: "inbound" }, function(trip) {
+            view.updateBusy(false);
             ageEpoch = new Date();
             //view.updateTrip("#ob", trip);
             view.updateTripSummary("#ibtrip", trip);

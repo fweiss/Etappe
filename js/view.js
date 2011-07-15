@@ -10,6 +10,9 @@ var view = function() {
     function ftm(minutes) {
         return minutes;
     }
+    function updateBusy(busy) {
+        $("#busyModal").toggle(busy);
+    }
     function updateTrip(id, trip) {
         var d = $(id);
         d.empty();
@@ -131,7 +134,8 @@ var view = function() {
         updateTrip: updateTrip,
         updateSegments: updateSegments,
         updateGraph: updateGraph,
-        updateTripSummary: updateTripSummary
+        updateTripSummary: updateTripSummary,
+        updateBusy: updateBusy
     };
     return api;
 }();
