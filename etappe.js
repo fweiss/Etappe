@@ -187,6 +187,7 @@ var etappe = function() {
     function strategy6(options, callback) {
         options.origin = "muni:14076";
         options.destination = "bart:mont";
+        var trip = {};
         var strategies = {
             outbound: function(options, callback) { // muni segments, bart segments, plans
                 var subroutes = getSubroutes(options);
@@ -210,7 +211,8 @@ var etappe = function() {
                         var segments = [];
                         segments.push(segments0);
                         segments.push(segments1);
-                        callback(segments);
+                        trip.segments = segments;
+                        callback(trip);
                     }
                 }
             }, 
@@ -230,7 +232,8 @@ var etappe = function() {
                         var segments = [];
                         segments.push(segments0);
                         segments.push(segments1);
-                        callback(segments);
+                        trip.segments = segments;
+                        callback(trip);
                     }
                 }
 

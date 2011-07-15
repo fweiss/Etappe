@@ -1,23 +1,23 @@
 $(function() {
     $("#tabs").tabs();
     $("#obRefresh").click(function(event) {
-        etappe.strategy6({ direction: "outbound" }, function(segments) {
+        etappe.strategy6({ direction: "outbound" }, function(trip) {
             ageEpoch = new Date();
             //view.updateTrip("#ob", trip);
-            view.updateTripSummary("#obtrip");
-            view.updateSegments("#ob1", segments[0], new Date());
-            view.updateSegments("#ob2", segments[1], new Date());
-            view.updateGraph("obGraph", segments);
+            view.updateTripSummary("#obtrip", trip);
+            view.updateSegments("#ob1", trip.segments[0], new Date());
+            view.updateSegments("#ob2", trip.segments[1], new Date());
+            view.updateGraph("obGraph", trip.segments);
         });
     });
     $("#ibRefresh").click(function(event) {
-        etappe.strategy6({ direction: "inbound" }, function(segments) {
+        etappe.strategy6({ direction: "inbound" }, function(trip) {
             ageEpoch = new Date();
             //view.updateTrip("#ob", trip);
-            view.updateTripSummary("#ibtrip");
-            view.updateSegments("#ib1", segments[0], new Date());
-            view.updateSegments("#ib2", segments[1], new Date());
-            view.updateGraph("ibGraph", segments);
+            view.updateTripSummary("#ibtrip", trip);
+            view.updateSegments("#ib1", trip.segments[0], new Date());
+            view.updateSegments("#ib2", trip.segments[1], new Date());
+            view.updateGraph("ibGraph", trip.segments);
         });
     });
     $("#xibRefresh").click(function(event) {
