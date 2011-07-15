@@ -4,6 +4,7 @@ $(function() {
         etappe.strategy6({ direction: "outbound" }, function(segments) {
             ageEpoch = new Date();
             //view.updateTrip("#ob", trip);
+            view.updateTripSummary("#obtrip");
             view.updateSegments("#ob1", segments[0], new Date());
             view.updateSegments("#ob2", segments[1], new Date());
             view.updateGraph("obGraph", segments);
@@ -13,6 +14,7 @@ $(function() {
         etappe.strategy6({ direction: "inbound" }, function(segments) {
             ageEpoch = new Date();
             //view.updateTrip("#ob", trip);
+            view.updateTripSummary("#ibtrip");
             view.updateSegments("#ib1", segments[0], new Date());
             view.updateSegments("#ib2", segments[1], new Date());
             view.updateGraph("ibGraph", segments);

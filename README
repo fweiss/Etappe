@@ -1,0 +1,13 @@
+Etappe is a browser app for planning a metro transit trip using one or more 
+transit carriers. There are many strategies for creating an optimal trip. Some 
+of the optimization criteria are:
+
+departure time
+arrival time
+number of layovers (transfers)
+trip duration
+layover duration
+transit carriers (allow/deny)
+fare cost
+...and so on
+

@@ -26,6 +26,11 @@ var view = function() {
             }
         }
     }
+    function updateTripSummary(id) {
+        var d = $(id);
+        d.empty();
+        $("<span>").appendTo(d).append("trip from: Montgomery to: Clayton and Corbett transfer at: 16th and Mission");
+    }
     function updateSegments(id, segments, datetime) {
         var d = $(id);
         d.empty();
@@ -125,7 +130,8 @@ var view = function() {
     var api = {
         updateTrip: updateTrip,
         updateSegments: updateSegments,
-        updateGraph: updateGraph
+        updateGraph: updateGraph,
+        updateTripSummary: updateTripSummary
     };
     return api;
 }();
