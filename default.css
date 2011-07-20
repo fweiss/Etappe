@@ -11,6 +11,8 @@ body {
     position: absolute;
     top: 100px;
     left: 100px;
-    background-color: gray;
     display: none;
+    background-color: white;
+    border: 2px solid gray;
+    padding: auto;
 }
