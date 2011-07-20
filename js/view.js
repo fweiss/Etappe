@@ -1,5 +1,14 @@
 var view = function() {
+    var trackWidth = 6;
+    var nexusWidth = 12;
+    var topLegendHeight = 12;
+    var routeHeight = 100;
+
+    var hourMillis = 60 * 60 * 1000;
+    var minuteMillis = 60 * 1000;
+    
     var routeColor = [ "#7fff7f", "#7f7fff" ];
+    
     /** Time of Day */
     function tod(time) {
         // 3:34:00 PM - 3:34 PM
@@ -9,9 +18,6 @@ var view = function() {
     }
     function ftm(minutes) {
         return minutes;
-    }
-    function updateBusy(busy) {
-        $("#busyModal").toggle(busy);
     }
     function updateTrip(id, trip) {
         var d = $(id);
@@ -50,12 +56,6 @@ var view = function() {
         var ctx = canvas.getContext("2d");
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
         canvas.width = canvas.width; // clear canvas
-        var trackWidth = 6;
-        var nexusWidth = 12;
-        var topLegendHeight = 12;
-        var routeHeight = 100;
-        var hourMillis = 60 * 60 * 1000;
-        var minuteMillis = 60 * 1000;
         var t0 = new Date().getTime();
         var t1 = t0 + 1 * hourMillis; 
         
@@ -130,12 +130,32 @@ var view = function() {
         drawNexusLabels([ "Montgomery", "16th and Mission", "Clayton and Corbett"]);
         drawTicks();
     }
+    function drawExpiredArea(epochTime, segments) {
+        var canvas = document.getElementById("ibGraph");
+        var ctx = canvas.getContext("2d");
+        var t0 = new Date().getTime();
+        var t1 = t0 + hourMillis; 
+        var x0 = 0;
+        var x1 = 600;
+        var x = timeToX(new Date(), t0, t1, x0, x1);
+        var y0 = topLegendHeight + nexusWidth;
+        var y1 = y0 + segments.length * (routeHeight + nexusWidth);
+        ctx.beginPath();
+        ctx.rect(x0, x, y0, y1);
+        ctx.save();
+        ctx.fillStyle = "rgba(0, 0, 0, .5)";
+        ctx.fill();
+        ctx.restore();
+        function timeToX(time, t0, t1, x0, x1) {
+            return Math.floor(600 * (time.getTime() - t0) / (t1 - t0));
+        }
+    }
     var api = {
         updateTrip: updateTrip,
         updateSegments: updateSegments,
         updateGraph: updateGraph,
         updateTripSummary: updateTripSummary,
-        updateBusy: updateBusy
+        drawExpiredArea: drawExpiredArea
     };
     return api;
 }();

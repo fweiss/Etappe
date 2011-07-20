@@ -1,9 +1,9 @@
 $(function() {
+    var currentOutboundTrip;
+    var currentInboundTrip;
     $("#tabs").tabs();
     $("#obRefresh").click(function(event) {
-        view.updateBusy(true);
         etappe.strategy6({ direction: "outbound" }, function(trip) {
-            view.updateBusy(false);
             ageEpoch = new Date();
             //view.updateTrip("#ob", trip);
             view.updateTripSummary("#obtrip", trip);
@@ -13,9 +13,8 @@ $(function() {
         });
     });
     $("#ibRefresh").click(function(event) {
-        view.updateBusy(true);
         etappe.strategy6({ direction: "inbound" }, function(trip) {
-            view.updateBusy(false);
+            currentInboundTrip = trip;
             ageEpoch = new Date();
             //view.updateTrip("#ob", trip);
             view.updateTripSummary("#ibtrip", trip);
@@ -36,5 +35,8 @@ $(function() {
     ageRefresh = window.setInterval(function() {
         var age = new Date() - ageEpoch;
         $("#inbound .ageRefresh").html(Math.floor(age /1000));
+        if (currentInboundTrip) {
+            //view.drawExpiredArea(ageEpoch, currentInboundTrip.segments);
+        }
     } , 1000);
 });
