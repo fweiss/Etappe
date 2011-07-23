@@ -3,7 +3,10 @@ $(function() {
     var currentInboundTrip;
     $("#tabs").tabs();
     $("#obRefresh").click(function(event) {
+        event.preventDefault();
+        $("#busyModal").show();
         etappe.strategy6({ direction: "outbound" }, function(trip) {
+            $("#busyModal").hide();
             ageEpoch = new Date();
             //view.updateTrip("#ob", trip);
             view.updateTripSummary("#obtrip", trip);
@@ -13,7 +16,10 @@ $(function() {
         });
     });
     $("#ibRefresh").click(function(event) {
+        event.preventDefault();
+        $("#busyModal").show();
         etappe.strategy6({ direction: "inbound" }, function(trip) {
+            $("#busyModal").hide();
             currentInboundTrip = trip;
             ageEpoch = new Date();
             //view.updateTrip("#ob", trip);

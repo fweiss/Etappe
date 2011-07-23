@@ -85,7 +85,7 @@ var view = function() {
         }
         function drawNexusLabels(labels) {
             for (var i=0; i<labels.length; i++) {
-                var x = 100;
+                var x = 400;
                 var y = topLegendHeight + i * routeHeight + (i + 1) * nexusWidth;
                 ctx.fillText(labels[i], x, y - 2);            
             }
