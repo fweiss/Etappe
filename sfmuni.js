@@ -1,4 +1,5 @@
 var sfmuni = function() {
+    var routeConfigs = {};
     function addMinutes(date, addMinutes) {
         var minutes = date.getMinutes() + addMinutes;
         if (minutes < 60) {
@@ -103,9 +104,15 @@ var sfmuni = function() {
         getRouteConfig: function(options, callback) {
             options.command = "routeConfig";
             options.a = "sf-muni";
-            request(options, function(data, textStatus, jqXHR) {
-                callback(parseRouteConfig($("route", data)));
-            });
+            if (routeConfigs[options.r]) {
+                callback(routeConfigs[options.r]);
+            } else {
+                request(options, function(data, textStatus, jqXHR) {
+                    var routeConfig = parseRouteConfig($("route", data));
+                    routeConfigs[options.r] = routeConfig;
+                    callback(routeConfig);
+                });
+            }
         }
     };   
     return api;
