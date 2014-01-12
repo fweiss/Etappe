@@ -28,9 +28,10 @@ var sfmuni = function() {
             messages: []
         };
         predictions.agencyTitle = $(data).attr("agencyTitle");
-        predictions.routeTitle = data.attr("routeTitle");
+        predictions.routeTitle = $(data).attr("routeTitle");
         predictions.stopTitle = $(data).attr("stopTitle");
         predictions.stopTag = $(data).attr("stopTag");
+        predictions.routeTag = $(data).attr("routeTag");
         $("direction", data).each(function() {
             var direction = {
                 predictions: []
@@ -113,7 +114,8 @@ var sfmuni = function() {
                     callback(routeConfig);
                 });
             }
-        }
+        },
+        parsePredictions: parsePredictions
     };   
     return api;
 }();

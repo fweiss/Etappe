@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<body copyright="All data copyright San Francisco Muni 2014.">
+    <predictions agencyTitle="San Francisco Muni" routeTitle="33-Stanyan" routeTag="33" stopTitle="Clayton St &amp; Corbett Ave" stopTag="4076">
+        <direction title="Outbound to General Hospital">
+            <prediction epochTime="1389473455945" seconds="305" minutes="5" isDeparture="false" dirTag="33__OB1" vehicle="5457" block="3302" tripTag="5825482" />
+            <prediction epochTime="1389474688387" seconds="1538" minutes="25" isDeparture="false" affectedByLayover="true" dirTag="33__OB1" vehicle="5448" block="3304" tripTag="5825481" />
+            <prediction epochTime="1389475888387" seconds="2738" minutes="45" isDeparture="false" affectedByLayover="true" dirTag="33__OB1" vehicle="5406" block="3305" tripTag="5825480" />
+            <prediction epochTime="1389477088387" seconds="3938" minutes="65" isDeparture="false" affectedByLayover="true" dirTag="33__OB1" vehicle="5467" block="3301" tripTag="5825479" />
+            <prediction epochTime="1389478288387" seconds="5138" minutes="85" isDeparture="false" affectedByLayover="true" dirTag="33__OB1" vehicle="5412" block="3303" tripTag="5825478" />
+        </direction>
+    </predictions>
+</body>

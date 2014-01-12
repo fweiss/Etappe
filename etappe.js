@@ -184,6 +184,25 @@ var etappe = function() {
         segment.destinationTime = trip.destDatetime;
         return segment;
     }
+    function strategy7(options, callback) {
+        var trip = {};
+        trip.segments = [];
+        var segment = {};
+        segment.agency = 'sfmuni';
+        segment.origin = 'origin';
+        segment.destination = 'destination';
+        segment.list = [];
+        var ride = {};
+        ride.route = 'route';
+        ride.vehicle = 'vehicle';
+        ride.originTime = new Date();
+        ride.destinationTime = new Date(ride.originTime.getTime() + 3 * 60 * 1000);
+        // s/b rides, not list
+        segment.list.push(ride);
+        trip.segments.push(segment);
+        trip.segments.push(segment);
+        callback(trip);
+    }
     function strategy6(options, callback) {
         options.origin = "muni:14076";
         options.destination = "bart:mont";
@@ -336,30 +355,53 @@ var etappe = function() {
             }
         }
         function result() {
-            var segments = {};
-            segments.agency = "sfmuni";
-            segments.origin = origStop;
-            segments.destination = destStop;
-            segments.list = [];
-            for (var i=0; i<predictions1.directions[0].predictions.length; i++) {
-                var prediction1 = predictions1.directions[0].predictions[i];
-                for (var j=0; j<predictions2.directions[0].predictions.length; j++) {
-                    var prediction2 = predictions2.directions[0].predictions[j];
-                    if (prediction2.vehicle == prediction1.vehicle) {
-                        var segment = {};
-                        segment.originTime = prediction1.datetime;
-                        segment.destinationTime = prediction2.datetime;
-                        segment.carrier = "sfmuni";
-                        segment.route = route;
-                        segment.vehicle = prediction1.vehicle;
-                        segment.origin = { id: 0, name: "", abbr: getStop(origStop).title };
-                        segment.destination = { id: "16TH", name: "16th", abbr: "16th Street" };
-                        segments.list.push(segment);
-                    }
-                }
-            }
+            var segments = createMuniRides('1', predictions1, predictions2, routeConfig);
             callback(segments);
         }
+    }
+
+    /**
+     * Determine the originTime and destinationTime for the rides in the segment by matching up the vehicle ids
+     * at the origin and destination. SFMuni only provides departure times for a stop.
+     *
+     * @param direction
+     * @param departurePredictions
+     * @param arrivalProdictions
+     * @param routeConfig
+     * @returns {{}}
+     */
+    function createMuniRides(direction, departurePredictions, arrivalProdictions, routeConfig) {
+        function getStop(stopId) {
+            for (var i=0; i<routeConfig.stops.length; i++) {
+                var stop = routeConfig.stops[i];
+                if (stop.stopId == stopId) {
+                    return stop;
+                }
+            }
+        }
+        var rides = {};
+        rides.agency = "sfmuni";
+        rides.origin = direction + departurePredictions.stopTag;
+        rides.destination = direction + arrivalProdictions.stopTag;
+        rides.list = [];
+        for (var i=0; i<departurePredictions.directions[0].predictions.length; i++) {
+            var prediction1 = departurePredictions.directions[0].predictions[i];
+            for (var j=0; j<arrivalProdictions.directions[0].predictions.length; j++) {
+                var prediction2 = arrivalProdictions.directions[0].predictions[j];
+                if (prediction2.vehicle == prediction1.vehicle) {
+                    var segment = {};
+                    segment.originTime = prediction1.datetime;
+                    segment.destinationTime = prediction2.datetime;
+                    segment.carrier = "sfmuni";
+                    segment.route = departurePredictions.routeTag;
+                    segment.vehicle = prediction1.vehicle;
+                    segment.origin = { id: 0, name: "", abbr: getStop(rides.origin).title };
+                    segment.destination = { id: "16TH", name: "16th", abbr: "16th Street" };
+                    rides.list.push(segment);
+                }
+            }
+        }
+        return rides;
     }
     var api = {
         strategy1: strategy1,
@@ -368,6 +410,7 @@ var etappe = function() {
         strategy4: strategy4,
         strategy5: strategy5,
         strategy6: strategy6,
+        strategy7: strategy7,
         findSegments: findSegments
     };
     return api;
