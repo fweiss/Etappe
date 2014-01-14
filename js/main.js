@@ -2,10 +2,18 @@ $(function() {
     var currentOutboundTrip;
     var currentInboundTrip;
     $("#tabs").tabs();
+    var tripInfo = {
+        origin: '1349 Clayton St',
+        destination: '555 Market St'
+    };
+    view.updateTripInfo(tripInfo);
+    var options = {};
+    options.trip = trips[1];
     $("#obRefresh").click(function(event) {
+        options.direction = 'outbound';
         event.preventDefault();
         $("#busyModal").show();
-        etappe.strategy6({ direction: "outbound" }, function(trip) {
+        etappe.strategy6(options, function(trip) {
             $("#busyModal").hide();
             ageEpoch = new Date();
             //view.updateTrip("#ob", trip);
@@ -16,9 +24,10 @@ $(function() {
         });
     });
     $("#ibRefresh").click(function(event) {
+        options.direction = 'inbound';
         event.preventDefault();
         $("#busyModal").show();
-        etappe.strategy6({ direction: "inbound" }, function(trip) {
+        etappe.strategy6(options, function(trip) {
             $("#busyModal").hide();
             currentInboundTrip = trip;
             ageEpoch = new Date();

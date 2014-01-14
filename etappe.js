@@ -206,10 +206,14 @@ var etappe = function() {
     function strategy6(options, callback) {
         options.origin = "muni:14076";
         options.destination = "bart:mont";
+        function getPlan() {
+            console.log(options);
+            return options.trip.routes[options.direction];
+        }
         var trip = {};
         var strategies = {
             outbound: function(options, callback) { // muni segments, bart segments, plans
-                var subroutes = getSubroutes(options);
+                var subroutes = getPlan();
                 var segments0;
                 var segments1;
                 getSegments(subroutes[0], function(segments) {
@@ -236,7 +240,7 @@ var etappe = function() {
                 }
             }, 
             inbound: function(options, callback) {  // bart segments, muni segments, plans
-                                var subroutes = getSubroutes(options);
+                var subroutes = getPlan();
                 var segments0;
                 var segments1;
                 getSegments(subroutes[0], function(segments) {
@@ -384,10 +388,14 @@ var etappe = function() {
         rides.origin = direction + departurePredictions.stopTag;
         rides.destination = direction + arrivalProdictions.stopTag;
         rides.list = [];
-        for (var i=0; i<departurePredictions.directions[0].predictions.length; i++) {
-            var prediction1 = departurePredictions.directions[0].predictions[i];
-            for (var j=0; j<arrivalProdictions.directions[0].predictions.length; j++) {
-                var prediction2 = arrivalProdictions.directions[0].predictions[j];
+        for (var ii=0; ii<departurePredictions.directions.length; ii++) {
+            var direction1 = departurePredictions.directions[ii];
+        for (var i=0; i<direction1.predictions.length; i++) {
+            var prediction1 = direction1.predictions[i];
+            for (var jj=0; jj<arrivalProdictions.directions.length; jj++) {
+                var direction2 = arrivalProdictions.directions[jj];
+            for (var j=0; j<direction2.predictions.length; j++) {
+                var prediction2 = direction2.predictions[j];
                 if (prediction2.vehicle == prediction1.vehicle) {
                     var segment = {};
                     segment.originTime = prediction1.datetime;
@@ -395,12 +403,12 @@ var etappe = function() {
                     segment.carrier = "sfmuni";
                     segment.route = departurePredictions.routeTag;
                     segment.vehicle = prediction1.vehicle;
-                    segment.origin = { id: 0, name: "", abbr: getStop(rides.origin).title };
+                    segment.origin = { id: 0, name: "", abbr: 'zzz'}; //getStop(rides.origin).title };
                     segment.destination = { id: "16TH", name: "16th", abbr: "16th Street" };
                     rides.list.push(segment);
                 }
-            }
-        }
+            }}
+        }}
         return rides;
     }
     var api = {
@@ -411,7 +419,8 @@ var etappe = function() {
         strategy5: strategy5,
         strategy6: strategy6,
         strategy7: strategy7,
-        findSegments: findSegments
+        findSegments: findSegments,
+        createMuniRides: createMuniRides
     };
     return api;
 }();

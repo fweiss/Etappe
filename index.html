@@ -11,6 +11,8 @@
 <script type="text/javascript" src="js/view.js"></script>
 <script type="text/javascript" src="etappe.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/trips.js"></script>
+
 </head>
 <body>
 <div id="tabs">
@@ -22,8 +24,8 @@
    <div id="trip">
       <p>Date: today</p>
       <p>Time: now</p>
-      <p>Origin: 1349 Clayton St</p>
-      <p>Destination: 555 Market St</p>
+      <p>Origin: <span id='tripOrigin'></span></p>
+      <p>Destination: <span id='tripDestination'></span></p>
    </div>
    <div id="outbound">
         <div class="header"><a href="#" id="obRefresh">Refresh</a><span class="ageRefresh"></span></div>

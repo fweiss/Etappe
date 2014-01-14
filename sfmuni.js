@@ -18,6 +18,13 @@ var sfmuni = function() {
     }
     /**
      * Parse the given jQuery data into a Predictions object.
+     *
+     * XML:
+     * body < predictions < direction < prediction
+     *
+     * JS:
+     * predictions < direction < prediction
+     * but it flattens the directions, leaving out the route id in the predictions element
      * 
      * @param data the jQuery.ajax data
      * @return a Predictions object
@@ -115,7 +122,8 @@ var sfmuni = function() {
                 });
             }
         },
-        parsePredictions: parsePredictions
+        parsePredictions: parsePredictions,
+        parseRouteConfig: parseRouteConfig
     };   
     return api;
 }();

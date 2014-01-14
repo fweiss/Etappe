@@ -19,6 +19,10 @@ var view = function() {
     function ftm(minutes) {
         return minutes;
     }
+    function updateTripInfo(tripInfo) {
+        $('#tripOrigin').text(tripInfo.origin);
+        $('#tripDestination').text(tripInfo.destination)
+    }
     function updateTrip(id, trip) {
         var d = $(id);
         d.empty();
@@ -155,7 +159,8 @@ var view = function() {
         updateSegments: updateSegments,
         updateGraph: updateGraph,
         updateTripSummary: updateTripSummary,
-        drawExpiredArea: drawExpiredArea
+        drawExpiredArea: drawExpiredArea,
+        updateTripInfo: updateTripInfo
     };
     return api;
 }();

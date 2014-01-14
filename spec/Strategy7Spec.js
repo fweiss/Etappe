@@ -69,6 +69,26 @@ describe('strategy7', function() {
         });
     });
 
+    describe('create MUNI rides', function() {
+        var rides;
+        beforeEach(function() {
+            var origin = sfmuni.parsePredictions($("predictions", fixtures.p15726));
+            var destination = sfmuni.parsePredictions($("predictions", fixtures.p16992));
+            var routeConfig = sfmuni.parseRouteConfig($("route", fixtures.routeConfig));
+            rides = etappe.createMuniRides('inbound', origin, destination, routeConfig);
+        });
+        it('should link multiple route predictions', function() {
+            // list s/b rides
+            expect(rides.list.length).toBeGreaterThan(0);
+        });
+        it('should not link multiple destinations', function() {});
+        it('should have correct route id', function() {
+            var op = {};
+            op.directions = [];
+
+        });
+    });
+
    /**
      * Make the SUT look synchronous instead of asynchronous. Since all async calls in the SUT
      * are stubbed, the callback occurs synchronously
