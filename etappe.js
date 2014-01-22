@@ -187,21 +187,42 @@ var etappe = function() {
     function strategy7(options, callback) {
         var trip = {};
         trip.segments = [];
-        var segment = {};
-        segment.agency = 'sfmuni';
-        segment.origin = 'origin';
-        segment.destination = 'destination';
-        segment.list = [];
-        var ride = {};
-        ride.route = 'route';
-        ride.vehicle = 'vehicle';
-        ride.originTime = new Date();
-        ride.destinationTime = new Date(ride.originTime.getTime() + 3 * 60 * 1000);
-        // s/b rides, not list
-        segment.list.push(ride);
-        trip.segments.push(segment);
-        trip.segments.push(segment);
-        callback(trip);
+
+        var route = options.trip.routes[options.direction];
+//        getSegments(route, callback)
+
+//        var segment = {};
+//        segment.agency = 'sfmuni';
+//        segment.origin = 'origin';
+//        segment.destination = 'destination';
+//        segment.list = [];
+//        var ride = {};
+//        ride.route = 'route';
+//        ride.vehicle = 'vehicle';
+//        ride.originTime = new Date();
+//        ride.destinationTime = new Date(ride.originTime.getTime() + 3 * 60 * 1000);
+//        // s/b rides, not list
+//        segment.list.push(ride);
+//        trip.segments.push(segment);
+//        trip.segments.push(segment);
+//        callback(trip);
+        var segment0;
+        var segment1;
+        sfmuni.getSegments(route[0], function(segments) {
+            segment0 = segments;
+            join();
+        });
+        sfmuni.getSegments(route[1], function(segments) {
+            segment1 = segments;
+            join();
+        });
+        function join() {
+            if (segment0 && segment1) {
+                trip.segments.push(segment0);
+                trip.segments.push(segment1);
+                callback(trip);
+            }
+        }
     }
     function strategy6(options, callback) {
         options.origin = "muni:14076";
@@ -297,13 +318,17 @@ var etappe = function() {
     function getCarrierAdaptor(carrier) {
         var adaptors = {
             sfmuni: {
-                getSegments: function(subroute, callback) {
-                    var options = {};
-                    options.route = subroute.route;
-                    options.orig = subroute.origin;
-                    options.dest = subroute.destination;
-                    findSegments(options, callback);
-                }
+                  getSegments: function(subroute, callback) {
+                      sfmuni.getSegments(subroute, callback);
+                  }
+
+//                getSegments: function(subroute, callback) {
+//                    var options = {};
+//                    options.route = subroute.route;
+//                    options.orig = subroute.origin;
+//                    options.dest = subroute.destination;
+//                    findSegments(options, callback);
+//                }
             },
             bart: {
                 getSegments: function(subroute, callback) {
@@ -325,92 +350,7 @@ var etappe = function() {
         };
         return adaptors[carrier];
     }
-    function findSegments(options, callback) {
-        var route = options.route; //"33";
-        var origStop = options.orig; //14076;
-        var destStop = options.dest; //13292;
-        // FIXME: check if stops and route make sense
-        var predictions1;
-        var predictions2;
-        var routeConfig;
-        sfmuni.getRouteConfig({r: route }, function(rc) {
-            routeConfig = rc;
-            predictionsUpdated();
-        });
-        sfmuni.getPredictions({ stopId: origStop }, function(predictions) {
-            predictions1 = predictions;
-            predictionsUpdated();
-        });
-        sfmuni.getPredictions({ stopId: destStop }, function(predictions) {
-            predictions2 = predictions;
-            predictionsUpdated();
-        });
-        function predictionsUpdated() {
-            if (predictions1 && predictions2 && routeConfig) {
-                result();
-            }
-        }
-        function getStop(stopId) {
-            for (var i=0; i<routeConfig.stops.length; i++) {
-                var stop = routeConfig.stops[i];
-                if (stop.stopId == stopId) {
-                    return stop;
-                }
-            }
-        }
-        function result() {
-            var segments = createMuniRides('1', predictions1, predictions2, routeConfig);
-            callback(segments);
-        }
-    }
 
-    /**
-     * Determine the originTime and destinationTime for the rides in the segment by matching up the vehicle ids
-     * at the origin and destination. SFMuni only provides departure times for a stop.
-     *
-     * @param direction
-     * @param departurePredictions
-     * @param arrivalProdictions
-     * @param routeConfig
-     * @returns {{}}
-     */
-    function createMuniRides(direction, departurePredictions, arrivalProdictions, routeConfig) {
-        function getStop(stopId) {
-            for (var i=0; i<routeConfig.stops.length; i++) {
-                var stop = routeConfig.stops[i];
-                if (stop.stopId == stopId) {
-                    return stop;
-                }
-            }
-        }
-        var rides = {};
-        rides.agency = "sfmuni";
-        rides.origin = direction + departurePredictions.stopTag;
-        rides.destination = direction + arrivalProdictions.stopTag;
-        rides.list = [];
-        for (var ii=0; ii<departurePredictions.directions.length; ii++) {
-            var direction1 = departurePredictions.directions[ii];
-        for (var i=0; i<direction1.predictions.length; i++) {
-            var prediction1 = direction1.predictions[i];
-            for (var jj=0; jj<arrivalProdictions.directions.length; jj++) {
-                var direction2 = arrivalProdictions.directions[jj];
-            for (var j=0; j<direction2.predictions.length; j++) {
-                var prediction2 = direction2.predictions[j];
-                if (prediction2.vehicle == prediction1.vehicle) {
-                    var segment = {};
-                    segment.originTime = prediction1.datetime;
-                    segment.destinationTime = prediction2.datetime;
-                    segment.carrier = "sfmuni";
-                    segment.route = departurePredictions.routeTag;
-                    segment.vehicle = prediction1.vehicle;
-                    segment.origin = { id: 0, name: "", abbr: 'zzz'}; //getStop(rides.origin).title };
-                    segment.destination = { id: "16TH", name: "16th", abbr: "16th Street" };
-                    rides.list.push(segment);
-                }
-            }}
-        }}
-        return rides;
-    }
     var api = {
         strategy1: strategy1,
         strategy2: strategy2,
@@ -418,9 +358,7 @@ var etappe = function() {
         strategy4: strategy4,
         strategy5: strategy5,
         strategy6: strategy6,
-        strategy7: strategy7,
-        findSegments: findSegments,
-        createMuniRides: createMuniRides
+        strategy7: strategy7
     };
     return api;
 }();

@@ -13,7 +13,7 @@ $(function() {
         options.direction = 'outbound';
         event.preventDefault();
         $("#busyModal").show();
-        etappe.strategy6(options, function(trip) {
+        etappe.strategy7(options, function(trip) {
             $("#busyModal").hide();
             ageEpoch = new Date();
             //view.updateTrip("#ob", trip);
@@ -27,7 +27,7 @@ $(function() {
         options.direction = 'inbound';
         event.preventDefault();
         $("#busyModal").show();
-        etappe.strategy6(options, function(trip) {
+        etappe.strategy7(options, function(trip) {
             $("#busyModal").hide();
             currentInboundTrip = trip;
             ageEpoch = new Date();
