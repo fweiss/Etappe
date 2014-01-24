@@ -154,13 +154,26 @@ var view = function() {
             return Math.floor(600 * (time.getTime() - t0) / (t1 - t0));
         }
     }
+    function updateViews(trip, direction) {
+        var epoch = new Date();
+        view.updateTripSummary("#" + direction + "trip", trip);
+        view.updateSegments("#" + direction + "1", trip.segments[0], epoch);
+        view.updateSegments("#" + direction + "2", trip.segments[1], epoch);
+        view.updateGraph(direction + "Graph", trip.segments);
+    }
     var api = {
         updateTrip: updateTrip,
         updateSegments: updateSegments,
         updateGraph: updateGraph,
         updateTripSummary: updateTripSummary,
         drawExpiredArea: drawExpiredArea,
-        updateTripInfo: updateTripInfo
+        updateTripInfo: updateTripInfo,
+        updateInbound: function(trip) {
+            updateViews(trip, 'ib');
+        },
+        updateOutbound: function(trip) {
+            updateViews(trip, 'ob');
+        }
     };
     return api;
 }();

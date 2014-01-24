@@ -15,7 +15,7 @@ $(function() {
         $("#busyModal").show();
         etappe.strategy7(options, function(trip) {
             $("#busyModal").hide();
-            updateViews(trip, 'ob');
+            view.updateOutbound(trip);
         });
     });
     $("#ibRefresh").click(function(event) {
@@ -24,21 +24,7 @@ $(function() {
         $("#busyModal").show();
         etappe.strategy7(options, function(trip) {
             $("#busyModal").hide();
-            updateViews(trip, 'ib');
-        });
-    });
-    function updateViews(trip, direction) {
-        var epoch = new Date();
-        view.updateTripSummary("#" + direction + "trip", trip);
-        view.updateSegments("#" + direction + "1", trip.segments[0], epoch);
-        view.updateSegments("#" + direction + "2", trip.segments[1], epoch);
-        view.updateGraph(direction + "Graph", trip.segments);
-    }
-    $("#xibRefresh").click(function(event) {
-        etappe.strategy5(function(trip) {
-            ageEpoch = new Date();
-            view.updateTrip("#ib", trip);
-            //view.updateGraph(trip.segments[0]);
+            view.updateInbound(trip);
         });
     });
     var ageRefresh;
