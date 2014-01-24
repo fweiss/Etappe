@@ -15,12 +15,7 @@ $(function() {
         $("#busyModal").show();
         etappe.strategy7(options, function(trip) {
             $("#busyModal").hide();
-            ageEpoch = new Date();
-            //view.updateTrip("#ob", trip);
-            view.updateTripSummary("#obtrip", trip);
-            view.updateSegments("#ob1", trip.segments[0], new Date());
-            view.updateSegments("#ob2", trip.segments[1], new Date());
-            view.updateGraph("obGraph", trip.segments);
+            updateViews(trip, 'ob');
         });
     });
     $("#ibRefresh").click(function(event) {
@@ -29,15 +24,16 @@ $(function() {
         $("#busyModal").show();
         etappe.strategy7(options, function(trip) {
             $("#busyModal").hide();
-            currentInboundTrip = trip;
-            ageEpoch = new Date();
-            //view.updateTrip("#ob", trip);
-            view.updateTripSummary("#ibtrip", trip);
-            view.updateSegments("#ib1", trip.segments[0], new Date());
-            view.updateSegments("#ib2", trip.segments[1], new Date());
-            view.updateGraph("ibGraph", trip.segments);
+            updateViews(trip, 'ib');
         });
     });
+    function updateViews(trip, direction) {
+        var epoch = new Date();
+        view.updateTripSummary("#" + direction + "trip", trip);
+        view.updateSegments("#" + direction + "1", trip.segments[0], epoch);
+        view.updateSegments("#" + direction + "2", trip.segments[1], epoch);
+        view.updateGraph(direction + "Graph", trip.segments);
+    }
     $("#xibRefresh").click(function(event) {
         etappe.strategy5(function(trip) {
             ageEpoch = new Date();
