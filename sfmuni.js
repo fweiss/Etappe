@@ -167,7 +167,8 @@ var sfmuni = function() {
                     arrivalProdictions.forEach(function(connection) {
                         connection.directions.forEach(function(direction) {
                             direction.predictions.forEach(function(predictionB) {
-                                if (predictionA.vehicle == predictionB.vehicle) {
+                                if (predictionA.vehicle == predictionB.vehicle
+                                    && predictionA.datetime < predictionB.datetime) {
                                     var segment = {};
                                     segment.originTime = predictionA.datetime;
                                     segment.destinationTime = predictionB.datetime;

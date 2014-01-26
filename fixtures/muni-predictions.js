@@ -439,104 +439,136 @@ var fixtures = function() {
     </route>\
     </body>\
 ';
+    var p16239 = '<?xml version="1.0" encoding="utf-8" ?>\
+        <body copyright="All data copyright San Francisco Muni 2014.">\
+            <predictions agencyTitle="San Francisco Muni" routeTitle="37-Corbett" routeTag="37" stopTitle="Roosevelt Way &amp; Lower Ter" stopTag="6239">\
+                <direction title="Outbound to Twin Peaks">\
+                    <prediction epochTime="1390594967022" seconds="563" minutes="9" isDeparture="false" affectedByLayover="true" dirTag="37_OB1" vehicle="8526" block="3701" tripTag="5826422" />\
+                    <prediction epochTime="1390596167022" seconds="1763" minutes="29" isDeparture="false" affectedByLayover="true" dirTag="37_OB1" vehicle="8518" block="3702" tripTag="5826421" />\
+                    <prediction epochTime="1390597367022" seconds="2963" minutes="49" isDeparture="false" affectedByLayover="true" dirTag="37_OB1" vehicle="8515" block="3703" tripTag="5826420" />\
+                    <prediction epochTime="1390599767022" seconds="5363" minutes="89" isDeparture="false" affectedByLayover="true" dirTag="37_OB1" vehicle="8526" block="3701" tripTag="5826418" />\
+                </direction>\
+                <message text="For real time srv alerts follow us on Twitter: sfmta_muni" priority="Low"/>\
+                <message text="Sign-up for Route/Line specific Email/Text Alerts @ sfmta.com" priority="Low"/>\
+            </predictions>\
+        </body>';
+    var p13255 = '<?xml version="1.0" encoding="utf-8" ?>\
+        <body copyright="All data copyright San Francisco Muni 2014.">\
+            <predictions agencyTitle="San Francisco Muni" routeTitle="37-Corbett" routeTag="37" stopTitle="14th St &amp; Church St" stopTag="3255">\
+                <direction title="Outbound to Twin Peaks">\
+                    <prediction epochTime="1390595302385" seconds="899" minutes="14" isDeparture="false" affectedByLayover="true" dirTag="37_OB1" vehicle="8526" block="3701" tripTag="5826422" />\
+                    <prediction epochTime="1390596502385" seconds="2099" minutes="34" isDeparture="false" affectedByLayover="true" dirTag="37_OB1" vehicle="8518" block="3702" tripTag="5826421" />\
+                    <prediction epochTime="1390597702385" seconds="3299" minutes="54" isDeparture="false" affectedByLayover="true" dirTag="37_OB1" vehicle="8515" block="3703" tripTag="5826420" />\
+                </direction>\
+                <message text="For real time srv alerts follow us on Twitter: sfmta_muni" priority="Low"/>\
+                <message text="Sign-up for Route/Line specific Email/Text Alerts @ sfmta.com" priority="Low"/>\
+            </predictions>\
+        </body>';
     var p15726 = '<?xml version="1.0" encoding="utf-8" ?>\
         <body copyright="All data copyright San Francisco Muni 2014.">\
             <predictions agencyTitle="San Francisco Muni" routeTitle="M-Ocean View" routeTag="M" stopTitle="Church St Station Inbound" stopTag="5726">\
                 <direction title="Inbound to Downtown">\
-                    <prediction epochTime="1389544551054" seconds="671" minutes="11" isDeparture="false" dirTag="M__IB1" vehicle="1516" block="9604" tripTag="5849358" />\
-                    <prediction epochTime="1389545623101" seconds="1743" minutes="29" isDeparture="false" dirTag="M__IB1" vehicle="1536" block="9601" tripTag="5849359" />\
-                    <prediction epochTime="1389546415927" seconds="2536" minutes="42" isDeparture="false" affectedByLayover="true" dirTag="M__IB1" vehicle="1431" block="9605" tripTag="5849360" />\
-                    <prediction epochTime="1389548192063" seconds="4312" minutes="71" isDeparture="false" affectedByLayover="true" dirTag="M__IB1" vehicle="1425" block="9602" tripTag="5849458" />\
+                    <prediction epochTime="1390595057062" seconds="653" minutes="10" isDeparture="false" dirTag="M__IB1" vehicle="1422" block="9612" tripTag="5848180" />\
+                    <prediction epochTime="1390595463942" seconds="1060" minutes="17" isDeparture="false" dirTag="M__IB1" vehicle="1457" block="9603" tripTag="5848181" />\
+                    <prediction epochTime="1390596212618" seconds="1809" minutes="30" isDeparture="false" dirTag="M__IB1" vehicle="1458" block="9608" tripTag="5848182" />\
+                    <prediction epochTime="1390596394426" seconds="1991" minutes="33" isDeparture="false" dirTag="M__IB1" vehicle="1462" block="MUNSCHED" tripTag="MwkdUNSCHEDI" />\
+                    <prediction epochTime="1390597122204" seconds="2718" minutes="45" isDeparture="false" affectedByLayover="true" dirTag="M__IB1" vehicle="1407" block="9609" tripTag="5848184" />\
                 </direction>\
-                <message text="No Elevator at&#10;Van Ness Station"/>\
+                <message text="For real time srv alerts follow us on Twitter: sfmta_muni" priority="Low"/>\
+                <message text="Sign-up for Route/Line specific Email/Text Alerts @ sfmta.com" priority="Low"/>\
             </predictions>\
             <predictions agencyTitle="San Francisco Muni" routeTitle="L-Taraval" routeTag="L" stopTitle="Church St Station Inbound" stopTag="5726">\
                 <direction title="Inbound to Downtown">\
-                    <prediction epochTime="1389543946447" seconds="67" minutes="1" isDeparture="false" dirTag="L___IB1" vehicle="1532" block="9504" tripTag="5849345" />\
-                    <prediction epochTime="1389544821456" seconds="942" minutes="15" isDeparture="false" dirTag="L___IB1" vehicle="1510" block="9505" tripTag="5849346" />\
-                    <prediction epochTime="1389545518320" seconds="1639" minutes="27" isDeparture="false" affectedByLayover="true" dirTag="L___IB1" vehicle="1498" block="9506" tripTag="5849347" />\
-                    <prediction epochTime="1389546243574" seconds="2364" minutes="39" isDeparture="false" affectedByLayover="true" dirTag="L___IB1" vehicle="1511" block="9507" tripTag="5849348" />\
-                    <prediction epochTime="1389547021806" seconds="3142" minutes="52" isDeparture="false" affectedByLayover="true" dirTag="L___IB1" vehicle="1413" block="9501" tripTag="5849407" />\
+                    <prediction epochTime="1390594824649" seconds="421" minutes="7" isDeparture="false" dirTag="L___IB1" vehicle="1403" vehiclesInConsist="2" block="9504" tripTag="5848071" />\
+                    <prediction epochTime="1390595216342" seconds="813" minutes="13" isDeparture="false" dirTag="L___IB1" vehicle="1495" block="9509" tripTag="5848072" />\
+                    <prediction epochTime="1390597194491" seconds="2791" minutes="46" isDeparture="false" affectedByLayover="true" dirTag="L___IB1" vehicle="1514" vehiclesInConsist="2" block="9510" tripTag="5848075" />\
+                    <prediction epochTime="1390597794491" seconds="3391" minutes="56" isDeparture="false" affectedByLayover="true" dirTag="L___IB1" vehicle="1498" vehiclesInConsist="2" block="9501" tripTag="5848076" />\
+                    <prediction epochTime="1390598394491" seconds="3991" minutes="66" isDeparture="false" affectedByLayover="true" dirTag="L___IB1" vehicle="1456" vehiclesInConsist="2" block="9511" tripTag="5848077" />\
                 </direction>\
-                <message text="Hot Chocolate Run today: May delay service."/>\
-                <message text="No Elevator at&#10;Van Ness Station"/>\
-                <message text="Hot Chocolate Run today: May delay service."/>\
+                <message text="For real time srv alerts follow us on Twitter: sfmta_muni" priority="Low"/>\
+                <message text="Sign-up for Route/Line specific Email/Text Alerts @ sfmta.com" priority="Low"/>\
             </predictions>\
             <predictions agencyTitle="San Francisco Muni" routeTitle="KT-Ingleside/Third Street" routeTag="KT" stopTitle="Church St Station Inbound" stopTag="5726">\
                 <direction title="Inbound to Visitacion Valley via Downtown">\
-                    <prediction epochTime="1389544325640" seconds="446" minutes="7" isDeparture="false" dirTag="KT__IB1" vehicle="1525" block="9401" tripTag="5849353" />\
-                    <prediction epochTime="1389545339536" seconds="1460" minutes="24" isDeparture="false" affectedByLayover="true" dirTag="KT__IB1" vehicle="1430" block="9406" tripTag="5849354" />\
-                    <prediction epochTime="1389546171282" seconds="2292" minutes="38" isDeparture="false" affectedByLayover="true" dirTag="KT__IB1" vehicle="1424" block="9408" tripTag="5849355" />\
-                    <prediction epochTime="1389547127190" seconds="3248" minutes="54" isDeparture="false" affectedByLayover="true" dirTag="KT__IB1" vehicle="1415" block="9403" tripTag="5849371" />\
-                    <prediction epochTime="1389547974137" seconds="4095" minutes="68" isDeparture="false" affectedByLayover="true" dirTag="KT__IB1" vehicle="1506" block="9404" tripTag="5849366" />\
+                    <prediction epochTime="1390594497001" seconds="93" minutes="1" isDeparture="false" dirTag="KT__IB1" vehicle="1443" block="9401" tripTag="5848284" />\
+                    <prediction epochTime="1390594857913" seconds="454" minutes="7" isDeparture="false" dirTag="KT__IB1" vehicle="1537" block="9416" tripTag="5848285" />\
+                    <prediction epochTime="1390595982292" seconds="1579" minutes="26" isDeparture="false" dirTag="KT__IB1" vehicle="1520" block="9412" tripTag="5848286" />\
+                    <prediction epochTime="1390596188687" seconds="1785" minutes="29" isDeparture="false" affectedByLayover="true" dirTag="KT__IB1" vehicle="1496" block="9402" tripTag="5848287" />\
+                    <prediction epochTime="1390596956415" seconds="2553" minutes="42" isDeparture="false" affectedByLayover="true" dirTag="KT__IB1" vehicle="1508" block="9414" tripTag="5848288" />\
                 </direction>\
-                <message text="No Elevator at&#10;Van Ness Station"/>\
+                <message text="For real time srv alerts follow us on Twitter: sfmta_muni" priority="Low"/>\
+                <message text="Sign-up for Route/Line specific Email/Text Alerts @ sfmta.com" priority="Low"/>\
             </predictions>\
-        </body>\
-    ';
+        </body>';
     var p16992 = '<?xml version="1.0" encoding="utf-8" ?>\
         <body copyright="All data copyright San Francisco Muni 2014.">\
             <predictions agencyTitle="San Francisco Muni" routeTitle="L-Taraval" routeTag="L" stopTitle="Embarcadero Station Arr" stopTag="6992">\
                 <direction title="Inbound to Downtown">\
-                    <prediction epochTime="1389544427934" seconds="548" minutes="9" isDeparture="false" dirTag="L___IB1" vehicle="1532" block="9504" tripTag="5849345" />\
-                    <prediction epochTime="1389545302943" seconds="1423" minutes="23" isDeparture="false" dirTag="L___IB1" vehicle="1510" block="9505" tripTag="5849346" />\
-                    <prediction epochTime="1389545999807" seconds="2120" minutes="35" isDeparture="false" affectedByLayover="true" dirTag="L___IB1" vehicle="1498" block="9506" tripTag="5849347" />\
-                    <prediction epochTime="1389546749261" seconds="2870" minutes="47" isDeparture="false" affectedByLayover="true" dirTag="L___IB1" vehicle="1511" block="9507" tripTag="5849348" />\
-                    <prediction epochTime="1389547527493" seconds="3648" minutes="60" isDeparture="false" affectedByLayover="true" dirTag="L___IB1" vehicle="1413" block="9501" tripTag="5849407" />\
+                    <prediction epochTime="1390594821911" seconds="418" minutes="6" isDeparture="false" dirTag="L___IB1" vehicle="1460" vehiclesInConsist="2" block="9505" tripTag="5848070" />\
+                    <prediction epochTime="1390595383545" seconds="980" minutes="16" isDeparture="false" dirTag="L___IB1" vehicle="1403" vehiclesInConsist="2" block="9504" tripTag="5848071" />\
+                    <prediction epochTime="1390595775238" seconds="1372" minutes="22" isDeparture="false" dirTag="L___IB1" vehicle="1495" block="9509" tripTag="5848072" />\
+                    <prediction epochTime="1390597753387" seconds="3350" minutes="55" isDeparture="false" affectedByLayover="true" dirTag="L___IB1" vehicle="1514" vehiclesInConsist="2" block="9510" tripTag="5848075" />\
+                    <prediction epochTime="1390598353387" seconds="3950" minutes="65" isDeparture="false" affectedByLayover="true" dirTag="L___IB1" vehicle="1498" vehiclesInConsist="2" block="9501" tripTag="5848076" />\
                 </direction>\
-                <message text="Hot Chocolate Run today: May delay service."/>\
-                <message text="No Elevator at&#10;Van Ness Station"/>\
-                <message text="Hot Chocolate Run today: May delay service."/>\
+                <message text="For real time srv alerts follow us on Twitter: sfmta_muni" priority="Low"/>\
+                <message text="Sign-up for Route/Line specific Email/Text Alerts @ sfmta.com" priority="Low"/>\
             </predictions>\
             <predictions agencyTitle="San Francisco Muni" routeTitle="M-Ocean View" routeTag="M" stopTitle="Embarcadero Station Arr" stopTag="6992">\
                 <direction title="Inbound to Downtown">\
-                    <prediction epochTime="1389544180661" seconds="301" minutes="5" isDeparture="false" dirTag="M__IB1" vehicle="1496" block="9603" tripTag="5849357" />\
-                    <prediction epochTime="1389545044211" seconds="1165" minutes="19" isDeparture="false" dirTag="M__IB1" vehicle="1516" block="9604" tripTag="5849358" />\
-                    <prediction epochTime="1389546117509" seconds="2238" minutes="37" isDeparture="false" dirTag="M__IB1" vehicle="1536" block="9601" tripTag="5849359" />\
-                    <prediction epochTime="1389546930534" seconds="3051" minutes="50" isDeparture="false" affectedByLayover="true" dirTag="M__IB1" vehicle="1431" block="9605" tripTag="5849360" />\
-                    <prediction epochTime="1389548706670" seconds="4827" minutes="80" isDeparture="false" affectedByLayover="true" dirTag="M__IB1" vehicle="1425" block="9602" tripTag="5849458" />\
+                    <prediction epochTime="1390594839167" seconds="435" minutes="7" isDeparture="false" dirTag="M__IB1" vehicle="1536" vehiclesInConsist="2" block="9601" tripTag="5848179" />\
+                    <prediction epochTime="1390595612868" seconds="1209" minutes="20" isDeparture="false" dirTag="M__IB1" vehicle="1422" block="9612" tripTag="5848180" />\
+                    <prediction epochTime="1390596019748" seconds="1616" minutes="26" isDeparture="false" dirTag="M__IB1" vehicle="1457" block="9603" tripTag="5848181" />\
+                    <prediction epochTime="1390596768424" seconds="2365" minutes="39" isDeparture="false" dirTag="M__IB1" vehicle="1458" block="9608" tripTag="5848182" />\
+                    <prediction epochTime="1390596950232" seconds="2547" minutes="42" isDeparture="false" dirTag="M__IB1" vehicle="1462" block="MUNSCHED" tripTag="MwkdUNSCHEDI" />\
                 </direction>\
-                <message text="No Elevator at&#10;Van Ness Station"/>\
+                <message text="For real time srv alerts follow us on Twitter: sfmta_muni" priority="Low"/>\
+                <message text="Sign-up for Route/Line specific Email/Text Alerts @ sfmta.com" priority="Low"/>\
             </predictions>\
             <predictions agencyTitle="San Francisco Muni" routeTitle="N-Judah" routeTag="N" stopTitle="Embarcadero Station Arr" stopTag="6992">\
                 <direction title="Inbound to Caltrain via Downtown">\
-                    <prediction epochTime="1389544385900" seconds="506" minutes="8" isDeparture="false" dirTag="N__IB1" vehicle="1485" block="9703" tripTag="5841166" />\
-                    <prediction epochTime="1389544800000" seconds="920" minutes="15" isDeparture="true" affectedByLayover="true" dirTag="N__IBEMKI" vehicle="1534" block="9710" tripTag="5841282" />\
-                    <prediction epochTime="1389545138088" seconds="1258" minutes="20" isDeparture="false" dirTag="N__IB1" vehicle="1531" vehiclesInConsist="2" block="9704" tripTag="5841167" />\
-                    <prediction epochTime="1389546465655" seconds="2586" minutes="43" isDeparture="false" affectedByLayover="true" dirTag="N__IB1" vehicle="1475" vehiclesInConsist="2" block="9705" tripTag="5841168" />\
-                    <prediction epochTime="1389547749880" seconds="3870" minutes="64" isDeparture="false" affectedByLayover="true" dirTag="N__IB1" vehicle="1478" vehiclesInConsist="2" block="9708" tripTag="5841226" />\
+                    <prediction epochTime="1390594831894" seconds="428" minutes="7" isDeparture="false" delayed="true" slowness="0.299" dirTag="N__IB1" vehicle="1525" vehiclesInConsist="2" block="9702" tripTag="5840380" />\
+                    <prediction epochTime="1390595019300" seconds="616" minutes="10" isDeparture="false" dirTag="N__IB1" vehicle="1414" block="9703" tripTag="5840381" />\
+                    <prediction epochTime="1390595635887" seconds="1232" minutes="20" isDeparture="false" dirTag="N__IB1" vehicle="1465" block="9715" tripTag="5840382" />\
+                    <prediction epochTime="1390596376043" seconds="1972" minutes="32" isDeparture="false" dirTag="N__IB1" vehicle="1449" vehiclesInConsist="2" block="9704" tripTag="5840383" />\
+                    <prediction epochTime="1390596902333" seconds="2499" minutes="41" isDeparture="false" affectedByLayover="true" dirTag="N__IB1" vehicle="1523" vehiclesInConsist="2" block="9705" tripTag="5840384" />\
                 </direction>\
-                <message text="Hot Chocolate Run today: May delay service."/>\
-                <message text="No Elevator at&#10;Van Ness Station"/>\
-                <message text="Hot Chocolate Run today: May delay service."/>\
+                <message text="For real time srv alerts follow us on Twitter: sfmta_muni" priority="Low"/>\
+                <message text="Sign-up for Route/Line specific Email/Text Alerts @ sfmta.com" priority="Low"/>\
             </predictions>\
             <predictions agencyTitle="San Francisco Muni" routeTitle="KT-Ingleside/Third Street" routeTag="KT" stopTitle="Embarcadero Station Arr" stopTag="6992">\
                 <direction title="Inbound to Visitacion Valley via Downtown">\
-                    <prediction epochTime="1389544766897" seconds="887" minutes="14" isDeparture="false" dirTag="KT__IB1" vehicle="1525" block="9401" tripTag="5849353" />\
-                    <prediction epochTime="1389545780793" seconds="1901" minutes="31" isDeparture="false" affectedByLayover="true" dirTag="KT__IB1" vehicle="1430" block="9406" tripTag="5849354" />\
-                    <prediction epochTime="1389546665159" seconds="2786" minutes="46" isDeparture="false" affectedByLayover="true" dirTag="KT__IB1" vehicle="1424" block="9408" tripTag="5849355" />\
-                    <prediction epochTime="1389547621067" seconds="3741" minutes="62" isDeparture="false" affectedByLayover="true" dirTag="KT__IB1" vehicle="1415" block="9403" tripTag="5849371" />\
-                    <prediction epochTime="1389548468014" seconds="4588" minutes="76" isDeparture="false" affectedByLayover="true" dirTag="KT__IB1" vehicle="1506" block="9404" tripTag="5849366" />\
+                    <prediction epochTime="1390595048217" seconds="644" minutes="10" isDeparture="false" dirTag="KT__IB1" vehicle="1443" block="9401" tripTag="5848284" />\
+                    <prediction epochTime="1390595409129" seconds="1005" minutes="16" isDeparture="false" dirTag="KT__IB1" vehicle="1537" block="9416" tripTag="5848285" />\
+                    <prediction epochTime="1390596533508" seconds="2130" minutes="35" isDeparture="false" dirTag="KT__IB1" vehicle="1520" block="9412" tripTag="5848286" />\
+                    <prediction epochTime="1390596739903" seconds="2336" minutes="38" isDeparture="false" affectedByLayover="true" dirTag="KT__IB1" vehicle="1483" block="9402" tripTag="5848287" />\
+                    <prediction epochTime="1390597507631" seconds="3104" minutes="51" isDeparture="false" affectedByLayover="true" dirTag="KT__IB1" vehicle="1508" block="9414" tripTag="5848288" />\
                 </direction>\
-                <message text="No Elevator at&#10;Van Ness Station"/>\
+                <message text="For real time srv alerts follow us on Twitter: sfmta_muni" priority="Low"/>\
+                <message text="Sign-up for Route/Line specific Email/Text Alerts @ sfmta.com" priority="Low"/>\
             </predictions>\
             <predictions agencyTitle="San Francisco Muni" routeTitle="J-Church" routeTag="J" stopTitle="Embarcadero Station Arr" stopTag="6992">\
                 <direction title="Inbound to Downtown">\
-                    <prediction epochTime="1389544057586" seconds="178" minutes="2" isDeparture="false" dirTag="J__IB1" vehicle="1508" block="9305" tripTag="5841172" />\
-                    <prediction epochTime="1389544613321" seconds="734" minutes="12" isDeparture="false" dirTag="J__IB1" vehicle="1534" block="9710" tripTag="5841281" />\
-                    <prediction epochTime="1389545183349" seconds="1304" minutes="21" isDeparture="false" dirTag="J__IB1" vehicle="1445" block="9303" tripTag="5841173" />\
-                    <prediction epochTime="1389545829136" seconds="1950" minutes="32" isDeparture="false" affectedByLayover="true" dirTag="J__IB1" vehicle="1538" block="9301" tripTag="5841174" />\
-                    <prediction epochTime="1389547670804" seconds="3791" minutes="63" isDeparture="false" affectedByLayover="true" dirTag="J__IB1" vehicle="1520" block="9304" tripTag="5841188" />\
+                    <prediction epochTime="1390594843592" seconds="440" minutes="7" isDeparture="false" dirTag="J__IB1" vehicle="1475" block="9309" tripTag="5840496" />\
+                    <prediction epochTime="1390595115190" seconds="711" minutes="11" isDeparture="false" dirTag="J__IB1" vehicle="1466" block="9301" tripTag="5840497" />\
+                    <prediction epochTime="1390595827747" seconds="1424" minutes="23" isDeparture="false" dirTag="J__IB1" vehicle="1501" block="9306" tripTag="5840498" />\
+                    <prediction epochTime="1390596220589" seconds="1817" minutes="30" isDeparture="false" dirTag="J__IB1" vehicle="1467" block="9302" tripTag="5840499" />\
+                    <prediction epochTime="1390596466036" seconds="2062" minutes="34" isDeparture="false" dirTag="J__IB1" vehicle="1419" block="9306" tripTag="5840498" />\
                 </direction>\
-                <message text="No Elevator at&#10;Van Ness Station"/>\
+                <message text="For real time srv alerts follow us on Twitter: sfmta_muni" priority="Low"/>\
+                <message text="Sign-up for Route/Line specific Email/Text Alerts @ sfmta.com" priority="Low"/>\
             </predictions>\
-        </body>\
-    ';
+        </body>';
+
     return {
         p14076: p2(p14076),
         p13292: p2(p13292),
+
+        // 37 & KLM outbound
+        p16239: p2(p16239),
+        p13255: p2(p13255),
         p15726: p2(p15726),
         p16992: p2(p16992),
+
         routeConfig: p2(routeConfigXml)
     };
 }();

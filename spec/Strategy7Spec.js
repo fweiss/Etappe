@@ -14,16 +14,24 @@ describe('strategy7', function() {
         }
     };
 
-    var muniPredictions001;
+    var backEndFixture = {
+        getPredictions: function(options, callback) {
+            var data = fixtures['p' + options.stopId];
+            if ( ! data) {
+                throw 'no fixture for stop: ' + options.stopId;
+            }
+            callback(data);
+        },
+        getRouteConfig: function(options, callback) {
+            callback(fixtures.routeConfig);
+        }
+    };
 
     beforeEach(function() {
         options = {};
         options.trip = trip1;
         options.direction = 'outbound';
-//        var xhttp = new XMLHttpRequest();
-//        xhttp.open('GET', 'fixtures/muni-prediction-001.xml', false);
-//        xhttp.send();
-//        muniPredictions001 = xhttp.responseXML;
+        sfmuni.setBackend(backEndFixture);
     });
 
     it('should make a trip', function() {
@@ -63,14 +71,6 @@ describe('strategy7', function() {
 
     describe('ride', function() {
         var ride;
-        sfmuni.setBackend({
-            getPredictions: function(options, callback) {
-                callback(fixtures.p15726);
-            },
-            getRouteConfig: function(options, callback) {
-                callback(fixtures.routeConfig);
-            }
-        });
 
         beforeEach(function() {
             options.orig = '15726';
@@ -78,10 +78,10 @@ describe('strategy7', function() {
             ride = trip.segments[0].list[0];
         });
         it('should have route id', function() {
-            expect(ride.route).toBe('M');
+            expect(ride.route).toBe('37');
         });
         it('should have vehicle id', function() {
-            expect(ride.vehicle).toBe('1516');
+            expect(ride.vehicle).toBe('8526');
         });
 
         it('should have origin time', function() {
@@ -125,9 +125,27 @@ describe('strategy7', function() {
         });
         it('should not link multiple destinations', function() {});
         it('should have correct route id', function() {
-            expect(rides.list.length).toEqual(14);
+            expect(rides.list.length).toEqual(12);
             var ride4 = rides.list[4];
             expect(ride4.route).toEqual('L');
+        });
+    });
+
+    describe('create MUNI rides origin-destination linking', function() {
+        var routeConfig;
+        var originConnections;
+        var destinationConnections;
+        beforeEach(function() {
+            var routeConfig = sfmuni.parseRouteConfig($("route", fixtures.routeConfig));
+            originConnections = [ { directions: [ { predictions: [] } ] }];
+            destinationConnections = [ { directions: [ { predictions: [] } ] }];
+        });
+
+        it('should not link to destination occurring before origin', function() {
+            originConnections[0].directions[0].predictions.push({ datetime: 2000, vehicle: '1111' });
+            destinationConnections[0].directions[0].predictions.push({ datetime: 1000, vehicle: '1111' });
+            var rides = sfmuni.createMuniRides('inbound', originConnections, destinationConnections, routeConfig);
+            expect(rides.list.length).toEqual(0);
         });
     });
 
