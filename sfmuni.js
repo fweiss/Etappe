@@ -159,16 +159,21 @@ var sfmuni = function() {
         rides.origin = departurePredictions.stopTag;
         rides.destination = arrivalProdictions.stopTag;
         rides.list = [];
+        var committedOrigins = [];
         departurePredictions.forEach(function(connectionA) {
             var routeTag = connectionA.routeTag;
+//            committedOrgins.push(connectionA.)
             connectionA.directions.forEach(function(directionA) {
                 directionA.predictions.forEach(function(predictionA) {
 
                     arrivalProdictions.forEach(function(connection) {
                         connection.directions.forEach(function(direction) {
                             direction.predictions.forEach(function(predictionB) {
-                                if (predictionA.vehicle == predictionB.vehicle
-                                    && predictionA.datetime < predictionB.datetime) {
+                                var sameVehicle = predictionA.vehicle == predictionB.vehicle;
+                                var originBeforeDestination = predictionA.datetime < predictionB.datetime;
+                                var sameTripTag = predictionA.tripTag == predictionB.tripTag;
+
+                                if (sameVehicle && originBeforeDestination && sameTripTag) {
                                     var segment = {};
                                     segment.originTime = predictionA.datetime;
                                     segment.destinationTime = predictionB.datetime;

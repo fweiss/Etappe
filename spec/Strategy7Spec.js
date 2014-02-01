@@ -2,6 +2,7 @@ describe('strategy7', function() {
     var options = {};
     var trip1 = {
         id: 2,
+        description: 'Round trip between Roosevelt Way & Lower Terrace; Embarcadero via SF MUNI',
         routes: {
             outbound: [
                 { carrier: "sfmuni", route: "37", origin: "16239", destination: "13255" },
@@ -107,7 +108,13 @@ describe('strategy7', function() {
         it('should have multiple connections', function() {
             connections = sfmuni.parsePredictions(fixtures.p15726);
             expect(connections.length).toBe(3);
-
+        });
+        it('should have tripTag', function() {
+            var connections = sfmuni.parsePredictions(fixtures.p13292);
+            var connection = connections[0];
+            var direction = connection.directions[0];
+            var prediction = direction.predictions[0];
+            expect(prediction.tripTag).toEqual('5825459');
         });
     });
 
@@ -146,6 +153,14 @@ describe('strategy7', function() {
             destinationConnections[0].directions[0].predictions.push({ datetime: 1000, vehicle: '1111' });
             var rides = sfmuni.createMuniRides('inbound', originConnections, destinationConnections, routeConfig);
             expect(rides.list.length).toEqual(0);
+        });
+
+        it('should not link to destination more than once', function() {
+            originConnections[0].directions[0].predictions.push({ datetime: 2000, vehicle: '1111', tripTag: '1' });
+            destinationConnections[0].directions[0].predictions.push({ datetime: 3000, vehicle: '1111', tripTag: '1' });
+            destinationConnections[0].directions[0].predictions.push({ datetime: 4000, vehicle: '1111', tripTag: '2' });
+            var rides = sfmuni.createMuniRides('inbound', originConnections, destinationConnections, routeConfig);
+            expect(rides.list.length).toEqual(1);
         });
     });
 
