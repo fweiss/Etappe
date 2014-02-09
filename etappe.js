@@ -189,23 +189,6 @@ var etappe = function() {
         trip.segments = [];
 
         var route = options.trip.routes[options.direction];
-//        getSegments(route, callback)
-
-//        var segment = {};
-//        segment.agency = 'sfmuni';
-//        segment.origin = 'origin';
-//        segment.destination = 'destination';
-//        segment.list = [];
-//        var ride = {};
-//        ride.route = 'route';
-//        ride.vehicle = 'vehicle';
-//        ride.originTime = new Date();
-//        ride.destinationTime = new Date(ride.originTime.getTime() + 3 * 60 * 1000);
-//        // s/b rides, not list
-//        segment.list.push(ride);
-//        trip.segments.push(segment);
-//        trip.segments.push(segment);
-//        callback(trip);
         var segment0;
         var segment1;
         sfmuni.getSegments(route[0], function(segments) {
