@@ -1,0 +1,34 @@
+configurations {
+    scp
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    scp "org.apache.ant:ant-jsch:1.7.1", "jsch:jsch:0.1.29"
+}
+
+ant.taskdef(
+    name: "scp",
+    classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
+    classPath: configurations.scp.asPath
+)
+
+task awsPublish() {
+    doLast {
+        ant.scp(
+            todir: "$awsUserid@$awsHostname:$awsDocroot",
+            keyfile: "$awsKeyfile",
+            trust: 'true',
+            passphrase: '',
+            verbose: 'true'
+        ) {
+            fileset(dir: 'src/webapp') {
+                include(name: '**/*.*')
+            }
+        }
+    }
+
+}
