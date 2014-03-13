@@ -49,10 +49,18 @@ var view = function() {
         d.empty();
         //d.css("background-color", routeColor[0]);
         $("<div>").appendTo(d).append(segments.agency + ": " + segments.origin + " to " + segments.destination);
+        var table = $("<table>").appendTo(d);
+        var tbody = $("<tbody>").appendTo(table);
         for (var i=0; i<segments.list.length; i++) {
             var segment = segments.list[i];
             var wait = Math.floor((segment.originTime - datetime) / 60000);
-            $("<div>").appendTo(d).append("(" + wait + ") " + segment.route + "/" + segment.vehicle +  ": " + segment.originTime.toLocaleTimeString() + "-" + segment.destinationTime.toLocaleTimeString());
+            var tr = $("<tr>").appendTo(tbody);
+//            $("<div>").appendTo(d).append("(" + wait + ") " + segment.route + "/" + segment.vehicle +  ": " + segment.originTime.toLocaleTimeString() + "-" + segment.destinationTime.toLocaleTimeString());
+            $("<td>").appendTo(tr).append("(" + wait + ")");
+            $("<td>").appendTo(tr).append(segment.route);
+            $("<td>").appendTo(tr).append(segment.vehicle);
+            $("<td>").appendTo(tr).append(segment.originTime.toLocaleTimeString());
+            $("<td>").appendTo(tr).append(segment.destinationTime.toLocaleTimeString());
         }
     }
     function updateGraph(id, segments) {
