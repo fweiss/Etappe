@@ -1,49 +1,48 @@
 <html>
-<head>
-<title>Etappe</title>
-  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-<link  type="text/css" href="css/reset.css" rel="stylesheet"/>
-<link  type="text/css" href="css/default.css" rel="stylesheet"/>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-<script type="text/javascript" src="js/sfmuni.js"></script>
-<script type="text/javascript" src="js/bart.js"></script>
-<script type="text/javascript" src="js/view.js"></script>
-<script type="text/javascript" src="js/etappe.js"></script>
-<script type="text/javascript" src="js/main.js"></script>
-    <script type="text/javascript" src="js/trips.js"></script>
-
-</head>
-<body>
-<div id="tabs">
-   <ul>
-      <li><a href="#trip">Trip Info</a></li>
-      <li><a href="#outbound">Outbound</a></li>
-      <li><a href="#inbound">Inbound</a></li>
-   </ul>
-   <div id="trip">
-      <p>Date: today</p>
-      <p>Time: now</p>
-      <p>Origin: <span id='tripOrigin'></span></p>
-      <p>Destination: <span id='tripDestination'></span></p>
-   </div>
-   <div id="outbound">
-        <div class="header"><a href="#" id="obRefresh">Refresh</a><span class="ageRefresh"></span></div>
-        <div id="obtrip"></div>
-        <canvas id="obGraph" width="600" height="400"></canvas>
-        <p id="ob1">none</p>
-        <p id="ob2">none</p>
-   </div>
-   <div id="inbound">
-        <div class="header"><a href="#" id="ibRefresh">Refresh</a><span class="ageRefresh"></span></div>
-        <div id="ibtrip"></div>
-        <canvas id="ibGraph" width="600" height="400"></canvas>
-        <p id="ib1">none</p>
-        <p id="ib2">none</p>
-   </div>
-</div>
-<div id="busyModal">
-    <span>Loading...</span>
-</div>
-</body>
+    <head>
+        <title>Etappe</title>
+        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+        <link  type="text/css" href="css/reset.css" rel="stylesheet"/>
+        <link  type="text/css" href="css/default.css" rel="stylesheet"/>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/sfmuni.js"></script>
+        <script type="text/javascript" src="js/bart.js"></script>
+        <script type="text/javascript" src="js/view.js"></script>
+        <script type="text/javascript" src="js/etappe.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+        <script type="text/javascript" src="js/trips.js"></script>
+    </head>
+    <body>
+        <div id="tabs">
+           <ul>
+              <li><a href="#trip">Trip Info</a></li>
+              <li><a href="#outbound">Outbound</a></li>
+              <li><a href="#inbound">Inbound</a></li>
+           </ul>
+           <div id="trip">
+              <p>Date: today</p>
+              <p>Time: now</p>
+              <p>Origin: <span id='tripOrigin'></span></p>
+              <p>Destination: <span id='tripDestination'></span></p>
+           </div>
+           <div id="outbound">
+                <div class="header"><a href="#" id="obRefresh">Refresh</a><span class="ageRefresh"></span></div>
+                <div id="obtrip"></div>
+                <canvas id="obGraph" width="600" height="400"></canvas>
+                <p id="ob1">none</p>
+                <p id="ob2">none</p>
+           </div>
+           <div id="inbound">
+                <div class="header"><a href="#" id="ibRefresh">Refresh</a><span class="ageRefresh"></span></div>
+                <div id="ibtrip"></div>
+                <canvas id="ibGraph" width="600" height="400"></canvas>
+                <p id="ib1">none</p>
+                <p id="ib2">none</p>
+           </div>
+        </div>
+        <div id="busyModal">
+            <span>Loading...</span>
+        </div>
+    </body>
 </html>
