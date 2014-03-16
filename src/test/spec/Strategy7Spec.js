@@ -78,20 +78,19 @@ describe('strategy7', function() {
             var trip = strategy(options);
             ride = trip.segments[0].list[0];
         });
+
         it('should have route id', function() {
             expect(ride.route).toBe('37');
         });
         it('should have vehicle id', function() {
             expect(ride.vehicle).toBe('8526');
         });
-
         it('should have origin time', function() {
             expect(ride.originTime).toBeDefined();
         });
         it('should have destination time', function() {
             expect(ride.destinationTime).toBeDefined();
         });
-
     });
 
     describe('muni parser', function() {
@@ -142,10 +141,15 @@ describe('strategy7', function() {
         var routeConfig;
         var originConnections;
         var destinationConnections;
+        var originPredictions;
+        var destinationPredictions;
         beforeEach(function() {
             var routeConfig = sfmuni.parseRouteConfig($("route", fixtures.routeConfig));
             originConnections = [ { directions: [ { predictions: [] } ] }];
+            originPredictions = originConnections[0].directions[0].predictions;
             destinationConnections = [ { directions: [ { predictions: [] } ] }];
+            destinationPredictions = destinationConnections[0].directions[0].predictions;
+
         });
 
         it('should not link to destination occurring before origin', function() {
@@ -161,6 +165,18 @@ describe('strategy7', function() {
             destinationConnections[0].directions[0].predictions.push({ datetime: 4000, vehicle: '1111', tripTag: '2' });
             var rides = sfmuni.createMuniRides('inbound', originConnections, destinationConnections, routeConfig);
             expect(rides.list.length).toEqual(1);
+        });
+        it('should sort rides by departure time', function() {
+            originPredictions.push({ datetime: 1000, vehicle: '1', tripTag: '1' });
+            destinationPredictions.push({ datetime: 1001, vehicle: '1', tripTag: '1' });
+            originPredictions.push({ datetime: 3000, vehicle: '3', tripTag: '3' });
+            destinationPredictions.push({ datetime: 3001, vehicle: '3', tripTag: '3' });
+            originPredictions.push({ datetime: 2000, vehicle: '2', tripTag: '2' });
+            destinationPredictions.push({ datetime: 2001, vehicle: '2', tripTag: '2' });
+            var rides = sfmuni.createMuniRides('inbound', originConnections, destinationConnections, routeConfig);
+//            need to get rid of the 'list' field
+            expect(rides.list.length).toEqual(3);
+            expect(rides.list[2].originTime).toEqual(3000);
         });
     });
 

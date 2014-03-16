@@ -191,6 +191,7 @@ var sfmuni = function() {
                 });
             });
         });
+        rides.list = _.sortBy(rides.list, 'originTime');
         return rides;
     }
     function findSegments(options, callback) {
