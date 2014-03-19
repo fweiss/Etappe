@@ -1,18 +1,29 @@
-# README for a newly created project.
+Etappe is a browser app for planning a metro transit trip using one or more 
+transit carriers. There are many strategies for creating an optimal trip. Some 
+of the optimization criteria are:
 
-There are a couple of things you should do first, before you can use all of Git's power:
+departure time
+arrival time
+number of layovers (transfers)
+trip duration
+layover duration
+transit carriers (allow/deny)
+fare cost
+...and so on
 
-  * Add a remote to this project: in the Cloud9 IDE command line, you can execute the following commands
-    `git remote add [remote name] [remote url (eg. 'git@github.com:/ajaxorg/node_chat')]` [Enter]
-  * Create new files inside your project
-  * Add them to to Git by executing the following command
-    `git add [file1, file2, file3, ...]` [Enter]
-  * Create a commit which can be pushed to the remote you just added
-    `git commit -m 'added new files'` [Enter]
-  * Push the commit the remote
-    `git push [remote name] master` [Enter]
+Many transit carriers (agencies) publish route information and real-time
+schedules via web service interfaces (APIs). Although there is a standard
+protocol, it does not appear to provide the real time data this application
+requires.
 
-That's it! If this doesn't work for you, please visit the excellent resources from [Github.com](http://help.github.com) and the [Pro Git](http://http://progit.org/book/) book.
-If you can't find your answers there, feel free to ask us via Twitter (@cloud9ide), [mailing list](groups.google.com/group/cloud9-ide) or IRC (#cloud9ide on freenode).
+The key data structure is a trip. A trip has a origin place and a destination
+place. It also may have an anchor time and anchor time mode. Thus, for example
+a trip could depart the origin at a particular time or arrive at the destination
+at a particular time. Currently, a trip starts now at the origin. When a trip
+is evaluated, it creates plans. Each plan is a sequence of rides, such that each
+plan satisfies the trip, but may use different routes, stops, and vehicles. The
+intention is that plans be optimized according to a strategy, which may be left
+up to the user.
 
-Happy coding!
+A key subordinate data structure is a segment or subroute. This abstracts the
+time factor from a ride, or conversly specifies the prototype for a ride.
