@@ -30,3 +30,7 @@ up to the user.
 A key subordinate data structure of a segment is a ride. A ride provide concrete
 instances which satisfy a segment, including details origin and destination time,
 carrier, and vehicle id.
+
+# Resources
+
+http://www.bart.gov/schedules/developers/api

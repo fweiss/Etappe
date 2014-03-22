@@ -16,7 +16,36 @@
  * TODO: define the object graphs
  */
 var bart = function() {
+    var backend;
     var routes;
+    function initialize() {
+        backend = {
+            getEtd: function(options, callback) {
+                options.uri = "/api/etd.aspx";
+                options.cmd = "etd";
+                request(options, function(data, textStatus, jqXHR) {
+                    callback(parseEtd(data));
+                });
+            },
+            getSchedule: function(options, callback) {
+                options.uri = "/api/sched.aspx";
+                if (options.time && options.time instanceof Date) {
+                    options.time = convertFromDate(options.time);
+                }
+                request(options, function(data, textStatus, jqXHR) {
+                    var schedule = parseSched(data);
+                    // inject arrive/depart, since BART API response doesn't say
+                    schedule.cmd = options.cmd;
+                    callback(schedule);
+                });
+            },
+            getStations: function(options, callback) {
+                options.uri = '/api/stn.aspx';
+                options.cmd = 'stns';
+                request(options, callback);
+            }
+        };
+    }
     function convertToDate(date, time) {
         var datetime = new Date();
         datetime.setTime(Date.parse(date + " " + time));
@@ -49,6 +78,16 @@ var bart = function() {
             routes.push(route);
         });
         return routes;
+    }
+    function parseStations(data) {
+        var stations = [];
+        $('stations station', data).each(function() {
+            var station = {};
+            station.name = $(this).find('name').text();
+            station.id = $(this).find('abbr').text();
+            stations.push(station);
+        });
+        return stations;
     }
     function findRoute(routeID) {
         for (var i=0; i<routes.length; i++) {
@@ -108,32 +147,31 @@ var bart = function() {
             success: callback
         });
     }
+    // FIXME: should not be called in unit test!
     function init() {
+        initialize();
         request({ uri: "/api/route.aspx", cmd: "routes" }, function(data, textStatus, jqXHR) {
             routes = parseRoutes(data);
         });
     }
     var api = {
         getEtd: function(options, callback) {
-            options.uri = "/api/etd.aspx";
-            options.cmd = "etd";
-            request(options, function(data, textStatus, jqXHR) {
-                callback(parseEtd(data));
-            });
+            backend.getEtd(options, callback);
         },
         getSchedule: function(options, callback) {
-            options.uri = "/api/sched.aspx";
-            if (options.time && options.time instanceof Date) {
-                options.time = convertFromDate(options.time);
-            }
-            request(options, function(data, textStatus, jqXHR) {
-                var schedule = parseSched(data);
-                // inject arrive/depart, since BART API response doesn't say
-                schedule.cmd = options.cmd;
-                callback(schedule);
-            });           
+            backend.getSchedule(options.callback);;
         },
-        findRoute: findRoute
+        getStations: function(options, callback) {
+           backend.getStations(options, function(data) {
+               var stations = parseStations(data);
+               callback(stations);
+           });
+        },
+        findRoute: findRoute,
+//        getStations: parseStations,
+        setBackend: function(_backend) {
+            backend = _backend
+        }
     };
     init();
     return api;

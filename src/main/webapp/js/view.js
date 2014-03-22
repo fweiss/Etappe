@@ -181,6 +181,15 @@ var view = function() {
         },
         updateOutbound: function(trip) {
             updateViews(trip, 'ob');
+        },
+        drawStations: function(stations) {
+            var origin = $('#originStop');
+            var destination = $('#destinationStop');
+            origin.empty;
+            _.each(stations, function(station) {
+                $('<option>').appendTo(origin).append(station.name).attr('value', station.id);
+                $('<option>').appendTo(destination).append(station.name).attr('value', station.id);
+            });
         }
     };
     return api;

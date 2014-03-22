@@ -6,6 +6,11 @@ $(function() {
     };
     var direction;
     var autoRefresh = false;
+
+    bart.getStations({}, function(stations) {
+        view.drawStations(stations);
+    });
+
     view.updateTripInfo(tripInfo);
     var options = {};
     options.trip = trips[1];

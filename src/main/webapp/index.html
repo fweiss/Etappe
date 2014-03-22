@@ -4,7 +4,7 @@
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
         <link  type="text/css" href="css/reset.css" rel="stylesheet"/>
         <link  type="text/css" href="css/default.css" rel="stylesheet"/>
-        <script type="text/javascript" src="js/lib/underscore-min.js"></script>
+        <script type="text/javascript" src="js/lib/underscore.1.6.0/underscore-min.js"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/sfmuni.js"></script>
@@ -26,6 +26,19 @@
               <p>Time: now</p>
               <p>Origin: <span id='tripOrigin'></span></p>
               <p>Destination: <span id='tripDestination'></span></p>
+               <p>
+                   <select id="carrier">
+                       <option>Choose a carrier</option>
+                       <option value="sfmuni">SF MUNI</option>
+                       <option value="bart">BART</option>
+                   </select>
+                   <select id="originStop">
+                       <option>Choose an origin</option>
+                   </select>
+                   <select id="destinationStop">
+                       <option>Choose a destination</option>
+                   </select>
+               </p>
            </div>
            <div id="outbound">
                 <div class="header"><a href="#" id="obRefresh">Refresh</a><span class="ageRefresh"></span></div>
