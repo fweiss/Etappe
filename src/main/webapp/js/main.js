@@ -7,10 +7,6 @@ $(function() {
     var direction;
     var autoRefresh = false;
 
-    bart.getStations({}, function(stations) {
-        view.drawStations(stations);
-    });
-
     view.updateTripInfo(tripInfo);
     var options = {};
     options.trip = trips[1];
@@ -48,3 +44,15 @@ $(function() {
         }
     } , 60 * 1000);
 });
+
+var tripController = function() {
+    $(function() {
+        $('#originStationSelect, #destinationStationSelect').attr('disabled', 'disabled');
+        $('#carrierSelect').change(function() {
+            $('#originStationSelect, #destinationStationSelect').removeAttr('disabled');
+            bart.getStations({}, function(stations) {
+                view.drawStations(stations);
+            });
+        });
+    });
+}();

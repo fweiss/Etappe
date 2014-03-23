@@ -183,8 +183,8 @@ var view = function() {
             updateViews(trip, 'ob');
         },
         drawStations: function(stations) {
-            var origin = $('#originStop');
-            var destination = $('#destinationStop');
+            var origin = $('#originStationSelect');
+            var destination = $('#destinationStationSelect');
             origin.empty;
             _.each(stations, function(station) {
                 $('<option>').appendTo(origin).append(station.name).attr('value', station.id);

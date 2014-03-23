@@ -1,5 +1,5 @@
 /**
- * A singleton/static facade to the BART API
+ * A singleton/static adapter to the BART API
  * http://api.bart.gov/docs/overview/index.aspx
  * 
  * Responsibilities:
@@ -17,7 +17,7 @@
  */
 var bart = function() {
     var backend;
-    var routes;
+    var cachedRoutes;
     function initialize() {
         backend = {
             getEtd: function(options, callback) {
@@ -42,6 +42,13 @@ var bart = function() {
             getStations: function(options, callback) {
                 options.uri = '/api/stn.aspx';
                 options.cmd = 'stns';
+                request(options, callback);
+            },
+            getRouteInfo: function(options, callback) {
+                options.url = '/api/route/aspx';
+                options.cmd = 'routeinfo';
+                options.route = 'all';
+                options.date = 'today';
                 request(options, callback);
             }
         };
@@ -75,6 +82,10 @@ var bart = function() {
             route.routeID = $(this).find("routeID").text();
             route.number = $(this).find("number").text();
             route.color = $(this).find("color").text();
+            route.config = [];
+            $('config station', this).each(function() {
+                route.config.push($(this).text());
+            });
             routes.push(route);
         });
         return routes;
@@ -147,12 +158,8 @@ var bart = function() {
             success: callback
         });
     }
-    // FIXME: should not be called in unit test!
     function init() {
         initialize();
-        request({ uri: "/api/route.aspx", cmd: "routes" }, function(data, textStatus, jqXHR) {
-            routes = parseRoutes(data);
-        });
     }
     var api = {
         getEtd: function(options, callback) {
@@ -166,6 +173,15 @@ var bart = function() {
                var stations = parseStations(data);
                callback(stations);
            });
+        },
+        getRoutes: function(options, callback) {
+            if (cachedRoutes) {
+                callback(cachedRoutes);
+            }
+            backend.getRouteInfo(options, function(data) {
+                cachedRoutes = parseRoutes(data);
+                callback(cachedRoutes);
+            });
         },
         findRoute: findRoute,
 //        getStations: parseStations,
