@@ -190,6 +190,21 @@ var view = function() {
                 $('<option>').appendTo(origin).append(station.name).attr('value', station.id);
                 $('<option>').appendTo(destination).append(station.name).attr('value', station.id);
             });
+        },
+        drawPlan: function(segments) {
+            var thead = $('#plan thead');
+            var tbody = $('#plan tbody');
+            thead.empty();
+            tbody.empty();
+            var tr = $('<tr>').appendTo(thead);
+            if (segments.length === 0) {
+                $('<td>').appendTo(tr).append('No direct routes found');
+            }
+            $('<td>').appendTo(tr).append('Available routes');
+            _.each(segments, function(segment) {
+                var tr = $('<tr>').appendTo(tbody);
+                $('<td>').appendTo(tr).append(segment.routeName);
+            });
         }
     };
     return api;

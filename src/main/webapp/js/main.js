@@ -44,8 +44,14 @@ $(function() {
         }
     } , 60 * 1000);
 });
-
+/**
+ * The user can select a carrier/agency and an origin and destination station.
+ * Display a list of available segments/routes between the stations.
+ * @type {tripController}
+ */
 var tripController = function() {
+    var originStation;
+    var destinationStation;
     $(function() {
         $('#originStationSelect, #destinationStationSelect').attr('disabled', 'disabled');
         $('#carrierSelect').change(function() {
@@ -54,5 +60,19 @@ var tripController = function() {
                 view.drawStations(stations);
             });
         });
+        $('#originStationSelect').change(function() {
+            originStation = $(this).val();
+            join();
+        });
+        $('#destinationStationSelect').change(function() {
+            destinationStation = $(this).val();
+            join();
+        });
     });
+    function join() {
+        if (originStation && destinationStation) {
+            var segments = bart.findSegment(originStation, destinationStation);
+            view.drawPlan(segments);;
+        }
+    }
 }();

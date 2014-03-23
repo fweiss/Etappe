@@ -45,7 +45,7 @@ var bart = function() {
                 request(options, callback);
             },
             getRouteInfo: function(options, callback) {
-                options.url = '/api/route/aspx';
+                options.uri = '/api/route.aspx';
                 options.cmd = 'routeinfo';
                 options.route = 'all';
                 options.date = 'today';
@@ -160,6 +160,8 @@ var bart = function() {
     }
     function init() {
         initialize();
+        // should synchronize?
+        api.getRoutes({}, function() {});
     }
     var api = {
         getEtd: function(options, callback) {
@@ -187,6 +189,31 @@ var bart = function() {
 //        getStations: parseStations,
         setBackend: function(_backend) {
             backend = _backend
+        },
+        findSegment: function(origin, destination) {
+            var segments = [];
+//            var originRoutes = _.filter(cachedRoutes, function(route) {
+//                return _.contains(route.config, origin);
+//            });
+//            var destinationRoutes = _.filter(cachedRoutes, function(route) {
+//                return _.contains(route.config, destination);
+//            });
+//            var commonRoutes = _.intersection(originRoutes, destinationRoutes);
+            var commonRoutes = _.filter(cachedRoutes, function(route) {
+                var originIndex = _.indexOf(route.config, origin);
+                var destinationIndex = _.indexOf(route.config, destination);
+                return originIndex !== -1 && destinationIndex !== -1 && originIndex < destinationIndex;
+            });
+            _.each(commonRoutes, function(route) {
+                var segment = {};
+                segment.orginStation = origin;
+                segment.destinationStation = destination;
+                segment.carrier = 'bart';
+                segment.routeNumber = route.number;
+                segment.routeName = route.name;
+                segments.push(segment);
+            });
+            return segments;
         }
     };
     init();

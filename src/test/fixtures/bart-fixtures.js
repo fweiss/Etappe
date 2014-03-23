@@ -34,6 +34,39 @@ bart_fixtures = {
     <uri> http://api.bart.gov/api/route.aspx?cmd=routeinfo&route=6 </uri>\
     <sched_num>26</sched_num>\
     <routes>\
+        <route>\
+        <name>Fremont - Daly City</name>\
+<abbr>FRMT-DALY</abbr>\
+    <routeID>ROUTE 5</routeID>\
+<number>5</number>\
+    <origin>FRMT</origin>\
+<destination>DALY</destination>\
+    <direction></direction>\
+    <color>#339933</color>\
+    <holidays>0</holidays>\
+    <num_stns>19</num_stns>\
+    <config>\
+        <station>FRMT</station>\
+        <station>UCTY</station>\
+        <station>SHAY</station>\
+        <station>HAYW</station>\
+        <station>BAYF</station>\
+        <station>SANL</station>\
+        <station>COLS</station>\
+        <station>FTVL</station>\
+        <station>LAKE</station>\
+        <station>WOAK</station>\
+        <station>EMBR</station>\
+        <station>MONT</station>\
+        <station>POWL</station>\
+        <station>CIVC</station>\
+        <station>16TH</station>\
+        <station>24TH</station>\
+        <station>GLEN</station>\
+        <station>BALB</station>\
+        <station>DALY</station>\
+    </config>\
+</route>\
     <route>\
         <name>Daly City - Fremont</name>\
         <abbr>DALY-FRMT</abbr>\
