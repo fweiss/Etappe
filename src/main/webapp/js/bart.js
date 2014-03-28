@@ -190,7 +190,7 @@ var bart = function() {
         setBackend: function(_backend) {
             backend = _backend
         },
-        findSegment: function(origin, destination) {
+        findSegments: function(origin, destination) {
             var segments = [];
 //            var originRoutes = _.filter(cachedRoutes, function(route) {
 //                return _.contains(route.config, origin);

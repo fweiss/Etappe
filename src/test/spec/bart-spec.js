@@ -30,10 +30,14 @@ describe('BART adapter', function() {
     it('should find correct segments for two stations', function() {
         var origin = '16TH';
         var destination = 'EMBR';
-        var segments = bart.findSegment(origin, destination);
+        var segments = bart.findSegments(origin, destination);
         expect(segments.length).toEqual(1);
-        expect(segments[0].routeNumber).toEqual('6');
-        expect(segments[0].routeName).toEqual('Daly City - Fremont');
+        var segment = segments[0];
+        expect(segment.routeNumber).toEqual('6');
+        expect(segment.routeName).toEqual('Daly City - Fremont');
+        expect(segment.carrier).toEqual('bart');
+        expect(segment.orginStation).toEqual('16TH');
+        expect(segment.destinationStation).toEqual('EMBR');
     });
 
 });

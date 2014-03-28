@@ -93,6 +93,13 @@ var view = function() {
                 ctx.lineTo(x1, y1);
                 ctx.stroke();
             }
+            for(var i=0; i<segments.list.length; i++) {
+                var segment = segments.list[i];
+                var x0 = timeToX(segment.originTime);
+                var x1 = timeToX(segment.destinationTime);
+                ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
+                ctx.fillText(segment.route, x0, 20 + y0);
+            }
             ctx.restore();
         }
         function drawNexusLabels(labels) {
@@ -199,13 +206,14 @@ var view = function() {
             var tr = $('<tr>').appendTo(thead);
             if (segments.length === 0) {
                 $('<td>').appendTo(tr).append('No direct routes found');
+            } else {
+                $('<td>').appendTo(tr).append('Available routes');
+                _.each(segments, function(segment) {
+                    var tr = $('<tr>').appendTo(tbody);
+                    $('<td>').appendTo(tr).append(segment.routeName);
+                });
             }
-            $('<td>').appendTo(tr).append('Available routes');
-            _.each(segments, function(segment) {
-                var tr = $('<tr>').appendTo(tbody);
-                $('<td>').appendTo(tr).append(segment.routeName);
-            });
-        }
+       }
     };
     return api;
 }();

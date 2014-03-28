@@ -53,10 +53,10 @@ var tripController = function() {
     var originStation;
     var destinationStation;
     $(function() {
-        $('#originStationSelect, #destinationStationSelect').attr('disabled', 'disabled');
+        $('#originStationSelect, #destinationStationSelect, #doChart').attr('disabled', 'disabled');
         $('#carrierSelect').change(function() {
-            $('#originStationSelect, #destinationStationSelect').removeAttr('disabled');
             bart.getStations({}, function(stations) {
+                $('#originStationSelect, #destinationStationSelect').removeAttr('disabled');
                 view.drawStations(stations);
             });
         });
@@ -68,11 +68,15 @@ var tripController = function() {
             destinationStation = $(this).val();
             join();
         });
+        $('#doChart').click(function() {
+
+        });
     });
     function join() {
         if (originStation && destinationStation) {
-            var segments = bart.findSegment(originStation, destinationStation);
-            view.drawPlan(segments);;
+            var segments = bart.findSegments(originStation, destinationStation);
+            view.drawPlan(segments);
+            $('#doChart').removeAttr('disabled');
         }
     }
 }();
