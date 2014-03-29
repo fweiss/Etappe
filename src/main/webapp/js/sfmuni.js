@@ -113,16 +113,33 @@ var sfmuni = function() {
         });
         return routes;
     }
+    /**
+     * XML feed is organized as body > route > ( stop, direction > stop, path > point )
+     * A stop represents a distinct node on a route. Since routes intersect, nodes
+     * may coincide, one for each route. Supposably, the geocodes will be equal.
+     * There will need to be a way to aggregate such stops into "station" or "nexus"
+     * which would represent an endpoint for a ride and a trip.
+     *
+     * Note that this is unlike BART, where a station can be shared among routes.
+     *
+     * http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=sf-muni
+     *
+     * @param data XML
+     * @returns {{}}
+     */
     function parseRouteConfig(data) {
         var route = {};
         route.stops = [];
-        $("stop", data).each(function() {
+        $("route > stop", data).each(function() {
             var stop = {};
             stop.tag = $(this).attr("tag");
             stop.title = $(this).attr("title");
+            stop.stopId = $(this).attr("stopId");
+
+            stop.id = $(this).attr("stopId");
+            stop.name = $(this).attr("title");
             stop.lat = $(this).attr("lat");
             stop.lon = $(this).attr("lon");
-            stop.stopId = $(this).attr("stopId");
             route.stops.push(stop);
         });
         return route;
@@ -267,9 +284,10 @@ var sfmuni = function() {
                     callback(routeConfigs[options.r]);
                 } else {
                     request(options, function(data, textStatus, jqXHR) {
-                        var routeConfig = parseRouteConfig($("route", data));
-                        routeConfigs[options.r] = routeConfig;
-                        callback(routeConfig);
+//                        var routeConfig = parseRouteConfig($("route", data));
+//                        routeConfigs[options.r] = routeConfig;
+//                        callback(routeConfig);
+                        callback(data);
                     });
                 }
             }
@@ -284,7 +302,13 @@ var sfmuni = function() {
         createMuniRides: createMuniRides,
         findSegments: findSegments,
 
-        getSegments: getSegments
+        getSegments: getSegments,
+        getStations: function(options, callback) {
+            backend.getRouteConfig(options, function(data) {
+                var stations = parseRouteConfig(data);
+                callback(stations.stops);
+            });
+        }
 
     };
     initialize();

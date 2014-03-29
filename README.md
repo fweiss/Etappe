@@ -34,3 +34,7 @@ carrier, and vehicle id.
 # Resources
 
 http://www.bart.gov/schedules/developers/api
+
+http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf
+
+http://www.sflivebus.com/

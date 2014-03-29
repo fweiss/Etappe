@@ -52,10 +52,20 @@ $(function() {
 var tripController = function() {
     var originStation;
     var destinationStation;
+    var segments;
+    var adapters = {
+        bart: {
+            getStations: bart.getStations
+        },
+        sfmuni: {
+            getStations: sfmuni.getStations
+        }
+    };
     $(function() {
         $('#originStationSelect, #destinationStationSelect, #doChart').attr('disabled', 'disabled');
-        $('#carrierSelect').change(function() {
-            bart.getStations({}, function(stations) {
+        $('#carrierSelect').change(function(event) {
+            var adapter = adapters[event.target.value];
+            adapter.getStations({}, function(stations) {
                 $('#originStationSelect, #destinationStationSelect').removeAttr('disabled');
                 view.drawStations(stations);
             });
@@ -69,12 +79,12 @@ var tripController = function() {
             join();
         });
         $('#doChart').click(function() {
-
+//            var rides = etappe.getRidesForSegments(segments);
         });
     });
     function join() {
         if (originStation && destinationStation) {
-            var segments = bart.findSegments(originStation, destinationStation);
+            segments = bart.findSegments(originStation, destinationStation);
             view.drawPlan(segments);
             $('#doChart').removeAttr('disabled');
         }

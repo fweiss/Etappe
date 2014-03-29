@@ -96,6 +96,8 @@ var bart = function() {
             var station = {};
             station.name = $(this).find('name').text();
             station.id = $(this).find('abbr').text();
+            station.lat = $(this).find('gtfs_latitude').text();
+            station.lon = $(this).find('gtfs_longitude').text();
             stations.push(station);
         });
         return stations;
@@ -192,13 +194,6 @@ var bart = function() {
         },
         findSegments: function(origin, destination) {
             var segments = [];
-//            var originRoutes = _.filter(cachedRoutes, function(route) {
-//                return _.contains(route.config, origin);
-//            });
-//            var destinationRoutes = _.filter(cachedRoutes, function(route) {
-//                return _.contains(route.config, destination);
-//            });
-//            var commonRoutes = _.intersection(originRoutes, destinationRoutes);
             var commonRoutes = _.filter(cachedRoutes, function(route) {
                 var originIndex = _.indexOf(route.config, origin);
                 var destinationIndex = _.indexOf(route.config, destination);
