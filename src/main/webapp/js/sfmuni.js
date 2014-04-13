@@ -128,8 +128,37 @@ var sfmuni = function() {
      * @returns {{}}
      */
     function parseRouteConfig(data) {
-        var route = {};
-        route.stops = [];
+        var routeConfig = {};
+        routeConfig.routes = [];
+        routeConfig.stops = [];
+        routeConfig.directions = [];
+        $('route', data).each(function() {
+            var route = {};
+            route.name = $(this).attr('title');
+            route.id = $(this).attr('tag');
+            route.stops = [];
+            // NB we don't want the children of the direction element
+            $(this).find('> stop').each(function() {
+//            $('stop', $(this)).each(function() {
+                var stop = {};
+                stop.id = $(this).attr('tag');
+                stop.name = $(this).attr('title');
+                stop.routeId = route.id;
+                route.stops.push(stop);
+            });
+            $(this).find('> direction').each(function() {
+                var direction = {};
+                direction.routeId = route.id;
+                direction.routeName = $(this).attr('title');
+                direction.stops = [];
+                $(this).find('> stop').each(function() {
+                    var stopId = $(this).attr('tag');
+                    direction.stops.push(stopId);
+                });
+                routeConfig.directions.push(direction);
+            });
+            routeConfig.routes.push(route);
+        });
         $("route > stop", data).each(function() {
             var stop = {};
             stop.tag = $(this).attr("tag");
@@ -140,9 +169,9 @@ var sfmuni = function() {
             stop.name = $(this).attr("title");
             stop.lat = $(this).attr("lat");
             stop.lon = $(this).attr("lon");
-            route.stops.push(stop);
+            routeConfig.stops.push(stop);
         });
-        return route;
+        return routeConfig;
     }
     function request(options, callback) {
         //$.ajax("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=sf-muni&stopId=14075", {
@@ -293,6 +322,43 @@ var sfmuni = function() {
             }
         };
     }
+    /**
+     * Return a list of segments that provide rides between the given origin and destination stations.
+     * Note that the nextbus API does not use station ids, so we use the stop titles instead.
+     * @param options
+     * @param callback
+     */
+    function findSegmentsBetweenStations(options, callback) {
+        var originStation = options.originStation;
+        var destinationStation = options.destinationStation;
+        var segments = [];
+        backend.getRouteConfig({}, function(data) {
+            var routes = parseRouteConfig(data);
+            var originStops = _.filter(routes.stops, function(stop) {
+                return stop.name == originStation;
+            });
+            var destinationStops = _.filter(routes.stops, function(stop) {
+                return stop.name == destinationStation;
+            });
+            _.each(routes.directions, function(direction) {
+                var providesRide = destinationProvidesRideBetween(direction, originStops[0].tag, destinationStops[0].tag);
+                if (providesRide) {
+                    var segment = {};
+                    segment.carrier = 'sfmuni';
+                    segment.orginStation = originStops[0];
+                    segment.destinationStation = destinationStops[0];
+                    segment.routeName = direction.routeName;
+                    segments.push(segment);
+                }
+            });
+            callback(segments);
+        });
+    }
+    function destinationProvidesRideBetween(direction, originStopId, destinationStopId) {
+        var p1 = _.indexOf(direction.stops, originStopId );
+        var p2 = _.indexOf(direction.stops, destinationStopId);
+        return p1 !== -1 && p2 !== -1 && p1 < p2;
+    }
     var api = {
         setBackend: setBackend,
 
@@ -301,15 +367,23 @@ var sfmuni = function() {
 
         createMuniRides: createMuniRides,
         findSegments: findSegments,
+        findSegmentsBetweenStations: findSegmentsBetweenStations,
 
         getSegments: getSegments,
         getStations: function(options, callback) {
             backend.getRouteConfig(options, function(data) {
                 var stations = parseRouteConfig(data);
-                callback(stations.stops);
+                var uniqueStations = _.uniq(stations.stops, function(station) {
+                    // hopefully, there are no typos in names
+                    // however, there may be gotchas, like "Church & Market" vs "Church & 14th"
+                    return station.name;
+                });
+                _.each(uniqueStations, function(station) {
+                    station.id = station.name; // nextmuni doesn't provide a unique station id
+                });
+                callback(uniqueStations);
             });
         }
-
     };
     initialize();
     return api;

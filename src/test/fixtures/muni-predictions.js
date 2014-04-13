@@ -36,6 +36,20 @@ var fixtures = function() {
             </predictions>\
         </body>\
     ';
+    var routeConfigXml2 = '<?xml version="1.0" encoding="utf-8"?>\
+        <body copyright="copyright">\
+            <route tag="33">\
+                <stop tag="3296" title="16th St &amp; Potrero Ave" lat="37.7656999" lon="-122.40765" stopId="13296"/>\
+                <stop tag="3295" title="16th St &amp; Potrero Ave" lat="37.7658599" lon="-122.40767" stopId="13295"/>\
+                <direction></direction>\
+                <path></path>\
+            </route>\
+            <route tag="37">\
+                <stop tag="93295" title="16th St &amp; Potrero Ave" lat="37.7658599" lon="-122.40767" stopId="13295"/>\
+                <direction></direction>\
+                <path></path>\
+            </route>\
+        </body>';
     var routeConfigXml = '<?xml version="1.0" encoding="utf-8" ?>\
     <body copyright="All data copyright San Francisco Muni 2014.">\
     <route tag="33" title="33-Stanyan" color="660000" oppositeColor="ffffff" latMin="37.7514099" latMax="37.7869099" lonMin="-122.4592499" lonMax="-122.40627">\
@@ -569,6 +583,7 @@ var fixtures = function() {
         p15726: p2(p15726),
         p16992: p2(p16992),
 
-        routeConfig: p2(routeConfigXml)
+        routeConfig: p2(routeConfigXml),
+        routeConfig2: p2(routeConfigXml2)
     };
 }();

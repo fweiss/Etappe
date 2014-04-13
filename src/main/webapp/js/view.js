@@ -76,13 +76,14 @@ var view = function() {
         }
         function drawRoute(index, segments) {
             ctx.save();
+            ctx.globalCompositeOperation = 'xor';
             var y0 = index * routeHeight + (index + 1) * nexusWidth + topLegendHeight;
             var y1 = y0 + routeHeight;
             ctx.fillStyle = routeColor[index];
             ctx.fillRect(0, y0, 600, (y1 - y0));
             //ctx.fill();
             ctx.lineCap = "square";
-                        
+
             for(var i=0; i<segments.list.length; i++) {
                 var segment = segments.list[i];
                 var x0 = timeToX(segment.originTime);
@@ -92,14 +93,16 @@ var view = function() {
                 ctx.moveTo(x0, y0);
                 ctx.lineTo(x1, y1);
                 ctx.stroke();
-            }
-            for(var i=0; i<segments.list.length; i++) {
-                var segment = segments.list[i];
-                var x0 = timeToX(segment.originTime);
-                var x1 = timeToX(segment.destinationTime);
                 ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
-                ctx.fillText(segment.route, x0, 20 + y0);
+                ctx.fillText(segment.route, x0 + 5, 20 + y0);
             }
+//            for(var i=0; i<segments.list.length; i++) {
+//                var segment = segments.list[i];
+//                var x0 = timeToX(segment.originTime);
+//                var x1 = timeToX(segment.destinationTime);
+//                ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
+//                ctx.fillText(segment.route, x0 + 5, 20 + y0);
+//            }
             ctx.restore();
         }
         function drawNexusLabels(labels) {

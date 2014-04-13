@@ -1,0 +1,15 @@
+fahrkarte
+
+trip
+origin<place>
+destination<place>
+anchorTime
+anchorMode(origin,destination)
+
+plans
+plan
+rides
+ride[route, vehicle, originTime, destinationTime, waitDuration?]
+segment[carrier, route, origin, destination]
+
+agency=carrier

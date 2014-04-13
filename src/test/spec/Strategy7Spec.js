@@ -131,6 +131,8 @@ describe('strategy7', function() {
         });
         it('should not link multiple destinations', function() {});
         it('should have correct route id', function() {
+            // this fails sometimes with 11 or 10, is it related to the fact that the bart api is being called?
+            // this may be the time calc in sfmuni line 91
             expect(rides.list.length).toEqual(12);
             var ride4 = rides.list[4];
             expect(ride4.route).toEqual('L');

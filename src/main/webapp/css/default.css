@@ -6,13 +6,33 @@ body {
     padding: 0;
 }
 #busyModal {
-    width: 100;
-    height: 100;
+    width: 100%;
+    height: 100%;
     position: absolute;
-    top: 100px;
-    left: 100px;
+    top: 0px;
+    left: 0px;
     display: none;
     background-color: white;
     border: 2px solid gray;
     padding: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    vertical-align: middle;
+}
+#busyModal div {
+    display: inline-block;
+    margin: auto auto;
+    width: 100px;
+    height: 100px;
+}
+#busyModal div img {
+    width: 100px;
+    height: 100px;
+}
+#busyModal img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -32px; /* -1 * image width / 2 */
+    margin-top: -32px;  /* -1 * image height / 2 */
+    display: block;
 }

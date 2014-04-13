@@ -22,9 +22,9 @@ $(function() {
     });
     function updateTrip() {
         options.direction = direction;
-        $("#busyModal").show();
+        modalController.start();
         etappe.strategy7(options, function(trip) {
-            $("#busyModal").hide();
+            modalController.finish();
             if (direction == 'inbound') {
                 view.updateInbound(trip);
             }
@@ -50,24 +50,27 @@ $(function() {
  * @type {tripController}
  */
 var tripController = function() {
+    var carrier;
     var originStation;
     var destinationStation;
     var segments;
     var adapters = {
         bart: {
-            getStations: bart.getStations
+            getStations: bart.getStations,
+            findSegments: bart.findSegments
         },
         sfmuni: {
-            getStations: sfmuni.getStations
+            getStations: sfmuni.getStations,
+            findSegments: sfmuni.findSegmentsBetweenStations
         }
     };
     $(function() {
         $('#originStationSelect, #destinationStationSelect, #doChart').attr('disabled', 'disabled');
         $('#carrierSelect').change(function(event) {
-            var adapter = adapters[event.target.value];
-            adapter.getStations({}, function(stations) {
+            carrier = event.target.value;
+            adapters[carrier].getStations({}, function(stations) {
                 $('#originStationSelect, #destinationStationSelect').removeAttr('disabled');
-                view.drawStations(stations);
+                view.drawStations(_.sortBy(stations, 'name'));
             });
         });
         $('#originStationSelect').change(function() {
@@ -84,9 +87,32 @@ var tripController = function() {
     });
     function join() {
         if (originStation && destinationStation) {
-            segments = bart.findSegments(originStation, destinationStation);
-            view.drawPlan(segments);
-            $('#doChart').removeAttr('disabled');
+            options = {};
+            options.originStation = originStation;
+            options.destinationStation= destinationStation
+            adapters[carrier].findSegments(options, function(_segments) {
+                segments = _segments;
+                view.drawPlan(segments);
+                $('#doChart').removeAttr('disabled');
+            });
+        }
+    }
+}();
+
+var modalController = function() {
+    var timer;
+    function timeout() {
+        $("#busyModal").hide();
+    }
+
+    return {
+        start: function() {
+            $("#busyModal").show();
+            timer = window.setTimeout(timeout, 5000);
+        },
+        finish: function() {
+            window.clearTimeout(timer);
+            $("#busyModal").hide();
         }
     }
 }();
