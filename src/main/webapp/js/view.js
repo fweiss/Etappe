@@ -59,8 +59,8 @@ var view = function() {
             $("<td>").appendTo(tr).append("(" + wait + ")");
             $("<td>").appendTo(tr).append(segment.route);
             $("<td>").appendTo(tr).append(segment.vehicle);
-            $("<td>").appendTo(tr).append(segment.originTime.toLocaleTimeString());
-            $("<td>").appendTo(tr).append(segment.destinationTime.toLocaleTimeString());
+            $("<td>").appendTo(tr).append(tod(segment.originTime));
+            $("<td>").appendTo(tr).append(tod(segment.destinationTime));
         }
     }
     function updateGraph(id, segments) {
