@@ -49,7 +49,17 @@ var fixtures = function() {
                 <direction></direction>\
                 <path></path>\
             </route>\
+            <route tag="M" title="M-Ocean View" color="006633" oppositeColor="ffffff" latMin="37.71315" latMax="37.7932299" lonMin="-122.47523" lonMax="-122.3964">\
+                <stop tag="5726" title="Church St Station Inbound" lat="37.76719" lon="-122.4291699" stopId="15726"/>\
+            </route>\
+            <route tag="N" title="N-Judah" color="003399" oppositeColor="ffffff" latMin="37.7601699" latMax="37.7932299" lonMin="-122.5092" lonMax="-122.38798">\
+                <stop tag="6992" title="Embarcadero Station Inbound" lat="37.7931399" lon="-122.3964" stopId="16992"/>\
+            </route>\
         </body>';
+    // http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=sf-muni&r=33
+//    <route tag="37" title="37-Corbett" color="000000" oppositeColor="ffffff" latMin="37.7470399" latMax="37.7700899" lonMin="-122.4507699" lonMax="-122.4288899">\
+//        <stop tag="6239" title="Roosevelt Way &amp; Lower Ter" lat="37.76324" lon="-122.4437899" stopId="16239"/>\
+//    </route>\
     var routeConfigXml = '<?xml version="1.0" encoding="utf-8" ?>\
     <body copyright="All data copyright San Francisco Muni 2014.">\
     <route tag="33" title="33-Stanyan" color="660000" oppositeColor="ffffff" latMin="37.7514099" latMax="37.7869099" lonMin="-122.4592499" lonMax="-122.40627">\

@@ -69,7 +69,7 @@ describe('SFMUNI adapter', function() {
         routeConfigFixture = fixtures.routeConfig2;
         var stations = getStations();
         // note that geocodes may differ, say if stops are across the street
-        expect(stations.length).toEqual(1);
+        expect(stations.length).toEqual(3);
     });
     it('should find a segment between stations', function() {
         var originStation = 'California St & Cherry St';
@@ -79,6 +79,33 @@ describe('SFMUNI adapter', function() {
         var segment = segments[0];
         expect(segment.carrier).toEqual('sfmuni');
         expect(segment.routeName).toEqual('Outbound to General Hospital');
+    });
+    describe('create MUNI rides', function() {
+        var rides;
+        beforeEach(function() {
+            var origin = sfmuni.parsePredictions(fixtures.p15726, '15726');
+            var destination = sfmuni.parsePredictions(fixtures.p16992, '16992');
+            var routeConfig = sfmuni.parseRouteConfig(fixtures.routeConfig2);
+            rides = sfmuni.createMuniRides('inbound', origin, destination, routeConfig);
+        });
+        it('should link multiple route predictions', function() {
+            // list s/b rides
+            expect(rides.list.length).toBeGreaterThan(0);
+        });
+        it('should not link multiple destinations', function() {});
+        it('should have correct route id', function() {
+            // this fails sometimes with 11 or 10, is it related to the fact that the bart api is being called?
+            // this may be the time calc in sfmuni line 91
+            expect(rides.list.length).toEqual(12);
+            var ride4 = rides.list[4];
+            expect(ride4.route).toEqual('L');
+        });
+        it('should have origin name', function() {
+            expect(rides.originName).toEqual('Church St Station Inbound');
+        });
+        it('should have destination name', function() {
+            expect(rides.destinationName).toEqual('Embarcadero Station Inbound');
+        });
     });
 
 });

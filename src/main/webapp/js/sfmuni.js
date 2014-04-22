@@ -66,11 +66,15 @@ var sfmuni = function() {
 
     /**
      * Parse the given predictions (XML) to a list of connections (JS)
+     * Although the data also has the id of the stop, we pass it in to get the full id with leading '1'
      * @param data
+     * @param stopId
      * @returns {Array}
      */
-    function parsePredictions(data) {
+    function parsePredictions(data, stopId) {
         var connections = [];
+        // this is a bit funky, mixing numeric and test indices
+        connections['stopTag'] = stopId;
         $(data).find("body").find("predictions").each(function() {
             var connection = {
                 routeTag: $(this).attr("routeTag"),
@@ -191,19 +195,18 @@ var sfmuni = function() {
      * @param routeConfig
      * @returns {{}}
      */
-    function createMuniRides(direction, departurePredictions, arrivalProdictions, routeConfig) {
+    function createMuniRides(direction, departurePredictions, arrivalPredictions, routeConfig) {
         function getStop(stopId) {
-            for (var i=0; i<routeConfig.stops.length; i++) {
-                var stop = routeConfig.stops[i];
-                if (stop.stopId == stopId) {
-                    return stop;
-                }
-            }
+           return _.findWhere(routeConfig.stops, { id: stopId });
         }
         var rides = {};
         rides.agency = "sfmuni";
         rides.origin = departurePredictions.stopTag;
-        rides.destination = arrivalProdictions.stopTag;
+        var stop = getStop(departurePredictions['stopTag']);
+        rides.originName = stop ? stop.title : 'unknown';
+        rides.destination = arrivalPredictions.stopTag;
+        var dstop = getStop(arrivalPredictions['stopTag']);
+        rides.destinationName = dstop ? dstop.title : 'unknown';
         rides.list = [];
         var committedOrigins = [];
         departurePredictions.forEach(function(connectionA) {
@@ -212,7 +215,7 @@ var sfmuni = function() {
             connectionA.directions.forEach(function(directionA) {
                 directionA.predictions.forEach(function(predictionA) {
 
-                    arrivalProdictions.forEach(function(connection) {
+                    arrivalPredictions.forEach(function(connection) {
                         connection.directions.forEach(function(direction) {
                             direction.predictions.forEach(function(predictionB) {
                                 var sameVehicle = predictionA.vehicle == predictionB.vehicle;
@@ -238,6 +241,7 @@ var sfmuni = function() {
             });
         });
         rides.list = _.sortBy(rides.list, 'originTime');
+//        rides.originName = 'foo';
         return rides;
     }
     function findSegments(options, callback) {
@@ -249,7 +253,7 @@ var sfmuni = function() {
         var predictions2;
         var routeConfig;
         backend.getRouteConfig({r: route }, function(rc) {
-            routeConfig = rc;
+            routeConfig = parseRouteConfig(rc);
             predictionsUpdated();
         });
         backend.getPredictions({ stopId: origStop }, function(data) {
