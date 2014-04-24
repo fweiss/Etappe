@@ -149,7 +149,11 @@ var view = function() {
         ctx.beginPath();
         drawRoute(0, segments[0]);
         drawRoute(1, segments[1]);
-        drawNexusLabels([ "Montgomery", "16th and Mission", "Clayton and Corbett"]);
+        var labels = [ segments[0].originName ];
+        _.each(segments, function(segment) {
+            labels.push(segment.destinationName)
+        });
+        drawNexusLabels(labels);
         drawTicks();
     }
     function drawExpiredArea(epochTime, segments) {

@@ -252,7 +252,9 @@ var sfmuni = function() {
         var predictions1;
         var predictions2;
         var routeConfig;
-        backend.getRouteConfig({r: route }, function(rc) {
+        // need all routes since predictions is for all routes between the stations
+//        backend.getRouteConfig({r: route }, function(rc) {
+        backend.getRouteConfig({}, function(rc) {
             routeConfig = parseRouteConfig(rc);
             predictionsUpdated();
         });
