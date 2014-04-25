@@ -1,11 +1,18 @@
 $(function() {
-    $("#tabs").tabs();
+    var direction;
+    var autoRefresh = false;
+
+    $("#tabs").tabs({
+        select: function(event, ui) {
+            if ($(ui.panel).is('#trip')) {
+                autoRefresh = false;
+            }
+        }
+    });
     var tripInfo = {
         origin: '1349 Clayton St',
         destination: '555 Market St'
     };
-    var direction;
-    var autoRefresh = false;
 
     view.updateTripInfo(tripInfo);
     var options = {};
