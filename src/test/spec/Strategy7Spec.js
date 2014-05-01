@@ -23,7 +23,7 @@ describe('strategy7', function() {
             }
             callback(data);
         },
-        getRouteConfig: function(options, callback) {
+        routeConfig: function(options, callback) {
             callback(fixtures.routeConfig);
         }
     };

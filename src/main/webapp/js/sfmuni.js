@@ -253,8 +253,8 @@ var sfmuni = function() {
         var predictions2;
         var routeConfig;
         // need all routes since predictions is for all routes between the stations
-//        backend.getRouteConfig({r: route }, function(rc) {
-        backend.getRouteConfig({}, function(rc) {
+//        backend.routeConfig({r: route }, function(rc) {
+        backend.routeConfig({}, function(rc) {
             routeConfig = parseRouteConfig(rc);
             predictionsUpdated();
         });
@@ -312,7 +312,7 @@ var sfmuni = function() {
                     callback(parseRoutes($("body", data)));
                 });
             },
-            getRouteConfig: function(options, callback) {
+            routeConfig: function(options, callback) {
                 options.command = "routeConfig";
                 options.a = "sf-muni";
                 if (routeConfigs[options.r]) {
@@ -338,7 +338,7 @@ var sfmuni = function() {
         var originStation = options.originStation;
         var destinationStation = options.destinationStation;
         var segments = [];
-        backend.getRouteConfig({}, function(data) {
+        backend.routeConfig({}, function(data) {
             var routes = parseRouteConfig(data);
             var originStops = _.filter(routes.stops, function(stop) {
                 return stop.name == originStation;
@@ -377,7 +377,7 @@ var sfmuni = function() {
 
         getSegments: getSegments,
         getStations: function(options, callback) {
-            backend.getRouteConfig(options, function(data) {
+            backend.routeConfig(options, function(data) {
                 var stations = parseRouteConfig(data);
                 var uniqueStations = _.uniq(stations.stops, function(station) {
                     // hopefully, there are no typos in names

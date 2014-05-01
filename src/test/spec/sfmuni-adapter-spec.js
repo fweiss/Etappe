@@ -8,7 +8,7 @@ describe('SFMUNI adapter', function() {
             }
             callback(data);
         },
-        getRouteConfig: function(options, callback) {
+        routeConfig: function(options, callback) {
             callback(routeConfigFixture);
         }
     };
