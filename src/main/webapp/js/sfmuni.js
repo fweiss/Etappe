@@ -328,6 +328,19 @@ var sfmuni = function() {
             }
         };
     }
+
+    /**
+     * Returns a routes model via a promise.
+     * @returns a promis for the routes model
+     */
+    function getRouteConfig() {
+        var deferred = Q.defer();
+        backend.routeConfig({}, function(data) {
+            var routes = parseRouteConfig(data);
+            deferred.resolve(routes);
+        });
+        return deferred.promise;
+    }
     /**
      * Return a list of segments that provide rides between the given origin and destination stations.
      * Note that the nextbus API does not use station ids, so we use the stop titles instead.
@@ -338,8 +351,7 @@ var sfmuni = function() {
         var originStation = options.originStation;
         var destinationStation = options.destinationStation;
         var segments = [];
-        backend.routeConfig({}, function(data) {
-            var routes = parseRouteConfig(data);
+        getRouteConfig().then(function(routes) {
             var originStops = _.filter(routes.stops, function(stop) {
                 return stop.name == originStation;
             });

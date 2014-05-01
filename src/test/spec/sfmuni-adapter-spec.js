@@ -21,6 +21,7 @@ describe('SFMUNI adapter', function() {
         var segments = null;
         var options = { originStation: origin, destinationStation: destination };
         sfmuni.findSegmentsBetweenStations(options, function(_segments) { segments = _segments; });
+        // after converting to promise, we kind of lost it here, proabably the parser?
         return segments;
     }
 
@@ -72,13 +73,22 @@ describe('SFMUNI adapter', function() {
         expect(stations.length).toEqual(3);
     });
     it('should find a segment between stations', function() {
-        var originStation = 'California St & Cherry St';
-        var destinationStation = '18th St & Guerrero St';
-        var segments = findSegmentsBetween(originStation, destinationStation);
-        expect(segments.length).toEqual(1);
-        var segment = segments[0];
-        expect(segment.carrier).toEqual('sfmuni');
-        expect(segment.routeName).toEqual('Outbound to General Hospital');
+        // need to async this after using promise
+        var segments = null;
+        runs(function() {
+            var originStation = 'California St & Cherry St';
+            var destinationStation = '18th St & Guerrero St';
+            segments = findSegmentsBetween(originStation, destinationStation);
+        });
+        waitFor(function() {
+            return segments != null;
+        }, 'findSegmentsBetween() should return segments' 1000);
+        runs(function() {
+            expect(segments.length).toEqual(1);
+            var segment = segments[0];
+            expect(segment.carrier).toEqual('sfmuni');
+            expect(segment.routeName).toEqual('Outbound to General Hospital');
+        });
     });
     describe('create MUNI rides', function() {
         var rides;
