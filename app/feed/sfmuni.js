@@ -38,18 +38,7 @@ angular.module('agencies', [])
                 return $http(config);
             },
             getStops: function(route) {
-                var config = {
-                    url: baseUrl,
-                    params: {
-                        command: 'routeConfig',
-                        a: 'sf-muni',
-                        r: route
-                    },
-                    transformResponse: function(data) {
-                        return parseStops(data);
-                    }
-                }
-                return $http(config).then(function(result) { return result.data; });
+                return buildResource('routeConfig', parseStops)({ r: route });
             },
             getRides: function(originStop, destinationStop) {
                 return buildResource('predictions', parseRides)({ r: '55'});
@@ -91,9 +80,9 @@ angular.module('agencies', [])
             return predictions;
         }
         // note that stop is both child of route and route.direction
-        function parseStops(data) {
-            var root = angular.element(parser.parseFromString(data, 'text/xml'));
-            var rx = angular.element(root).find('route');
+        function parseStops(root) {
+//            var root = angular.element(parser.parseFromString(data, 'text/xml'));
+            var rx = $(root).find('route');
             var sxc = angular.element(rx).find('stop');
             var stops = [];
             angular.forEach(sxc, function(sx){

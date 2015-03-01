@@ -29,7 +29,8 @@ describe('trial service test4', function() {
     it('should get stops', function() {
         var xml = '<body><route><stop title="16th and Mission"></stop><stop title="16th and Potrero"></stop><direction><stop></stop></direction></route></body>';
         httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig&r=55').respond(xml);
-        SfMuni.getStops('55').then(function(stops) {
+        SfMuni.getStops('55').then(function(response) {
+            var stops = response.data;
             expect(stops.length).toBe(2);
             var stop0 = stops[0];
             expect(stop0.name).toBe('16th and Mission');
