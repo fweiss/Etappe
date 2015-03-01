@@ -1,0 +1,16 @@
+{
+    "name": "etappe",
+    "repository": "https://github.com/angular/angular-seed",
+    "devDependeencies": {
+        "karma": "~0.10",
+        "karma-jasmine": "~0.2.2",
+        "http-server": "^0.6.1",
+        "protractor": "^1.1.1"
+    },
+    "scripts": {
+        "start": "http-server -a localhost -p 8000 -c-1",
+        "pretest": "npm install",
+        "test": "node node_modules/karma/bin/karma start",
+        "protractor": "node "
+    }
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app="etappe">
+    <head>
+
+    </head>
+    <body>
+        <div id="trip" ng-controller="Trip">
+            <p>Date: today</p>
+            <p>Time: now</p>
+            <p>Plan your trip:</p>
+            <p>
+                <select id="carrierSelect" ng-model="carrierSelect" ng-change="changeCarrier()" ng-options="carrier.name for carrier in carriers">
+                    <option value="">Choose a carrier</option>
+                </select>
+                <select id="originStationSelect" ng-model="originStationSelect" ng-options="station.name for station in originStations" ng-disabled="disableOrigin">
+                    <option value="">Choose an origin</option>
+                </select>
+                <select id="destinationStationSelect" ng-model="destinationStationSelect" ng-options="station.name for station in destinationStations" ng-disabled="disableDestination">
+                    <option value="">Choose a destination</option>
+                </select>
+            </p>
+            <table id="plan">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+            <canvas utt-rides width="600" height="100"></canvas>
+        </div>
+        <script src="lib/angular.min.js"></script>
+        <script src="lib/angular-resource.js"></script>
+        <script src="lib/angular-route.min.js"></script>
+        <script src="etappe.js"></script>
+        <script src="carrier-controller.js"></script>
+        <script src="canvas.js"></script>
+        <script src="sfmuni.js"></script>
+    </body>
+</html>

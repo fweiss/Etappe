@@ -6,10 +6,15 @@ destination<place>
 anchorTime
 anchorMode(origin,destination)
 
-plans
-plan
-rides
+plan > segment > ride
 ride[route, vehicle, originTime, destinationTime, waitDuration?]
-segment[carrier, route, origin, destination]
+segment[route, origin, destination]
+route[agency, title, stops, schedules]
+nexus > stop
+route > stop
+
+view
+
+
 
 agency=carrier

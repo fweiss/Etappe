@@ -1,0 +1,10 @@
+Trip
+
+Ride
+
+Carrier/Agency
+
+Route
+
+Stop/Station
+

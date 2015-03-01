@@ -1,0 +1,4 @@
+manually:
+npm install karma-jasmine protractor
+
+node node_modules/protractor/bin/webdriver-manager update

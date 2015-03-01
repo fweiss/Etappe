@@ -30,5 +30,11 @@ task awsPublish() {
             }
         }
     }
-
+}
+// TODO: use plugin to remove platform dependency
+task testUnit(type: Exec) {
+    commandLine 'cmd', '/c', 'npm test'
+}
+task protractor(type: Exec) {
+    commandLine 'cmd', '/c', 'node node_modules/protractor/bin/protractor protractor/config.js --jasmineNodeOpts.showColors=0'
 }
