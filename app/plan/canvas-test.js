@@ -78,5 +78,22 @@ describe('canvas5', function() {
             expect(mockContext.moveTo).toHaveBeenCalledWith(100, 0);
             expect(mockContext.lineTo).toHaveBeenCalledWith(200, canvasHeight);
         });
+        it('should draw two rides', function() {
+            var rideStart0 = addMinutes(spanStart, 10);
+            var rideEnd0 = addMinutes(spanStart, 20);
+            var rideStart1 = addMinutes(spanStart, 30);
+            var rideEnd1 = addMinutes(spanStart, 43);
+            var plan = { spanStart: spanStart, spanEnd: spanEnd,
+                rides: [
+                    { startTime: rideStart0, endTime: rideEnd0 },
+                    { startTime: rideStart1, endTime: rideEnd1 }
+                ]
+            };
+            scope.plan = plan;
+            element.scope().$apply();
+            expect(mockContext.moveTo).toHaveBeenCalledWith(100, 0);
+            expect(mockContext.lineTo).toHaveBeenCalledWith(200, canvasHeight);
+            expect(mockContext.moveTo).toHaveBeenCalledWith(300, 0);
+        });
     });
 });
