@@ -14,6 +14,7 @@
  */
 angular.module('agencies', [])
 .service('sfMuni', function($http) {
+        var $ = $ || angular.element;
         var parser = new DOMParser();
         const baseUrl =  'http://webservices.nextbus.com/service/publicXMLFeed';
         var api = {
@@ -36,20 +37,6 @@ angular.module('agencies', [])
                 };
                 return $http(config);
             },
-            getPredictions: function(route) {
-                var config = {
-                    url: baseUrl,
-                    params: {
-                        command: 'predictions',
-                        a: 'sf-muni',
-                        r: route
-                    },
-                    transformResponse: function(data) {
-                        return predictionsTransform(data);
-                    }
-                }
-                return $http(config);
-            },
             getStops: function(route) {
                 var config = {
                     url: baseUrl,
@@ -64,34 +51,42 @@ angular.module('agencies', [])
                 }
                 return $http(config).then(function(result) { return result.data; });
             },
-            getRides: buildResource(parseRides)
+            getRides: function(originStop, destinationStop) {
+                return buildResource('predictions', parseRides)({ r: '55'});
+            },
+            getPredictionsForStopId: function(stopId) {
+                return buildResource('predictions', predictionsTransform)({ stopId: stopId });
+            }
         }
-        function buildResource(transform) {
-            return function() {
+        function buildResource(command, transform) {
+            return function(params) {
+                params.command = command;
+                params.a = 'sf-muni';
                 var config = {
                     url: baseUrl,
-                    params: {
-                        command: 'predictions',
-                        a: 'sf-muni',
-                        r: '55'
-                    },
+                    params: params,
                     transformResponse: function(response) {
-                        var root = angular.element(parser.parseFromString(response, 'text/xml'));
+                        var root = $(parser.parseFromString(response, 'text/xml'));
                         return transform(root);
                     }
                 };
                 return $http(config);
             }
         }
-        function predictionsTransform(data) {
-            var doc =  parser.parseFromString(data, 'text/xml');
-            var root = angular.element(doc);
-            var px = angular.element(root).find('predictions');
-            var dx = angular.element(px).find('direction');
-            var predictions = { directions: [ ]};
-            angular.forEach(dx, function(ff) {
-                var direction = { time: '' };
-                predictions.directions.push(direction);
+       function predictionsTransform(root) {
+            var px = $(root).find('predictions');
+            var ddx = $(px).find('direction');
+            var predictions = [];
+            angular.forEach(ddx, function(dx) {
+                var route = $(dx).attr('routeTag');
+                var ppx = $(ddx).find('prediction');
+                angular.forEach(ppx, function(px) {
+                    var prediction = {};
+                    prediction.vehicle = $(px).attr('vehicle');
+                    prediction.time = new Date($(px).attr('epochTime') * 1000);
+                    prediction.route = route;
+                    predictions.push(prediction);
+                });
             });
             return predictions;
         }
@@ -125,7 +120,11 @@ angular.module('agencies', [])
                 var pm = angular.element(ppx).attr('minutes');
 //                var st = addMinutes(now, parseInt(pm, 10));
                 var st = new Date(pt * 1000);
-                var ride = { startTime: st };
+                var ride = {};
+                ride.agency = 'sf-muni';
+                ride.vehicle = angular.element(ppx).attr('vehicle');
+                ride.startTime = new Date(pt * 1000);
+                ride.endTime = '';
                 rides.push(ride);
             });
             return rides;
