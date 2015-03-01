@@ -54,7 +54,9 @@ angular.module('agencies', [])
                         var vehicle = originPrediction.vehicle;
                         _.each(destinationPredictions, function(destinationPrediction) {
                             var sameVehicle = vehicle === destinationPrediction.vehicle;
-                            if (sameVehicle) {
+                            var originBeforeDestination = originPrediction.time < destinationPrediction.time;
+                            var sameTripTag = originPrediction.tripTag === destinationPrediction.tripTag;
+                            if (sameVehicle && originBeforeDestination && sameTripTag) {
                                 ride = {};
                                 ride.agency = 'sf-muni';
                                 ride.vehicle = vehicle;
@@ -99,6 +101,7 @@ angular.module('agencies', [])
                     prediction.vehicle = $(px).attr('vehicle');
                     prediction.time = new Date($(px).attr('epochTime') * 1);
                     prediction.route = route;
+                    prediction.tripTag = $(px).attr('tripTag');
                     predictions.push(prediction);
                 });
             });

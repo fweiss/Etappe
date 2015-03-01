@@ -40,20 +40,23 @@ describe('trial service test4', function() {
     describe('predictions', function() {
         var round = 10;
         var now;
+        var epochMilliSeconds;
         var xmlOrigin;
         var xmlDestination;
+        function prediction(vehicle, offsetMinutes, tripTag) {
+            return '<prediction vehicle="' + vehicle + '" epochTime="' + (epochMilliSeconds + offsetMinutes * 60000) + '" tripTag="' + tripTag + '"></prediction>'
+        }
         beforeEach(function() {
             now = new Date();
-            var epochMilliSeconds = now.getTime();
+            epochMilliSeconds = now.getTime();
             xmlOrigin = '<body><predictions><direction routeTag="55">'
-                + '<prediction vehicle="2356" epochTime="' + (epochMilliSeconds + 11 * 60000) + '" minutes="11"></prediction>'
-                + '<prediction epochTime="' + (epochMilliSeconds + 22 * 60) +'" minutes="22"></prediction>'
+                + prediction(2356, 11, '6596789')
+                + prediction(4444, 22, '6596789')
                 + '</direction></predictions></body>';
             xmlDestination = '<body><predictions><direction routeTag="55">'
-                + '<prediction vehicle="2356" epochTime="' + (epochMilliSeconds + 22 * 60000) + '" minutes="11"></prediction>'
-                + '<prediction vehicle="2357" epochTime="' + (epochMilliSeconds + 33 * 60000) +'" minutes="22"></prediction>'
+                + prediction(2356, 22, '6596789')
+                + prediction(2357, 33, '6596789')
                 + '</direction></predictions></body>';
-
         });
         it('should get predictions for stop id', function() {
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=13293').respond(xmlOrigin);
@@ -62,12 +65,36 @@ describe('trial service test4', function() {
                 expect(predictions.length).toEqual(2);
                 var prediction0 = predictions[0];
                 expect(prediction0.vehicle).toBe('2356');
+                expect(prediction0.tripTag).toBe('6596789');
                 expect(prediction0.time / round).toBeCloseTo(addMinutes(now, 11) / round);
                 expect(prediction0.route).toBe('55');
             });
             httpBackend.flush();
         });
         it('should get rides between two stops', function() {
+            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=3293').respond(xmlOrigin);
+            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=7324').respond(xmlDestination);
+            SfMuni.getRides('3293', '7324').then(function(response) {
+                var rides = response.data;
+                expect(rides.length).toEqual(1);
+                var ride0 = rides[0];
+                expect(ride0.startTime / round).toBeCloseTo(addMinutes(now, 11) / round, 0);
+                expect(ride0.endTime / round).toBeCloseTo(addMinutes(now, 22) / round, 0);
+                expect(ride0.agency).toBe('sf-muni');
+                expect(ride0.vehicle).toBe('2356');
+            });
+            httpBackend.flush();
+        });
+        it('should get rides between two stops and correctly match vehicles by time', function() {
+            epochMilliSeconds = now.getTime();
+            xmlOrigin = '<body><predictions><direction routeTag="55">'
+                + prediction(2356, 11, '6596789')
+                + prediction(2356, 44, '6596789')
+                + '</direction></predictions></body>';
+            xmlDestination = '<body><predictions><direction routeTag="55">'
+                + prediction(2356, 22, '6596789')
+                + prediction(2356, 33, '6596790')
+                + '</direction></predictions></body>';
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=3293').respond(xmlOrigin);
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=7324').respond(xmlDestination);
             SfMuni.getRides('3293', '7324').then(function(response) {
