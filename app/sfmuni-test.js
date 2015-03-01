@@ -6,6 +6,9 @@ describe('trial service test4', function() {
     var SfMuni;
     var httpBackend;
     var Plan;
+    function addMinutes(date, minutes) {
+        return new Date(date.getTime() + minutes * 60000);
+    }
     beforeEach(module('agencies', 'etappe'));
     beforeEach(inject(function(_sfMuni_, $httpBackend, plan) {
         SfMuni = _sfMuni_;
@@ -39,6 +42,23 @@ describe('trial service test4', function() {
             expect(stops.length).toBe(2);
             var stop0 = stops[0];
             expect(stop0.name).toBe('16th and Mission');
+        });
+        httpBackend.flush();
+    });
+    it('should get rides', function() {
+        var round = 10;
+        var now = new Date();
+        var epochSeconds = now.getTime() / 1000;
+        var xml = '<body><predictions><direction>'
+            + '<prediction epochTime="' + (epochSeconds + 11 * 60) + '" minutes="11"></prediction>'
+            + '<prediction epochTime="' + (epochSeconds + 22 * 60) +'" minutes="22"></prediction>'
+            + '</direction><direction></direction></predictions></body>';
+        httpBackend.whenGET('http://webservices.nextbus.com/service/publicXMLFeed?a=sf-muni&command=predictions&r=55').respond(xml);
+        SfMuni.getRides('3293', '7324').then(function(response) {
+            var rides = response.data;
+            expect(rides.length).toEqual(2);
+            var ride0 = rides[0];
+            expect(ride0.startTime / round).toBeCloseTo(addMinutes(now, 11) / round, 0);
         });
         httpBackend.flush();
     });

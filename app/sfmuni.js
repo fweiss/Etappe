@@ -63,6 +63,24 @@ angular.module('agencies', [])
                     }
                 }
                 return $http(config).then(function(result) { return result.data; });
+            },
+            getRides: buildResource(parseRides)
+        }
+        function buildResource(transform) {
+            return function() {
+                var config = {
+                    url: baseUrl,
+                    params: {
+                        command: 'predictions',
+                        a: 'sf-muni',
+                        r: '55'
+                    },
+                    transformResponse: function(response) {
+                        var root = angular.element(parser.parseFromString(response, 'text/xml'));
+                        return transform(root);
+                    }
+                };
+                return $http(config);
             }
         }
         function predictionsTransform(data) {
@@ -92,6 +110,25 @@ angular.module('agencies', [])
                 }
             });
             return stops;
+        }
+        function addMinutes(date, minutes) {
+            return new Date(date.getTime() + minutes * 60000);
+        }
+        function parseRides(root) {
+            var psx = angular.element(root).find('predictions');
+            var dx = angular.element(psx).find('direction');
+            var px = angular.element(dx).find('prediction');
+            var rides = [];
+            var now = new Date();
+            angular.forEach(px, function(ppx) {
+                var pt = angular.element(ppx).attr('epochTime');
+                var pm = angular.element(ppx).attr('minutes');
+//                var st = addMinutes(now, parseInt(pm, 10));
+                var st = new Date(pt * 1000);
+                var ride = { startTime: st };
+                rides.push(ride);
+            });
+            return rides;
         }
         return api;
     });
