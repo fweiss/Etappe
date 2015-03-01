@@ -22,9 +22,15 @@ angular.module('carrier', [ 'rides', 'agencies' ])
         $scope.disableDestination = false;
         chart.setWidth(600);
         var now = new Date();
-        var then = new Date(now.getTime() + 3600);
+        var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
 //        chart.setTimeSpan(now, then);
-        $scope.plan = getPlan();
+//        $scope.plan = getPlan();
+        SfMuni.getRides('13293', '17324').then(function(response) {
+            var plan =  { spanStart: now, spanEnd: then,
+                rides: response.data
+            };
+           $scope.plan = plan;
+        });
     };
     function getPlan() {
         var plan =  { spanStart: new Date('2013-02-22T13:00'), spanEnd: new Date('2013-02-22T14:00'),

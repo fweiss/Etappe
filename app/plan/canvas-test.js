@@ -66,14 +66,14 @@ describe('canvas5', function() {
             };
         }));
         it('should draw background', function() {
-            scope.plan = { spanStart: spanStart, spanEnd: spanEnd, rides: [  { rideStart: spanStart, rideEnd: spanEnd }]};
+            scope.plan = { spanStart: spanStart, spanEnd: spanEnd, rides: [  { startTime: spanStart, endTime: spanEnd }]};
             element.scope().$apply();
             expect(mockContext.fillRect).toHaveBeenCalledWith(0, 0, canvasWidth, canvasHeight);
         });
         it('should draw a ride', function() {
             var rideStart = addMinutes(spanStart, 10);
             var rideEnd = addMinutes(spanStart, 20);
-            scope.plan = { spanStart: spanStart, spanEnd: spanEnd, rides: [ { rideStart: rideStart, rideEnd: rideEnd }]};
+            scope.plan = { spanStart: spanStart, spanEnd: spanEnd, rides: [ { startTime: rideStart, endTime: rideEnd }]};
             element.scope().$apply();
             expect(mockContext.moveTo).toHaveBeenCalledWith(100, 0);
             expect(mockContext.lineTo).toHaveBeenCalledWith(200, canvasHeight);

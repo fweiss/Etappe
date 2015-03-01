@@ -97,7 +97,7 @@ angular.module('agencies', [])
                 angular.forEach(ppx, function(px) {
                     var prediction = {};
                     prediction.vehicle = $(px).attr('vehicle');
-                    prediction.time = new Date($(px).attr('epochTime') * 1000);
+                    prediction.time = new Date($(px).attr('epochTime') * 1);
                     prediction.route = route;
                     predictions.push(prediction);
                 });

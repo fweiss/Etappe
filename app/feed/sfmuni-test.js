@@ -44,19 +44,19 @@ describe('trial service test4', function() {
         var xmlDestination;
         beforeEach(function() {
             now = new Date();
-            var epochSeconds = now.getTime() / 1000;
+            var epochMilliSeconds = now.getTime();
             xmlOrigin = '<body><predictions><direction routeTag="55">'
-                + '<prediction vehicle="2356" epochTime="' + (epochSeconds + 11 * 60) + '" minutes="11"></prediction>'
-                + '<prediction epochTime="' + (epochSeconds + 22 * 60) +'" minutes="22"></prediction>'
+                + '<prediction vehicle="2356" epochTime="' + (epochMilliSeconds + 11 * 60000) + '" minutes="11"></prediction>'
+                + '<prediction epochTime="' + (epochMilliSeconds + 22 * 60) +'" minutes="22"></prediction>'
                 + '</direction></predictions></body>';
             xmlDestination = '<body><predictions><direction routeTag="55">'
-                + '<prediction vehicle="2356" epochTime="' + (epochSeconds + 22 * 60) + '" minutes="11"></prediction>'
-                + '<prediction vehicle="2357" epochTime="' + (epochSeconds + 33 * 60) +'" minutes="22"></prediction>'
+                + '<prediction vehicle="2356" epochTime="' + (epochMilliSeconds + 22 * 60000) + '" minutes="11"></prediction>'
+                + '<prediction vehicle="2357" epochTime="' + (epochMilliSeconds + 33 * 60000) +'" minutes="22"></prediction>'
                 + '</direction></predictions></body>';
 
         });
         it('should get predictions for stop id', function() {
-            httpBackend.whenGET('http://webservices.nextbus.com/service/publicXMLFeed?a=sf-muni&command=predictions&stopId=13293').respond(xmlOrigin);
+            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=13293').respond(xmlOrigin);
             SfMuni.getPredictionsForStopId('13293').then(function(response) {
                 var predictions = response.data;
                 expect(predictions.length).toEqual(2);
@@ -68,7 +68,7 @@ describe('trial service test4', function() {
             httpBackend.flush();
         });
         it('should get rides between two stops', function() {
-            httpBackend.whenGET('http://webservices.nextbus.com/service/publicXMLFeed?a=sf-muni&command=predictions&stopId=3293').respond(xmlOrigin);
+            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=3293').respond(xmlOrigin);
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=7324').respond(xmlDestination);
             SfMuni.getRides('3293', '7324').then(function(response) {
                 var rides = response.data;

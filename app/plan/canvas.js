@@ -46,8 +46,8 @@ angular.module('rides', [])
                 if (plan) {
                     chart.setTimeSpan(plan.spanStart, plan.spanEnd);
                     var ride = plan.rides[0];
-                    var rideStart = ride.rideStart;
-                    var rideEnd = ride.rideEnd;
+                    var startTime = ride.startTime;
+                    var endTime = ride.endTime;
                     clearCanvas(element[0]);
                     var ctx = element[0].getContext('2d');
                     ctx.save();
@@ -58,8 +58,8 @@ angular.module('rides', [])
                     ctx.strokeStyle = "rgba(0, 0, 0, 1)";
                     ctx.lineWidth = 10;
                     ctx.beginPath();
-                    ctx.moveTo(chart.timeToX(rideStart), 0);
-                    ctx.lineTo(chart.timeToX(rideEnd), height);
+                    ctx.moveTo(chart.timeToX(startTime), 0);
+                    ctx.lineTo(chart.timeToX(endTime), height);
                     ctx.stroke();
                     ctx.restore();
                 }
