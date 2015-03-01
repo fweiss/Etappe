@@ -13,7 +13,7 @@
  * @returns {{}}
  */
 angular.module('agencies', [])
-.service('sfMuni', function($http) {
+.service('sfMuni', function($http, $q) {
         var $ = $ || angular.element;
         var parser = new DOMParser();
         const baseUrl =  'http://webservices.nextbus.com/service/publicXMLFeed';
@@ -41,7 +41,32 @@ angular.module('agencies', [])
                 return buildResource('routeConfig', parseStops)({ r: route });
             },
             getRides: function(originStop, destinationStop) {
-                return buildResource('predictions', parseRides)({ r: '55'});
+                var origin = api.getPredictionsForStopId(originStop);
+                var destination = api.getPredictionsForStopId(destinationStop);
+                var defer = $q.defer();
+                // combine the results of both sets of predictions
+                $q.all([ origin, destination ]).then(function(responses) {
+                    var originPredictions = responses[0].data;
+                    var destinationPredictions = responses[1].data;
+                    var rides = [];
+                    // match up predictions by vehicle
+                    _.each(originPredictions, function(originPrediction) {
+                        var vehicle = originPrediction.vehicle;
+                        _.each(destinationPredictions, function(destinationPrediction) {
+                            var sameVehicle = vehicle === destinationPrediction.vehicle;
+                            if (sameVehicle) {
+                                ride = {};
+                                ride.agency = 'sf-muni';
+                                ride.vehicle = vehicle;
+                                ride.startTime = originPrediction.time;
+                                ride.endTime = destinationPrediction.time;
+                                rides.push(ride);
+                            }
+                        });
+                    });
+                    defer.resolve({ data: rides });
+                });
+                return defer.promise;
             },
             getPredictionsForStopId: function(stopId) {
                 return buildResource('predictions', predictionsTransform)({ stopId: stopId });
