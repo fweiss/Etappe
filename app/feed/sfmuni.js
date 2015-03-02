@@ -80,7 +80,7 @@ angular.module('agencies', [])
                 angular.forEach(ppx, function(px) {
                     var prediction = {};
                     prediction.vehicle = $(px).attr('vehicle');
-                    prediction.time = new Date($(px).attr('epochTime') * 1);
+                    prediction.time = new Date($(px).attr('epochTime') * 1); // parseInt
                     prediction.route = route;
                     prediction.tripTag = $(px).attr('tripTag');
                     predictions.push(prediction);
@@ -92,17 +92,15 @@ angular.module('agencies', [])
         function parseStops(root) {
 //            var root = angular.element(parser.parseFromString(data, 'text/xml'));
             var rx = $(root).find('route');
-            var sxc = angular.element(rx).find('stop');
+            var ssx = angular.element(rx).find('stop');
             var stops = [];
-            angular.forEach(sxc, function(sx){
+            angular.forEach(ssx, function(sx){
                 // because angular.element.children('stop') won't work
                 var title = $(sx).attr('title');
-                var stopId = $(sx).attr('stopId');
                 if (title !== undefined) {
-//                    var stop = { name: title };
                     var stop = {};
                     stop.name = title;
-                    stop.stopId = stopId;
+                    stop.stopId = $(sx).attr('stopId');
                     stops.push(stop);
                 }
             });
