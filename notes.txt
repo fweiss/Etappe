@@ -6,12 +6,13 @@ destination<place>
 anchorTime
 anchorMode(origin,destination)
 
-plan > segment > ride
+plan < segment < ride
 ride[route, vehicle, originTime, destinationTime, waitDuration?]
-segment[route, origin, destination]
-route[agency, title, stops, schedules]
-nexus > stop
-route > stop
+segment[route, origin, destination] WRONG because there can be many routes
+route[agency, title, schedules]
+nexus <> stop
+route < stop   WRONG because a stop can be on many routes
+stop <> route what routes at a  stop; what stops on a route
 
 view
 
