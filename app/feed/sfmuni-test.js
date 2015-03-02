@@ -27,13 +27,14 @@ describe('trial service test4', function() {
     });
     // route > (stop, direction > stop)
     it('should get stops', function() {
-        var xml = '<body><route><stop title="16th and Mission"></stop><stop title="16th and Potrero"></stop><direction><stop></stop></direction></route></body>';
+        var xml = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Potrero"></stop><direction><stop></stop></direction></route></body>';
         httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig&r=55').respond(xml);
         SfMuni.getStops('55').then(function(response) {
             var stops = response.data;
             expect(stops.length).toBe(2);
             var stop0 = stops[0];
             expect(stop0.name).toBe('16th and Mission');
+            expect(stop0.stopId).toBe('12345');
         });
         httpBackend.flush();
     });

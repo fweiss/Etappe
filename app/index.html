@@ -9,13 +9,13 @@
             <p>Time: now</p>
             <p>Plan your trip:</p>
             <p>
-                <select id="carrierSelect" ng-model="carrierSelect" ng-change="changeCarrier()" ng-options="carrier.name for carrier in carriers">
+                <select id="carrierSelect" ng-model="carrierSelect" ng-options="carrier.name for carrier in carriers" ng-change="changeCarrier()">
                     <option value="">Choose a carrier</option>
                 </select>
-                <select id="originStationSelect" ng-model="originStationSelect" ng-options="station.name for station in originStations" ng-disabled="disableOrigin">
+                <select id="originStationSelect" ng-model="originStationSelect" ng-options="station.name for station in originStations" ng-change="changeOrigin()" ng-disabled="disableOrigin">
                     <option value="">Choose an origin</option>
                 </select>
-                <select id="destinationStationSelect" ng-model="destinationStationSelect" ng-options="station.name for station in destinationStations" ng-disabled="disableDestination">
+                <select id="destinationStationSelect" ng-model="destinationStationSelect" ng-options="station.name for station in destinationStations" ng-change="changeDestination()" ng-disabled="disableDestination">
                     <option value="">Choose a destination</option>
                 </select>
             </p>

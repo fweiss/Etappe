@@ -115,9 +115,13 @@ angular.module('agencies', [])
             var stops = [];
             angular.forEach(sxc, function(sx){
                 // because angular.element.children('stop') won't work
-                var title = angular.element(sx).attr('title');
+                var title = $(sx).attr('title');
+                var stopId = $(sx).attr('stopId');
                 if (title !== undefined) {
-                    var stop = { name: title };
+//                    var stop = { name: title };
+                    var stop = {};
+                    stop.name = title;
+                    stop.stopId = stopId;
                     stops.push(stop);
                 }
             });

@@ -14,9 +14,8 @@ angular.module('carrier', [ 'rides', 'agencies' ])
     $scope.changeCarrier = function() {
         SfMuni.getStops('55').then(function(response) {
             $scope.originStations = response.data;
+            $scope.destinationStations = response.data;
         });
-//        $scope.originStations = SfMuni.getStops('55');
-//        $scope.originStations = [ { name: 'foo'},{ name: 'bar'},{name: 'baz' }];
         $scope.destinationStations = [ { name: 'foo2'},{ name: 'bar2'}];
         $scope.disableOrigin = false;
         $scope.disableDestination = false;
@@ -31,6 +30,12 @@ angular.module('carrier', [ 'rides', 'agencies' ])
             };
            $scope.plan = plan;
         });
+    };
+    $scope.changeOrigin = function() {
+        console.log('ooooooo ' + $scope.originStationSelect.stopId);
+    };
+    $scope.changeDestination = function() {
+        console.log('dddddd ' + $scope.destinationStationSelect.stopId);
     };
     function getPlan() {
         var plan =  { spanStart: new Date('2013-02-22T13:00'), spanEnd: new Date('2013-02-22T14:00'),
