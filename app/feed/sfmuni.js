@@ -18,26 +18,7 @@ angular.module('agencies', [])
         var parser = new DOMParser();
         const baseUrl =  'http://webservices.nextbus.com/service/publicXMLFeed';
         var api = {
-            getData: function() {
-                var config = {
-                    url: 'http://webservices.nextbus.com/service/publicXMLFeed',
-                    method: 'GET',
-                    transformResponse: function(data) {
-                        var routes = [];
-//                        data = '<body><route tag="" title=""><stop tag="" title="" shortTitle=""></stop></route></body>';
-                        var doc =  parser.parseFromString(data, 'text/xml');
-                        var root = angular.element(doc);
-                        var re = angular.element(root).find('route');
-                        angular.forEach(re, function(ff) {
-                            var route = { id: angular.element(ff).attr('tag') };
-                            routes.push(route);
-                        });
-                        return  routes;
-                    }
-                };
-                return $http(config);
-            },
-            getStops: function(route) {
+             getStops: function(route) {
                 return buildResource('routeConfig', parseStops)({ r: route });
             },
             getRides: function(originStop, destinationStop) {
@@ -126,29 +107,6 @@ angular.module('agencies', [])
                 }
             });
             return stops;
-        }
-        function addMinutes(date, minutes) {
-            return new Date(date.getTime() + minutes * 60000);
-        }
-        function parseRides(root) {
-            var psx = angular.element(root).find('predictions');
-            var dx = angular.element(psx).find('direction');
-            var px = angular.element(dx).find('prediction');
-            var rides = [];
-            var now = new Date();
-            angular.forEach(px, function(ppx) {
-                var pt = angular.element(ppx).attr('epochTime');
-                var pm = angular.element(ppx).attr('minutes');
-//                var st = addMinutes(now, parseInt(pm, 10));
-                var st = new Date(pt * 1000);
-                var ride = {};
-                ride.agency = 'sf-muni';
-                ride.vehicle = angular.element(ppx).attr('vehicle');
-                ride.startTime = new Date(pt * 1000);
-                ride.endTime = '';
-                rides.push(ride);
-            });
-            return rides;
         }
         return api;
     });

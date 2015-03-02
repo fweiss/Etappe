@@ -15,16 +15,6 @@ describe('trial service test4', function() {
         httpBackend = $httpBackend;
         Plan = plan;
     }));
-    it('should get data', function() {
-        var xml = '<body><route tag="aa" title="bb"><stop tag="xx" title="yy" shortTitle="zz"></stop></route></body>';
-        httpBackend.whenGET(baseUrl).respond(xml);
-        SfMuni.getData().then(function(response) {
-            var routes = response.data;
-            expect(routes.length).toEqual(1);
-            expect(routes[0].id).toEqual('aa');
-        });
-        httpBackend.flush();
-    });
     // route > (stop, direction > stop)
     it('should get stops', function() {
         var xml = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Potrero"></stop><direction><stop></stop></direction></route></body>';
