@@ -20,23 +20,27 @@ angular.module('carrier', [ 'rides', 'agencies' ])
         $scope.disableOrigin = false;
         $scope.disableDestination = false;
         chart.setWidth(600);
-        var now = new Date();
-        var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-//        chart.setTimeSpan(now, then);
-//        $scope.plan = getPlan();
-        SfMuni.getRides('13293', '17324').then(function(response) {
-            var plan =  { spanStart: now, spanEnd: then,
-                rides: response.data
-            };
-           $scope.plan = plan;
-        });
     };
     $scope.changeOrigin = function() {
-        console.log('ooooooo ' + $scope.originStationSelect.stopId);
+        changePlan();
     };
     $scope.changeDestination = function() {
-        console.log('dddddd ' + $scope.destinationStationSelect.stopId);
+        changePlan();
     };
+    function changePlan() {
+        if ($scope.originStationSelect && $scope.destinationStationSelect) {
+            var originStop = $scope.originStationSelect.stopId; // 13293
+            var destinationStop = $scope.destinationStationSelect.stopId; // 17324
+            var now = new Date();
+            var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+            SfMuni.getRides(originStop, destinationStop).then(function(response) {
+                var plan =  { spanStart: now, spanEnd: then,
+                    rides: response.data
+                };
+                $scope.plan = plan;
+            });
+        }
+   }
     function getPlan() {
         var plan =  { spanStart: new Date('2013-02-22T13:00'), spanEnd: new Date('2013-02-22T14:00'),
             rides: [
