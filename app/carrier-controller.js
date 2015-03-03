@@ -12,7 +12,7 @@ angular.module('carrier', [ 'rides', 'agencies' ])
     ];
     $scope.rides = null;
     $scope.changeCarrier = function() {
-        SfMuni.getStops('55').then(function(response) {
+        SfMuni.getAllStops().then(function(response) {
             $scope.originStations = response.data;
             $scope.destinationStations = response.data;
         });

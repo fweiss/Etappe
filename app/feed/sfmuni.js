@@ -18,9 +18,13 @@ angular.module('agencies', [])
         var parser = new DOMParser();
         const baseUrl =  'http://webservices.nextbus.com/service/publicXMLFeed';
         var api = {
-             getStops: function(route) {
+             getStopsForRoute: function(route) {
                 return buildResource('routeConfig', parseStops)({ r: route });
             },
+            getAllStops: function() {
+                return buildResource('routeConfig', parseStops)({});
+            },
+
             getRides: function(originStop, destinationStop) {
                 var origin = api.getPredictionsForStopId(originStop);
                 var destination = api.getPredictionsForStopId(destinationStop);
@@ -104,7 +108,7 @@ angular.module('agencies', [])
                     stops.push(stop);
                 }
             });
-            return stops;
+            return _.uniq(_.sortBy(stops, 'name'), 'stopId');
         }
         return api;
     });

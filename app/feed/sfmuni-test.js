@@ -1,7 +1,7 @@
 //      http://nathanleclaire.com/blog/2014/04/12/unit-testing-services-in-angularjs-for-fun-and-for-profit/
 "use strict";
 
-describe('trial service test4', function() {
+describe('sfmuni', function() {
     var baseUrl = 'http://webservices.nextbus.com/service/publicXMLFeed';
     var SfMuni;
     var httpBackend;
@@ -15,18 +15,55 @@ describe('trial service test4', function() {
         httpBackend = $httpBackend;
         Plan = plan;
     }));
-    // route > (stop, direction > stop)
-    it('should get stops', function() {
-        var xml = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Potrero"></stop><direction><stop></stop></direction></route></body>';
-        httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig&r=55').respond(xml);
-        SfMuni.getStops('55').then(function(response) {
-            var stops = response.data;
-            expect(stops.length).toBe(2);
-            var stop0 = stops[0];
-            expect(stop0.name).toBe('16th and Mission');
-            expect(stop0.stopId).toBe('12345');
+    describe('stops', function() {
+        // route > (stop, direction > stop)
+        var xml;
+        beforeEach(function() {
+            xml = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Potrero"></stop><direction><stop></stop></direction></route></body>';
         });
-        httpBackend.flush();
+        it('should get stops', function() {
+            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig&r=55').respond(xml);
+            SfMuni.getStopsForRoute('55').then(function(response) {
+                var stops = response.data;
+                expect(stops.length).toBe(2);
+                var stop0 = stops[0];
+                expect(stop0.name).toBe('16th and Mission');
+                expect(stop0.stopId).toBe('12345');
+            });
+            httpBackend.flush();
+        });
+        it('should sort by name', function() {
+            xml = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Harrison"></stop><direction><stop></stop></direction></route></body>';
+            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig&r=55').respond(xml);
+            SfMuni.getStopsForRoute('55').then(function(response) {
+                var stops = response.data;
+                expect(stops.length).toBe(2);
+                var stop0 = stops[0];
+                var stop1 = stops[1];
+                expect(stop0.name).toBeLessThan(stop1.name);
+            });
+            httpBackend.flush();
+        });
+        it('should remove duplicates', function() {
+            var xml2 = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Mission" stopId="12346"></stop><stop title="16th and Mission" stopId="12345"></stop></route></body>';
+            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml2);
+            SfMuni.getAllStops().then(function(response) {
+                var stops = response.data;
+                expect(stops.length).toBe(2);
+            });
+            httpBackend.flush();
+        });
+        it('should get allstops', function() {
+            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml);
+            SfMuni.getAllStops().then(function(response) {
+                var stops = response.data;
+                expect(stops.length).toBe(2);
+                var stop0 = stops[0];
+                expect(stop0.name).toBe('16th and Mission');
+                expect(stop0.stopId).toBe('12345');
+            });
+            httpBackend.flush();
+        });
     });
     describe('predictions', function() {
         var round = 10;
