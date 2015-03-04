@@ -64,6 +64,18 @@ describe('sfmuni', function() {
             });
             httpBackend.flush();
         });
+        it('should get all nexus', function() {
+            var xml1 = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Mission" stopId="12346"></stop><stop title="16th and Mission" stopId="12345"></stop></route></body>';
+            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
+            SfMuni.getAllNexus().then(function(response) {
+                console.log('nnnnnn ' + _.keys(response));
+                var nexus = response.data;
+                expect(nexus['16th and Mission']).toBeTruthy();
+                console.log('ssssss ' + _.keys(nexus['16th and Mission']));
+                expect(nexus['16th and Mission'].stops.length).toBe(3);
+            });
+            httpBackend.flush();
+        });
     });
     describe('predictions', function() {
         var round = 10;

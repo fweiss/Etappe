@@ -18,6 +18,9 @@
                 <select id="destinationStationSelect" ng-model="destinationStationSelect" ng-options="station.name for station in destinationStations" ng-change="changeDestination()" ng-disabled="disableDestination">
                     <option value="">Choose a destination</option>
                 </select>
+                <select id="nexusSelect" ng-model="nexusSelect" ng-options="key for (key , value) in nexus">
+                    <option value="">Choose a destination</option>
+                </select>
             </p>
             <table id="plan">
                 <thead></thead>

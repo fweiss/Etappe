@@ -36,15 +36,14 @@ angular.module('agencies', [])
                     var rides = [];
                     // match up predictions by vehicle
                     _.each(originPredictions, function(originPrediction) {
-                        var vehicle = originPrediction.vehicle;
                         _.each(destinationPredictions, function(destinationPrediction) {
-                            var sameVehicle = vehicle === destinationPrediction.vehicle;
+                            var sameVehicle = originPrediction.vehicle === destinationPrediction.vehicle;
                             var originBeforeDestination = originPrediction.time < destinationPrediction.time;
                             var sameTripTag = originPrediction.tripTag === destinationPrediction.tripTag;
                             if (sameVehicle && originBeforeDestination && sameTripTag) {
                                 ride = {};
                                 ride.agency = 'sf-muni';
-                                ride.vehicle = vehicle;
+                                ride.vehicle = originPrediction.vehicle;
                                 ride.startTime = originPrediction.time;
                                 ride.endTime = destinationPrediction.time;
                                 rides.push(ride);
@@ -57,6 +56,9 @@ angular.module('agencies', [])
             },
             getPredictionsForStopId: function(stopId) {
                 return buildResource('predictions', predictionsTransform)({ stopId: stopId });
+            },
+            getAllNexus: function() {
+                return buildResource('routeConfig', nexusTransform)({});
             }
         }
         function buildResource(command, transform) {
@@ -92,8 +94,8 @@ angular.module('agencies', [])
             });
             return predictions;
         }
-        // note that stop is both child of route and route.direction
-        function parseStops(root) {
+       // note that stop is both child of route and route.direction
+       function parseStops(root) {
 //            var root = angular.element(parser.parseFromString(data, 'text/xml'));
             var rx = $(root).find('route');
             var ssx = angular.element(rx).find('stop');
@@ -109,6 +111,30 @@ angular.module('agencies', [])
                 }
             });
             return _.uniq(_.sortBy(stops, 'name'), 'stopId');
-        }
-        return api;
+       }
+       // here we collect all the stops by title to try to avoid so many
+       // stops, many of which are really at the same location
+       function nexusTransform(root) {
+            nexus = {};
+            function getOrCreate(name) {
+                var stops = nexus[name] && nexus[name].stops;
+                if (stops === undefined) {
+                    stops = [];
+                    nexus[name] = { stops: stops };
+                }
+                return stops;
+            }
+            var rx = $(root).find('route');
+            var ssx = $(rx).find('stop');
+            angular.forEach(ssx, function(sx) {
+                // because angular.element.children('stop') won't work
+                var title = $(sx).attr('title');
+                if (title !== undefined) {
+                    var stops = getOrCreate(title);
+                    stops.push($(sx).attr('stopId'));
+                }
+            });
+            return nexus;
+       }
+       return api;
     });

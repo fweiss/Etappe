@@ -16,6 +16,9 @@ angular.module('carrier', [ 'rides', 'agencies' ])
             $scope.originStations = response.data;
             $scope.destinationStations = response.data;
         });
+        SfMuni.getAllNexus().then(function(response) {
+            $scope.nexus = response.data;
+        });
         $scope.destinationStations = [ { name: 'foo2'},{ name: 'bar2'}];
         $scope.disableOrigin = false;
         $scope.disableDestination = false;
