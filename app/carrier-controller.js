@@ -40,4 +40,7 @@ angular.module('carrier', [ 'rides', 'agencies' ])
             });
         }
    }
+        $scope.originNexusChanged = function() {
+            console.log($scope.originNexusSelect);
+        }
 }]);

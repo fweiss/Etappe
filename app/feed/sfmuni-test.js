@@ -64,17 +64,32 @@ describe('sfmuni', function() {
             });
             httpBackend.flush();
         });
-        it('should get all nexus', function() {
-            var xml1 = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Mission" stopId="12346"></stop><stop title="16th and Mission" stopId="12345"></stop></route></body>';
-            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
-            SfMuni.getAllNexus().then(function(response) {
-                console.log('nnnnnn ' + _.keys(response));
-                var nexus = response.data;
-                expect(nexus['16th and Mission']).toBeTruthy();
-                console.log('ssssss ' + _.keys(nexus['16th and Mission']));
-                expect(nexus['16th and Mission'].stops.length).toBe(3);
+        describe('nexus', function() {
+            it('should get all', function() {
+                var xml1 = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Mission" stopId="12346"></stop><stop title="16th and Mission" stopId="12345"></stop></route></body>';
+                httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
+                SfMuni.getAllNexus().then(function(response) {
+                    var nexus = response.data;
+                    expect(nexus['16th and Mission']).toBeTruthy();
+                    expect(nexus['16th and Mission'].stops.length).toBe(3);
+                    var stop = nexus['16th and Mission'].stops[0];
+                    expect(stop.stopId).toBe('12345');
+                });
+                httpBackend.flush();
             });
-            httpBackend.flush();
+            it('should get with route and direction', function() {
+                var xml1 = '<body><route tag="F"><stop title="16th and Mission" stopId="12345"></stop></route></body>';
+                httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
+                SfMuni.getAllNexus().then(function(response) {
+                    var nexus = response.data;
+                    expect(nexus['16th and Mission']).toBeTruthy();
+                    expect(nexus['16th and Mission'].stops.length).toBe(1);
+                    var stop = nexus['16th and Mission'].stops[0];
+                    expect(stop.stopId).toBe('12345');
+                    expect(stop.route).toBe('F');
+                });
+                httpBackend.flush();
+            });
         });
     });
     describe('predictions', function() {

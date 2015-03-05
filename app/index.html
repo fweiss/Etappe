@@ -18,7 +18,7 @@
                 <select id="destinationStationSelect" ng-model="destinationStationSelect" ng-options="station.name for station in destinationStations" ng-change="changeDestination()" ng-disabled="disableDestination">
                     <option value="">Choose a destination</option>
                 </select>
-                <select id="nexusSelect" ng-model="nexusSelect" ng-options="key for (key , value) in nexus">
+                <select id="originNexusSelect" ng-model="originNexusSelect" ng-options="key for (key , value) in nexus" ng-change="originNexusChanged()">
                     <option value="">Choose a destination</option>
                 </select>
             </p>
@@ -27,6 +27,10 @@
                 <tbody>
                     <tr>
                         <td>{{ originStationSelect.stopId }}</td>
+                        <td>{{ destinationStationSelect.stopId }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ originNexusSelect.stops }}</td>
                         <td>{{ destinationStationSelect.stopId }}</td>
                     </tr>
                 </tbody>

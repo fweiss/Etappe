@@ -114,6 +114,8 @@ angular.module('agencies', [])
        }
        // here we collect all the stops by title to try to avoid so many
        // stops, many of which are really at the same location
+       // route[tag] < stop[tag,title,stopId]
+       // route[tag] < direction[name] < stop[tag]
        function nexusTransform(root) {
             nexus = {};
             function getOrCreate(name) {
@@ -124,16 +126,23 @@ angular.module('agencies', [])
                 }
                 return stops;
             }
-            var rx = $(root).find('route');
-            var ssx = $(rx).find('stop');
-            angular.forEach(ssx, function(sx) {
-                // because angular.element.children('stop') won't work
-                var title = $(sx).attr('title');
-                if (title !== undefined) {
-                    var stops = getOrCreate(title);
-                    stops.push($(sx).attr('stopId'));
-                }
+            var rrx = $(root).find('route');
+            angular.forEach(rrx, function(rx) {
+                var route = $(rx).attr('tag');
+                var ssx = $(rx).find('stop');
+                angular.forEach(ssx, function(sx) {
+                    // because angular.element.children('stop') won't work
+                    var title = $(sx).attr('title');
+                    if (title !== undefined) {
+                        var stops = getOrCreate(title);
+                        var stop = {};
+                        stop.stopId = $(sx).attr('stopId');
+                        stop.route = route;
+                        stops.push(stop);
+                    }
+                });
             });
+
             return nexus;
        }
        return api;
