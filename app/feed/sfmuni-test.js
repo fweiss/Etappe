@@ -19,7 +19,7 @@ describe('sfmuni', function() {
         // route > (stop, direction > stop)
         var xml;
         beforeEach(function() {
-            xml = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Potrero"></stop><direction><stop></stop></direction></route></body>';
+            xml = '<body><route><stop tag="2345" title="16th and Mission" stopId="12345"></stop><stop title="16th and Potrero"></stop><direction><stop></stop></direction></route></body>';
         });
         it('should get stops', function() {
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig&r=55').respond(xml);
@@ -29,6 +29,7 @@ describe('sfmuni', function() {
                 var stop0 = stops[0];
                 expect(stop0.name).toBe('16th and Mission');
                 expect(stop0.stopId).toBe('12345');
+                expect(stop0.stopTag).toBe('2345');
             });
             httpBackend.flush();
         });
@@ -77,8 +78,8 @@ describe('sfmuni', function() {
                 });
                 httpBackend.flush();
             });
-            it('should get with route and direction', function() {
-                var xml1 = '<body><route tag="F"><stop title="16th and Mission" stopId="12345"></stop></route></body>';
+            it('should get with route, direction, tag', function() {
+                var xml1 = '<body><route tag="F"><stop tag="2345" title="16th and Mission" stopId="12345"></stop></route></body>';
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
                 SfMuni.getAllNexus().then(function(response) {
                     var nexus = response.data;
@@ -87,6 +88,7 @@ describe('sfmuni', function() {
                     var stop = nexus['16th and Mission'].stops[0];
                     expect(stop.stopId).toBe('12345');
                     expect(stop.route).toBe('F');
+                    expect(stop.stopTag).toBe('2345');
                 });
                 httpBackend.flush();
             });
@@ -160,6 +162,22 @@ describe('sfmuni', function() {
                 expect(ride0.endTime / round).toBeCloseTo(addMinutes(now, 22) / round, 0);
                 expect(ride0.agency).toBe('sf-muni');
                 expect(ride0.vehicle).toBe('2356');
+            });
+            httpBackend.flush();
+        });
+        it('should get for multistops', function() {
+            var now = new Date();
+            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stop=N%7C2355&stop=J%7C5067').respond('<direction><predictions routeCode="N">' + prediction('4444', 0, '55555') + '</predictions><predictions routeCode="J"><prediction></prediction></predictions></direction>');
+            SfMuni.getPredictionsForMultiStops([ { route: 'N', stopTag: '2355'}, { route: 'J', stopTag: '5067' } ]).then(function(response) {
+                var predictions = response.data;
+                expect(predictions.length).toBe(2);
+                var p0 = predictions[0];
+                expect(p0.vehicle).toBe('4444');
+                expect(p0.tripTag).toBe('55555');
+                expect(p0.time / round).toBeCloseTo(addMinutes(now, 0) / round);
+                expect(p0.route).toBe('N');
+                var p1 = predictions[1];
+                expect(p1.route).toBe('J');
             });
             httpBackend.flush();
         });

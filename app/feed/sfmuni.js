@@ -33,23 +33,7 @@ angular.module('agencies', [])
                 $q.all([ origin, destination ]).then(function(responses) {
                     var originPredictions = responses[0].data;
                     var destinationPredictions = responses[1].data;
-                    var rides = [];
-                    // match up predictions by vehicle
-                    _.each(originPredictions, function(originPrediction) {
-                        _.each(destinationPredictions, function(destinationPrediction) {
-                            var sameVehicle = originPrediction.vehicle === destinationPrediction.vehicle;
-                            var originBeforeDestination = originPrediction.time < destinationPrediction.time;
-                            var sameTripTag = originPrediction.tripTag === destinationPrediction.tripTag;
-                            if (sameVehicle && originBeforeDestination && sameTripTag) {
-                                ride = {};
-                                ride.agency = 'sf-muni';
-                                ride.vehicle = originPrediction.vehicle;
-                                ride.startTime = originPrediction.time;
-                                ride.endTime = destinationPrediction.time;
-                                rides.push(ride);
-                            }
-                        });
-                    });
+                    var rides = getRidesForSegmentPredictions(originPredictions,destinationPredictions );
                     defer.resolve({ data: rides });
                 });
                 return defer.promise;
@@ -59,6 +43,12 @@ angular.module('agencies', [])
             },
             getAllNexus: function() {
                 return buildResource('routeConfig', nexusTransform)({});
+            },
+            getPredictionsForMultiStops: function(stops) {
+                var stopList = _.map(stops, function(stop) {
+                    return stop.route + '|' + stop.stopTag;
+                });
+                return buildResource('predictionsForMultiStops', multiPredictionsTransform)({ stop: stopList });
             }
         }
         function buildResource(command, transform) {
@@ -76,6 +66,15 @@ angular.module('agencies', [])
                 return $http(config);
             }
         }
+        function parsePrediction(px, route) {
+            var prediction = {};
+            prediction.vehicle = $(px).attr('vehicle');
+            prediction.time = new Date($(px).attr('epochTime') * 1); // parseInt
+            prediction.route = route;
+            prediction.tripTag = $(px).attr('tripTag');
+            return prediction;
+        }
+        // expecting predictions < direction < prediction
        function predictionsTransform(root) {
             var px = $(root).find('predictions');
             var ddx = $(px).find('direction');
@@ -94,6 +93,23 @@ angular.module('agencies', [])
             });
             return predictions;
         }
+        // expecting direction < predictions[routeTag] < prediction[epochTime,vehicle,tripTag]
+        function multiPredictionsTransform(root) {
+            predictions = [];
+            var ddx = $(root).find('direction');
+            angular.forEach(ddx, function(dx) {
+                var ssx = $(dx).find('predictions')
+                    angular.forEach(ssx, function(sx) {
+                        var route = $(sx).attr('routeCode');
+                        var ppx = $(sx).find('prediction');
+                        angular.forEach(ppx, function(px) {
+                            console.log('rrrrrrrr ' + route);
+                            predictions.push(parsePrediction(px, route));
+                        });
+                    });;
+          });
+            return predictions;
+        }
        // note that stop is both child of route and route.direction
        function parseStops(root) {
 //            var root = angular.element(parser.parseFromString(data, 'text/xml'));
@@ -107,6 +123,7 @@ angular.module('agencies', [])
                     var stop = {};
                     stop.name = title;
                     stop.stopId = $(sx).attr('stopId');
+                    stop.stopTag = $(sx).attr('tag');
                     stops.push(stop);
                 }
             });
@@ -137,6 +154,7 @@ angular.module('agencies', [])
                         var stops = getOrCreate(title);
                         var stop = {};
                         stop.stopId = $(sx).attr('stopId');
+                        stop.stopTag = $(sx).attr('tag');
                         stop.route = route;
                         stops.push(stop);
                     }
@@ -145,5 +163,25 @@ angular.module('agencies', [])
 
             return nexus;
        }
+        function getRidesForSegmentPredictions(originPredictions, destinationPredictions) {
+            var rides = [];
+            // match up predictions by vehicle
+            _.each(originPredictions, function(originPrediction) {
+                _.each(destinationPredictions, function(destinationPrediction) {
+                    var sameVehicle = originPrediction.vehicle === destinationPrediction.vehicle;
+                    var originBeforeDestination = originPrediction.time < destinationPrediction.time;
+                    var sameTripTag = originPrediction.tripTag === destinationPrediction.tripTag;
+                    if (sameVehicle && originBeforeDestination && sameTripTag) {
+                        ride = {};
+                        ride.agency = 'sf-muni';
+                        ride.vehicle = originPrediction.vehicle;
+                        ride.startTime = originPrediction.time;
+                        ride.endTime = destinationPrediction.time;
+                        rides.push(ride);
+                    }
+                });
+            });
+            return rides;
+        }
        return api;
     });
