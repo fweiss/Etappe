@@ -127,7 +127,8 @@ angular.module('agencies', [])
                     stops.push(stop);
                 }
             });
-            return _.uniq(_.sortBy(stops, 'name'), 'stopId');
+           return _.sortBy(stops, 'name');
+//            return _.uniq(_.sortBy(stops, 'name'), 'stopId');
        }
        // here we collect all the stops by title to try to avoid so many
        // stops, many of which are really at the same location
