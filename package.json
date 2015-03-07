@@ -8,7 +8,8 @@
         "protractor": "^1.1.1"
     },
     "scripts": {
-        "start": "http-server -a localhost -p 8000 -c-1",
+        "prestart": "npm install http-server",
+        "start": "http-server -a localhost -p 8080 -c-1",
         "pretest": "npm install karma-jasmine karma-chrome-launcher protractor",
         "test": "node node_modules/karma/bin/karma start",
         "protractor": "node "

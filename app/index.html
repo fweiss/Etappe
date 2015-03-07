@@ -12,13 +12,16 @@
                 <select id="carrierSelect" ng-model="carrierSelect" ng-options="carrier.name for carrier in carriers" ng-change="changeCarrier()">
                     <option value="">Choose a carrier</option>
                 </select>
-                <select id="originStationSelect" ng-model="originStationSelect" ng-options="station.name for station in originStations" ng-change="changeOrigin()" ng-disabled="disableOrigin">
-                    <option value="">Choose an origin</option>
-                </select>
-                <select id="destinationStationSelect" ng-model="destinationStationSelect" ng-options="station.name for station in destinationStations" ng-change="changeDestination()" ng-disabled="disableDestination">
+                <!--<select id="originStationSelect" ng-model="originStationSelect" ng-options="station.name for station in originStations" ng-change="changeOrigin()" ng-disabled="disableOrigin">-->
+                    <!--<option value="">Choose an origin</option>-->
+                <!--</select>-->
+                <!--<select id="destinationStationSelect" ng-model="destinationStationSelect" ng-options="station.name for station in destinationStations" ng-change="changeDestination()" ng-disabled="disableDestination">-->
+                    <!--<option value="">Choose a destination</option>-->
+                <!--</select>-->
+                <select id="originNexusSelect" ng-model="originNexusSelect" ng-options="key for (key , value) in originNexus" ng-change="originNexusChanged()">
                     <option value="">Choose a destination</option>
                 </select>
-                <select id="originNexusSelect" ng-model="originNexusSelect" ng-options="key for (key , value) in nexus" ng-change="originNexusChanged()">
+                <select id="destinationNexusSelect" ng-model="destinationNexusSelect" ng-options="key for (key , value) in destinationNexus" ng-change="destinationNexusChanged()">
                     <option value="">Choose a destination</option>
                 </select>
             </p>
@@ -31,10 +34,11 @@
                     </tr>
                     <tr>
                         <td>{{ originNexusSelect.stops }}</td>
-                        <td>{{ destinationStationSelect.stopId }}</td>
+                        <td>{{ destinationNexusSelect.stops }}</td>
                     </tr>
                 </tbody>
             </table>
+            <div ng-bind="rideList"></div>
             <canvas utt-rides width="600" height="100"></canvas>
         </div>
         <script src="lib/underscore.js"></script>

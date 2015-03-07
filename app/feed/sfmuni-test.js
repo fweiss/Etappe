@@ -1,19 +1,21 @@
 //      http://nathanleclaire.com/blog/2014/04/12/unit-testing-services-in-angularjs-for-fun-and-for-profit/
 "use strict";
 
-describe('sfmuni', function() {
+describe('sfmuni2', function() {
     var baseUrl = 'http://webservices.nextbus.com/service/publicXMLFeed';
     var SfMuni;
     var httpBackend;
     var Plan;
+    var rootScope;
     function addMinutes(date, minutes) {
         return new Date(date.getTime() + minutes * 60000);
     }
     beforeEach(module('agencies', 'etappe'));
-    beforeEach(inject(function(_sfMuni_, $httpBackend, plan) {
+    beforeEach(inject(function(_sfMuni_, $httpBackend, plan, $rootScope) {
         SfMuni = _sfMuni_;
         httpBackend = $httpBackend;
         Plan = plan;
+        rootScope = $rootScope;
     }));
     describe('stops', function() {
         // route > (stop, direction > stop)
@@ -143,34 +145,15 @@ describe('sfmuni', function() {
             });
             httpBackend.flush();
         });
-        it('should get rides between two stops and correctly match vehicles by time', function() {
-            epochMilliSeconds = now.getTime();
-            xmlOrigin = '<body><predictions><direction routeTag="55">'
-                + prediction(2356, 11, '6596789')
-                + prediction(2356, 44, '6596789')
-                + '</direction></predictions></body>';
-            xmlDestination = '<body><predictions><direction routeTag="55">'
-                + prediction(2356, 22, '6596789')
-                + prediction(2356, 33, '6596790')
-                + '</direction></predictions></body>';
-            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=3293').respond(xmlOrigin);
-            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=7324').respond(xmlDestination);
-            SfMuni.getRides('3293', '7324').then(function(response) {
-                var rides = response.data;
-                expect(rides.length).toEqual(1);
-                var ride0 = rides[0];
-                expect(ride0.startTime / round).toBeCloseTo(addMinutes(now, 11) / round, 0);
-                expect(ride0.endTime / round).toBeCloseTo(addMinutes(now, 22) / round, 0);
-                expect(ride0.agency).toBe('sf-muni');
-                expect(ride0.vehicle).toBe('2356');
-            });
-            httpBackend.flush();
-        });
         it('should get for multistops', function() {
             var now = new Date();
-            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stop=N%7C2355&stop=J%7C5067').respond('<direction><predictions routeCode="N">' + prediction('4444', 0, '55555') + '</predictions><predictions routeCode="J"><prediction></prediction></predictions></direction>');
+            var predictionXml = '<body><predictions routeCode="N"><direction>' + prediction('4444', 0, '55555') + '</direction></predictions>'
+                + '<predictions routeCode="J"><direction><prediction></prediction></direction></predictions></body>';
+            console.log('xxxxxxxxxxxxx ' + predictionXml);
+            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C2355&stops=J%7C5067').respond(predictionXml);
             SfMuni.getPredictionsForMultiStops([ { route: 'N', stopTag: '2355'}, { route: 'J', stopTag: '5067' } ]).then(function(response) {
                 var predictions = response.data;
+                console.log('pppppppppppppp ' + _.keys(predictions[0]));
                 expect(predictions.length).toBe(2);
                 var p0 = predictions[0];
                 expect(p0.vehicle).toBe('4444');
@@ -181,6 +164,45 @@ describe('sfmuni', function() {
                 expect(p1.route).toBe('J');
             });
             httpBackend.flush();
+        });
+        describe('rides', function() {
+            it('should get rides between two stops and correctly match vehicles by time', function() {
+                epochMilliSeconds = now.getTime();
+                xmlOrigin = '<body><predictions><direction routeTag="55">'
+                    + prediction(2356, 11, '6596789')
+                    + prediction(2356, 44, '6596789')
+                    + '</direction></predictions></body>';
+                xmlDestination = '<body><predictions><direction routeTag="55">'
+                    + prediction(2356, 22, '6596789')
+                    + prediction(2356, 33, '6596790')
+                    + '</direction></predictions></body>';
+                httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=3293').respond(xmlOrigin);
+                httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=7324').respond(xmlDestination);
+                SfMuni.getRides('3293', '7324').then(function(response) {
+                    var rides = response.data;
+                    expect(rides.length).toEqual(1);
+                    var ride0 = rides[0];
+                    expect(ride0.startTime / round).toBeCloseTo(addMinutes(now, 11) / round, 0);
+                    expect(ride0.endTime / round).toBeCloseTo(addMinutes(now, 22) / round, 0);
+                    expect(ride0.agency).toBe('sf-muni');
+                    expect(ride0.vehicle).toBe('2356');
+                });
+                httpBackend.flush();
+            });
+            it('should get a ride for multi stops', function() {
+                var originXml = '<body><predictions routeCode="N"><direction>' + prediction('4444', 0, '44444') + '</direction></predictions></body>';
+                var destinationXml = '<body><predictions routeCode="N"><direction>' + prediction('4444', 10, '44444') + '</direction></predictions></body>';
+                httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C2222').respond(originXml);
+                httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C3333').respond(destinationXml);
+                var segment = { originStops: [ { route: 'N', stopTag: '2222' }], destinationStops: [ { route: 'N', stopTag: '3333' }]};
+                SfMuni.getRidesForSegment(segment).then(function(response) {
+                    var rides = response.data;
+                    expect(rides.length).toBe(1);
+                    // maybe need to test data here, but ought to unit test getRidesForSegmentPredictions()
+                });
+//                rootScope.$apply(); // is this only needed when there's no $httBackend calls?
+                httpBackend.flush();
+            });
         });
     });
 });

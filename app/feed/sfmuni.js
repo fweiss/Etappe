@@ -48,7 +48,19 @@ angular.module('agencies', [])
                 var stopList = _.map(stops, function(stop) {
                     return stop.route + '|' + stop.stopTag;
                 });
-                return buildResource('predictionsForMultiStops', multiPredictionsTransform)({ stop: stopList });
+                return buildResource('predictionsForMultiStops', multiPredictionsTransform)({ stops: stopList });
+            },
+            getRidesForSegment: function(segment) {
+                var defer = $q.defer();
+                var origin = api.getPredictionsForMultiStops(segment.originStops);
+                var destination = api.getPredictionsForMultiStops(segment.destinationStops);
+                $q.all([origin, destination]).then(function(responses) {
+                    var originPredictions = responses[0].data;
+                    var destinationPredictions = responses[1].data;
+                    var rides = getRidesForSegmentPredictions(originPredictions, destinationPredictions);
+                    defer.resolve({ data: rides });
+                });
+                return defer.promise;
             }
         }
         function buildResource(command, transform) {
@@ -93,21 +105,21 @@ angular.module('agencies', [])
             });
             return predictions;
         }
-        // expecting direction < predictions[routeTag] < prediction[epochTime,vehicle,tripTag]
+        // the docs are incorrect: direction < predictions[routeTag] < prediction[epochTime,vehicle,tripTag]
+        // actual: body < predictions[routeTag] < direction <  prediction[epochTime,vehicle,tripTag]
         function multiPredictionsTransform(root) {
             predictions = [];
-            var ddx = $(root).find('direction');
-            angular.forEach(ddx, function(dx) {
-                var ssx = $(dx).find('predictions')
-                    angular.forEach(ssx, function(sx) {
-                        var route = $(sx).attr('routeCode');
-                        var ppx = $(sx).find('prediction');
-                        angular.forEach(ppx, function(px) {
-                            console.log('rrrrrrrr ' + route);
-                            predictions.push(parsePrediction(px, route));
-                        });
-                    });;
-          });
+            var ssx = $(root).find('predictions')
+            angular.forEach(ssx, function(sx) {
+                var route = $(sx).attr('routeCode');
+                var ddx = $(sx).find('direction');
+                angular.forEach(ddx, function(dx) {
+                    var ppx = $(dx).find('prediction');
+                    angular.forEach(ppx, function(px) {
+                        predictions.push(parsePrediction(px, route));
+                    });
+                });
+            });
             return predictions;
         }
        // note that stop is both child of route and route.direction
