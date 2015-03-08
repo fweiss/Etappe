@@ -18,6 +18,7 @@ module.exports = function(config) {
             'app/lib/underscore.js',
             'app/*.js',
             'app/feed/*.js',
+            'app/plan/module.js',
             'app/plan/*.js'
         ],
         nestedReporter: {

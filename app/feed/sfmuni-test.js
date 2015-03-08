@@ -149,16 +149,14 @@ describe('sfmuni2', function() {
             var now = new Date();
             var predictionXml = '<body><predictions routeCode="N"><direction>' + prediction('4444', 0, '55555') + '</direction></predictions>'
                 + '<predictions routeCode="J"><direction><prediction></prediction></direction></predictions></body>';
-            console.log('xxxxxxxxxxxxx ' + predictionXml);
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C2355&stops=J%7C5067').respond(predictionXml);
             SfMuni.getPredictionsForMultiStops([ { route: 'N', stopTag: '2355'}, { route: 'J', stopTag: '5067' } ]).then(function(response) {
                 var predictions = response.data;
-                console.log('pppppppppppppp ' + _.keys(predictions[0]));
                 expect(predictions.length).toBe(2);
                 var p0 = predictions[0];
                 expect(p0.vehicle).toBe('4444');
                 expect(p0.tripTag).toBe('55555');
-                expect(p0.time / round).toBeCloseTo(addMinutes(now, 0) / round);
+                expect(p0.time / round).toBeCloseTo(addMinutes(now, 0) / round, 0);
                 expect(p0.route).toBe('N');
                 var p1 = predictions[1];
                 expect(p1.route).toBe('J');
