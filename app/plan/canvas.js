@@ -70,6 +70,9 @@ angular.module('rides')
                 ctx.strokeStyle = timeTickMajor.strokeStyle;
                 var x = timeToX(time);
                 drawTick(x);
+                var tickLabel = tod(time);
+                ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
+                ctx.fillText(tickLabel, x + 2, 10);
             });
             ctx.lineWidth = timeTickMinor.lineWidth;
             _.each(fiveMinuteTimes, function(time) {

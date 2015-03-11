@@ -1,5 +1,7 @@
 describe('canvas5', function() {
-    var spanStart = new Date('2013-02-22T13:00');
+    // N.B. Date constructor for ISO 8601 is always UTC, use RFC2822 instead
+    //var spanStart = new Date('2013-02-22T13:00');
+    var spanStart = new Date('22 Feb 2013 13:00');
     var spanEnd = addMinutes(spanStart, 60);
     var canvasWidth = 600;
     var canvasHeight = 100;
@@ -86,6 +88,14 @@ describe('canvas5', function() {
             var plan = { spanStart: addMinutes(spanStart, 12), spanEnd: addMinutes(spanStart, 16) };
             setPlanAndApply(plan);
             expect(mockContext.strokeStyle).toBe('rgba(0, 0, 0, 0.5)');
+        });
+    });
+    describe('tick labels', function() {
+        it('should draw at 15 minute mark', function() {
+            console.log(new Date(new Date('2013-02-22T13:00').getTime()).toLocaleTimeString());
+            var plan = { spanStart: addMinutes(spanStart, 12), spanEnd: addMinutes(spanStart, 16) };
+            setPlanAndApply(plan);
+            expect(mockContext.fillText).toHaveBeenCalledWith('1:15 PM', 452, 10);
         });
     });
 });
