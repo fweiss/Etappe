@@ -13,8 +13,9 @@ describe('plan2', function() {
         });
         it('should create empty plan', function() {
             var plan = Plan.createPlan(spanStart, spanEnd);
-            expect(plan.spanStart).toBeTruthy();
-            expect(plan.rides.length).toBe(0);
+            expect(plan.spanStart).toBe(spanStart);
+            expect(plan.spanEnd).toBe(spanEnd);
+            expect(plan.getSegments().length).toBe(0);
         });
     });
     describe('with rides', function() {

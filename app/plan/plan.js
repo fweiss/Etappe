@@ -7,8 +7,9 @@ angular.module('etappe')
                 }
                 var segments = [];
                 return {
-                    spanStart: new Date(),
-                    rides: [],
+                    spanStart: spanStart,
+                    spanEnd: spanEnd,
+                    segments: [],
                     getSegments: function() {
                         return segments;
                     },
