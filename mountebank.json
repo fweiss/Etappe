@@ -1,0 +1,74 @@
+{ "imposters": [{
+    "port": 4545,
+    "protocol": "http",
+    "stubs": [
+        {
+            "responses": [
+                {
+                    "is": {
+                      "statusCode": 200,
+                      "headers":
+                        {"Content-type": "text/xml", "Access-Control-Allow-Origin": "*"},
+                      "body": "<body>
+                      <route tag='N'>
+                        <stop tag=\"5555\" title=\"16th St and Mission\" stopId=\"15555\"></stop>
+                      <stop tag=\"4444\" title=\"16th St and Harrison\" stopId=\"14444\"></stop>
+                      </route>
+                      </body>"
+                    }
+                }
+            ],
+            "predicates": [
+              { "equals": { "query": { "command": "routeConfig"}}}
+            ]
+        },
+        {
+          "responses": [
+            {
+              "is": {
+                "statusCode": 200,
+                "headers": {
+                  "Content-type": "text/xml",
+                  "Access-Control-Allow-Origin": "*"
+                },
+                "body": "<body><predictions routeTag=\"N\"><direction><prediction epochTime=\"2222\" vehicle=\"3333\" tripTag=\"7777\"></prediction></direction></predictions></body>"
+              }
+            }
+          ],
+          "predicates": [
+            {
+              "equals": {
+                "query": {
+                  "command": "predictionsForMultiStops",
+                  "stops": "N|4444"
+                }
+              }
+            }
+          ]
+        },
+      {
+        "responses": [
+          {
+            "is": {
+              "statusCode": 200,
+              "headers": {
+                "Content-type": "text/xml",
+                "Access-Control-Allow-Origin": "*"
+              },
+              "body": "<body><predictions routeTag=\"N\"><direction><prediction epochTime=\"1111\" vehicle=\"3333\" tripTag=\"7777\"></prediction></direction></predictions></body>"
+            }
+          }
+        ],
+        "predicates": [
+          {
+            "equals": {
+              "query": {
+                "command": "predictionsForMultiStops",
+                "stops": "N|5555"
+              }
+            }
+          }
+        ]
+      }
+    ]
+}]}
