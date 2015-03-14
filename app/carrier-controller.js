@@ -47,6 +47,9 @@ angular.module('carrier', [ 'rides', 'agencies' ])
     $scope.destinationNexusChanged = function() {
         changeNexus();
     }
+        $scope.refreshRides = function() {
+            changeNexus();
+        }
     function changeNexus() {
         if ($scope.originNexusSelect && $scope.destinationNexusSelect) {
             var originStops = $scope.originNexusSelect.stops;
@@ -55,12 +58,13 @@ angular.module('carrier', [ 'rides', 'agencies' ])
             var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
             var segment = { originStops: originStops, destinationStops: destinationStops };
             SfMuni.getRidesForSegment(segment).then(function(response) {
+                var rides = response.data;
                 var plan =  { spanStart: now, spanEnd: then,
-                    rides: response.data
+                    rides: rides
                 };
                 $scope.plan = plan;
-                $scope.rideList = plan.rides.length;
-            });
+                $scope.rideList = rides.length;
+            }, function(fail) { $scope.rideList = fail; });
 
         }
 

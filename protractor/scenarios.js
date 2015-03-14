@@ -1,6 +1,11 @@
 describe('carrier select', function() {
     var PROMPT = 1; // to account for the prompt option in select
     beforeEach(function() {
+        // using mountebank here
+        browser.addMockModule('sfmuni.config', function() {
+            angular.module('sfmuni.config', {})
+                .value('config', { baseUrl: 'http://localhost:4545' });
+        });
         browser.get('http://localhost:8080/app/index.html');
     });
     xit('should prompt to select carrier', function() {
@@ -35,16 +40,17 @@ describe('carrier select', function() {
             element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
             //element(by.cssContainingText('#originStationSelect option', 'foo')).click();
             //element(by.cssContainingText('#destinationStationSelect option', 'foo2')).click();
-            element(by.cssContainingText('#originNexusSelect option', 'Roosevelt Way & Lower Ter')).click();
-            element(by.cssContainingText('#destinationNexusSelect option', 'Roosevelt Way & Clifford Ter')).click();
+            element(by.cssContainingText('#originNexusSelect option', '16th St and Mission')).click();
+            element(by.cssContainingText('#destinationNexusSelect option', '16th St and Harrison')).click();
+            //element(by.model('originNexusSelect', 'Roosevelt Way & Lower Ter')).click();
+            //element(by.model('destinationNexusSelect', 'Roosevelt Way & Clifford Ter')).click();
         });
         xit('should show available routes', function() {
             expect(element(by.model('availableRoutes')).getText()).toBe('55 16th');
         });
         // this is dependent on data and time of day, should mock backend
         it('should show available rides', function() {
-            browser.pause();
-            expect(element(by.binding('rideList')).getText()).toBeGreaterThan(1);
+            expect(element(by.binding('rideList')).getText()).toBeGreaterThan(0);
         })
     });
 });

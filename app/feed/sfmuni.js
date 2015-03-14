@@ -12,11 +12,14 @@
  * @param data XML
  * @returns {{}}
  */
-angular.module('agencies', [])
-.service('sfMuni', function($http, $q) {
+angular.module('sfmuni.config', [])
+    .value('config', {baseUrl: 'http://webservices.nextbus.com/service/publicXMLFeed'});
+
+angular.module('agencies', [ 'sfmuni.config' ])
+.service('sfMuni', function(config, $http, $q) {
         var $ = $ || angular.element;
         var parser = new DOMParser();
-        const baseUrl =  'http://webservices.nextbus.com/service/publicXMLFeed';
+        const baseUrl = config.baseUrl;
         var api = {
              getStopsForRoute: function(route) {
                 return buildResource('routeConfig', parseStops)({ r: route });
@@ -185,7 +188,7 @@ angular.module('agencies', [])
                     var originBeforeDestination = originPrediction.time < destinationPrediction.time;
                     var sameTripTag = originPrediction.tripTag === destinationPrediction.tripTag;
                     if (sameVehicle && originBeforeDestination && sameTripTag) {
-                        ride = {};
+                        var ride = {};
                         ride.agency = 'sf-muni';
                         ride.vehicle = originPrediction.vehicle;
                         ride.startTime = originPrediction.time;
