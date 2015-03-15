@@ -50,7 +50,6 @@ describe('carrier select', function() {
         xit('should show available routes', function() {
             expect(element(by.model('availableRoutes')).getText()).toBe('55 16th');
         });
-        // this is dependent on data and time of day, should mock backend
         it('should show available rides', function() {
             expect(element(by.binding('rideList')).getText()).toBeGreaterThan(0);
         })
@@ -72,79 +71,39 @@ describe('carrier select', function() {
                 {
                     port: 4545,
                     protocol: 'http',
-                    stubs: [
-                        {
-                            responses: [
-                                {
-                                    is: {
-                                        status: 200,
-                                        headers: headers,
-                                        body: '<body>'
-                                            + '<route tag="N">'
-                                            + '<stop tag="5555" title="16th St and Mission" stopId="15555"></stop>'
-                                            + '<stop tag="4444" title="16th St and Harrison" stopId="14444"></stop>'
-                                            + '</route>'
-                                            + '</body>'
-                                    }
-                                }
-                            ],
-                            predicates: [
-                                {
-                                    equals: {
-                                        query: {
-                                            command: 'routeConfig'
-                                        }
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            responses: [
-                                {
-                                    is: {
-                                        status: 200,
-                                        headers: headers,
-                                        body: '<body><predictions routeTag="N"><direction><prediction epochTime="2222" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>'
-                                    }
-                                }
-                            ],
-                            predicates: [
-                                {
-                                    equals: {
-                                        query: {
-                                            command: 'predictionsForMultiStops',
-                                            stops: 'N|4444'
-                                        }
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            responses: [
-                                {
-                                    is: {
-                                        status: 200,
-                                        headers: headers,
-                                        body: '<body><predictions routeTag="N"><direction><prediction epochTime="1111" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>'
-                                    }
-                                }
-                            ],
-                            predicates: [
-                                {
-                                    equals: {
-                                        query: {
-                                            command: 'predictionsForMultiStops',
-                                            stops: 'N|5555'
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-
-                    ]
+                    stubs: []
                 }
             ]
         };
+        function addStub(query, body) {
+            var stub = {
+                predicates: [
+                    {
+                        equals: {
+                            query: query
+                        }
+                    }
+                ],
+                responses: [
+                    {
+                        is: {
+                            status: 200,
+                            headers: headers,
+                            body: body
+                        }
+                    }
+                ]};
+            options.body.imposters[0].stubs.push(stub);
+        }
+        addStub({ command: 'routeConfig' }, '<body>'
+        + '<route tag="N">'
+        + '<stop tag="5555" title="16th St and Mission" stopId="15555"></stop>'
+        + '<stop tag="4444" title="16th St and Harrison" stopId="14444"></stop>'
+        + '</route>'
+        + '</body>');
+        addStub({ command: 'predictionsForMultiStops', stops: 'N|4444'}, '<body><predictions routeTag="N"><direction><prediction epochTime="2222" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>');
+        addStub({ command: 'predictionsForMultiStops', stops: 'N|5555' }, '<body><predictions routeTag="N"><direction><prediction epochTime="1111" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>');
+
         request.put(options, function(error, message, body) {
             if (error || message.statusCode >= 400) {
                 defer.reject({
