@@ -10,24 +10,22 @@ describe('carrier select', function() {
         flow.execute(mountebank);
         browser.get('http://localhost:8080/app/index.html');
     });
-    xit('should prompt to select carrier', function() {
+    it('should prompt to select carrier', function() {
         expect(element(by.model('carrierSelect')).$('option:checked').getText()).toEqual('Choose a carrier');
     });
-    xit('should have available carriers', function() {
+    it('should have available carriers', function() {
         expect(element(by.model('carrierSelect')).all(by.tagName('option')).count()).toEqual(2 + PROMPT);
     });
-    xit('should disable origin selection');
-    xit('should disable destination selection');
+    it('should disable origin selection', function() {
+        expect(element(by.model('originNexusSelect')).isEnabled()).toBe(false);
+    });
+    it('should disable destination selection', function() {
+        expect(element(by.model('destinationNexusSelect')).isEnabled()).toBe(false);
+    });
 
     describe('available stops', function() {
         beforeEach(function() {
             element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
-        });
-        xit('should show origin stops', function() {
-            expect(element(by.model('originStationSelect')).all(by.tagName('option')).count()).toBeGreaterThan(1 + PROMPT);
-        });
-        xit('should show destination stops', function() {
-            expect(element(by.model('destinationStationSelect')).all(by.tagName('option')).count()).toBeGreaterThan(1 + PROMPT);
         });
         it('should show origin nexus', function() {
             expect(element(by.model('originNexusSelect')).all(by.tagName('option')).count()).toBeGreaterThan(1 + PROMPT);
@@ -40,12 +38,8 @@ describe('carrier select', function() {
     describe('selected origin and destination', function() {
         beforeEach(function() {
             element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
-            //element(by.cssContainingText('#originStationSelect option', 'foo')).click();
-            //element(by.cssContainingText('#destinationStationSelect option', 'foo2')).click();
             element(by.cssContainingText('#originNexusSelect option', '16th St and Mission')).click();
             element(by.cssContainingText('#destinationNexusSelect option', '16th St and Harrison')).click();
-            //element(by.model('originNexusSelect', 'Roosevelt Way & Lower Ter')).click();
-            //element(by.model('destinationNexusSelect', 'Roosevelt Way & Clifford Ter')).click();
         });
         xit('should show available routes', function() {
             expect(element(by.model('availableRoutes')).getText()).toBe('55 16th');
