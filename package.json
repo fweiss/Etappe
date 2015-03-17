@@ -3,16 +3,19 @@
     "version": "1.0.0",
     "repository": "https://github.com/angular/angular-seed",
     "devDependencies": {
-        "karma": "~0.10",
-        "karma-jasmine": "~0.2.2",
+        "karma": "~0.12.0",
+        "karma-jasmine": "~0.2.0",
         "http-server": "^0.6.1",
-        "protractor": "^1.1.1"
+        "protractor": "^1.1.1",
+        "mountebank": "~1.2.45",
+        "request": "~2.53.0"
     },
     "scripts": {
         "prestart": "npm install http-server",
         "start": "http-server -a localhost -p 8080 -c-1",
         "pretest": "npm install karma-jasmine karma-chrome-launcher protractor",
         "test": "node node_modules/karma/bin/karma start",
-        "protractor": "node "
+        "preprotractor": "node node_modules/protractor/bin/webdriver-manager update",
+        "protractor": "node node_modules/protractor/bin/protractor protractor/config.js"
     }
 }

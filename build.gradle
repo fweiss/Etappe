@@ -36,7 +36,7 @@ task testUnit(type: Exec) {
     commandLine 'cmd', '/c', 'npm test'
 }
 task protractor(type: Exec) {
-    commandLine 'cmd', '/c', 'node node_modules/protractor/bin/protractor protractor/config.js --jasmineNodeOpts.showColors=0'
+    commandLine 'node_modules/protractor/bin/protractor protractor/config.js --jasmineNodeOpts.showColors=0'
 }
 task start(type: Exec) {
     commandLine 'npm start'
