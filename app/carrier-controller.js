@@ -50,6 +50,7 @@ angular.module('carrier', [ 'rides', 'agencies' ])
         $scope.refreshRides = function() {
             changeNexus();
         }
+        $scope.savePlan = function() {}
     function changeNexus() {
         if ($scope.originNexusSelect && $scope.destinationNexusSelect) {
             var originStops = $scope.originNexusSelect.stops;

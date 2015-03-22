@@ -1,5 +1,5 @@
 angular.module('etappe')
-    .service('plan', [ function() {
+    .service('plan', [ '$window', function($window) {
         return {
             createPlan: function(spanStart, spanEnd) {
                 if (spanStart === undefined || spanEnd === undefined) {
@@ -17,6 +17,12 @@ angular.module('etappe')
                         segments.push(segment);
                     }
                 };
+            },
+            store: function(plan) {
+                $window.localStorage.setItem('plan', JSON.stringify(plan));
+            },
+            load: function(planName) {
+                return $window.localStorage.getItem(planName);
             }
         }
     }]);

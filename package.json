@@ -16,6 +16,7 @@
         "pretest": "npm install karma-jasmine karma-chrome-launcher protractor",
         "test": "node node_modules/karma/bin/karma start",
         "preprotractor": "node node_modules/protractor/bin/webdriver-manager update",
-        "protractor": "node node_modules/protractor/bin/protractor protractor/config.js"
+        "protractor": "node node_modules/protractor/bin/protractor protractor/config.js",
+        "mountebank": "node node_modules/mountebank/bin/mb"
     }
 }

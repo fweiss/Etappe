@@ -10,6 +10,10 @@ describe('carrier select', function() {
         flow.execute(mountebank);
         browser.get('http://localhost:8080/app/index.html');
     });
+    afterEach(function () {
+        browser.executeScript('window.sessionStorage.clear();');
+        browser.executeScript('window.localStorage.clear();');
+    });
     it('should prompt to select carrier', function() {
         expect(element(by.model('carrierSelect')).$('option:checked').getText()).toEqual('Choose a carrier');
     });
@@ -47,6 +51,23 @@ describe('carrier select', function() {
         it('should show available rides', function() {
             expect(element(by.binding('rideList')).getText()).toBeGreaterThan(0);
         })
+        describe('saving a plan', function() {
+            var savedPlan;
+           browser.addMockModule('plan.save', function() {
+                angular.module('plan.save', {})
+                    .service('save', function($window) {
+                        return {
+                            save: function(plan) {
+                                savedPlan = plan;
+                            }
+                        }
+                    });
+            });
+            xit('should save plan', function() {
+                element(by.css('#savePlan')).click();
+                expect(savedPlan).toEqual({ origin: '16th st and Mission'});
+            });
+        });
     });
     function mountebank() {
         var request = require('request');

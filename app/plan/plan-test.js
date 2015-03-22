@@ -1,6 +1,6 @@
 describe('plan2', function() {
-    const spanStart = new Date('2013-02-22T13:00');
-    const spanEnd = new Date('2013-02-22T14:00');
+    const spanStart = new Date('22 Feb 2013 13:00'); //('2013-02-22T13:00');
+    const spanEnd = new Date('22 Feb 2013 14:00'); //('2013-02-22T14:00');
     var Plan;
     beforeEach(module('etappe'));
     beforeEach(inject(function(_plan_) {
@@ -26,6 +26,17 @@ describe('plan2', function() {
         it('should add a segment', function() {
             plan.addSegment({ origin: '', destination: '', rides: [ { agency: '', startTime: null, endTime: null }]});
             expect(plan.getSegments().length).toBe(1);
+        });
+    });
+    describe('storing', function() {
+        it('should store a plan', function() {
+            var plan = Plan.createPlan(spanStart, spanEnd);
+            Plan.store(plan);
+            expect(window.localStorage.getItem('plan')).toBeTruthy();
+        });
+        it('should load a plan', function() {
+            var storedPlan = Plan.load('plan');
+            expect(storedPlan).toBeTruthy();
         });
     });
 });

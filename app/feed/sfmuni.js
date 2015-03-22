@@ -13,10 +13,10 @@
  * @returns {{}}
  */
 angular.module('sfmuni.config', [])
-    .value('config', {baseUrl: 'http://webservices.nextbus.com/service/publicXMLFeed'});
+    .value('config', { baseUrl: 'http://webservices.nextbus.com/service/publicXMLFeed' });
 
 angular.module('agencies', [ 'sfmuni.config' ])
-.service('sfMuni', function(config, $http, $q) {
+    .service('sfMuni', function(config, $http, $q) {
         var $ = $ || angular.element;
         var parser = new DOMParser();
         const baseUrl = config.baseUrl;
