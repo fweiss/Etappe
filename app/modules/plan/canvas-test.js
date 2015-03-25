@@ -10,27 +10,37 @@ describe('canvas5', function() {
         return new Date(date.getTime() + minutes * 60000);
     }
     beforeEach(module('rides'));
-    var element;
+
+    // captured injects
     var scope;
+    var compile;
+
+    // mocks
+    var element;
     var mockContext;
-    function setPlanAndApply(plan) {
-        scope.plan = plan;
-        element.scope().$apply();
-    }
-    beforeEach(inject(function($rootScope, $compile, chart) {
-        scope = $rootScope;
+
+    function mockCanvasContext(width, height) {
         var html = '<canvas utt-rides width="600" height="100"></canvas>';
         element = angular.element(html);
         // angular.element() evidently ignores style attribute
         element[0].width = canvasWidth;
         element[0].height = canvasHeight;
-        $compile(element)(scope);
+        compile(element)(scope);
         //chart.setTimeSpan(spanStart, spanEnd);
 
         mockContext = jasmine.createSpyObj('mockContext', [ 'save', 'restore', 'fillRect', 'beginPath', 'moveTo', 'lineTo', 'stroke', 'fillText' ]);
         element[0].getContext = function() {
             return mockContext;
         };
+    }
+    function setPlanAndApply(plan) {
+        scope.plan = plan;
+        element.scope().$apply();
+    }
+    beforeEach(inject(function($rootScope, $compile, chart) {
+        scope = $rootScope;
+        compile = $compile;
+        mockCanvasContext(600, 100);
     }));
     it('should draw background', function() {
         scope.plan = { spanStart: spanStart, spanEnd: spanEnd, rides: [  { startTime: spanStart, endTime: spanEnd }]};
