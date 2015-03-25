@@ -17,9 +17,9 @@ module.exports = function(config) {
             'app/lib/angular-mocks.js',
             'app/lib/underscore.js',
             'app/*.js',
-            'app/feed/*.js',
-            'app/plan/module.js',
-            'app/plan/*.js'
+            'app/modules/feed/*.js',
+            'app/modules/plan/module.js',
+            'app/modules/plan/*.js'
         ],
         nestedReporter: {
             colors: false
