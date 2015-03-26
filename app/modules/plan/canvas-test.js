@@ -6,11 +6,6 @@ describe('canvas5', function() {
     var canvasWidth = 600;
     var canvasHeight = 100;
 
-    function addMinutes(date, minutes) {
-        return new Date(date.getTime() + minutes * 60000);
-    }
-    beforeEach(module('rides'));
-
     // captured injects
     var scope;
     var compile;
@@ -19,6 +14,10 @@ describe('canvas5', function() {
     var element;
     var mockContext;
 
+    // helper functions
+    function addMinutes(date, minutes) {
+        return new Date(date.getTime() + minutes * 60000);
+    }
     function mockCanvasContext(width, height) {
         var html = '<canvas utt-rides width="600" height="100"></canvas>';
         element = angular.element(html);
@@ -26,7 +25,6 @@ describe('canvas5', function() {
         element[0].width = canvasWidth;
         element[0].height = canvasHeight;
         compile(element)(scope);
-        //chart.setTimeSpan(spanStart, spanEnd);
 
         mockContext = jasmine.createSpyObj('mockContext', [ 'save', 'restore', 'fillRect', 'beginPath', 'moveTo', 'lineTo', 'stroke', 'fillText' ]);
         element[0].getContext = function() {
@@ -37,10 +35,13 @@ describe('canvas5', function() {
         scope.plan = plan;
         element.scope().$apply();
     }
-    beforeEach(inject(function($rootScope, $compile, chart) {
+
+    // start of Jasmine specs
+    beforeEach(module('rides'));
+    beforeEach(inject(function($rootScope, $compile) {
         scope = $rootScope;
         compile = $compile;
-        mockCanvasContext(600, 100);
+        mockCanvasContext(canvasWidth, canvasHeight);
     }));
     it('should draw background', function() {
         scope.plan = { spanStart: spanStart, spanEnd: spanEnd, rides: [  { startTime: spanStart, endTime: spanEnd }]};
