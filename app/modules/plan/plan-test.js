@@ -1,4 +1,4 @@
-describe('plan2', function() {
+describe('plan', function() {
     const spanStart = new Date('22 Feb 2013 13:00'); //('2013-02-22T13:00');
     const spanEnd = new Date('22 Feb 2013 14:00'); //('2013-02-22T14:00');
     var Plan;
@@ -18,7 +18,7 @@ describe('plan2', function() {
             expect(plan.getSegments().length).toBe(0);
         });
     });
-    describe('with rides', function() {
+    describe('with segments', function() {
         var plan;
         beforeEach(function() {
             plan = Plan.createPlan(spanStart, spanEnd);

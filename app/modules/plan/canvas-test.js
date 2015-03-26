@@ -9,6 +9,7 @@ describe('canvas', function() {
     // captured injects
     var scope;
     var compile;
+    var Plan;
 
     // mocks
     var element;
@@ -37,10 +38,11 @@ describe('canvas', function() {
     }
 
     // start of Jasmine specs
-    beforeEach(module('rides'));
-    beforeEach(inject(function($rootScope, $compile) {
+    beforeEach(module('rides', 'etappe')); // FIXME correct modules
+    beforeEach(inject(function($rootScope, $compile, _plan_) {
         scope = $rootScope;
         compile = $compile;
+        Plan = _plan_;
         //mockCanvasContext(canvasWidth, canvasHeight);
     }));
     describe('600 x 100', function() {
@@ -48,8 +50,8 @@ describe('canvas', function() {
             mockCanvasContext(canvasWidth, canvasHeight);
         });
         it('should draw background', function() {
-            scope.plan = { spanStart: spanStart, spanEnd: spanEnd, rides: [  { startTime: spanStart, endTime: spanEnd }]};
-            element.scope().$apply();
+            var plan = Plan.createPlan(spanStart, spanEnd);
+            setPlanAndApply(plan);
             expect(mockContext.fillRect).toHaveBeenCalledWith(0, 0, canvasWidth, canvasHeight);
         });
         it('should draw a ride', function() {
