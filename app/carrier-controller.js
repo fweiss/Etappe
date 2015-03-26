@@ -19,7 +19,7 @@ angular.module('carrier', [ 'rides', 'agencies' ])
         $scope.destinationStations = [ { name: 'foo2'},{ name: 'bar2'}];
         $scope.disableOrigin = false;
         $scope.disableDestination = false;
-        chart.setWidth(600);
+        //chart.setWidth(600);
     };
     $scope.changeOrigin = function() {
         changePlan();
