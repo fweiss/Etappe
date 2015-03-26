@@ -57,8 +57,8 @@ describe('canvas', function() {
         it('should draw a ride', function() {
             var rideStart = addMinutes(spanStart, 10);
             var rideEnd = addMinutes(spanStart, 20);
-            scope.plan = { spanStart: spanStart, spanEnd: spanEnd, rides: [ { startTime: rideStart, endTime: rideEnd }]};
-            element.scope().$apply();
+            var plan = { spanStart: spanStart, spanEnd: spanEnd, rides: [ { startTime: rideStart, endTime: rideEnd }]};
+            setPlanAndApply(plan);
             expect(mockContext.moveTo).toHaveBeenCalledWith(100, 0);
             expect(mockContext.lineTo).toHaveBeenCalledWith(200, canvasHeight);
         });
@@ -73,8 +73,7 @@ describe('canvas', function() {
                     { startTime: rideStart1, endTime: rideEnd1 }
                 ]
             };
-            scope.plan = plan;
-            element.scope().$apply();
+            setPlanAndApply(plan);
             expect(mockContext.moveTo).toHaveBeenCalledWith(100, 0);
             expect(mockContext.lineTo).toHaveBeenCalledWith(200, canvasHeight);
             expect(mockContext.moveTo).toHaveBeenCalledWith(300, 0);
