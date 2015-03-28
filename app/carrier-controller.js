@@ -1,5 +1,5 @@
-angular.module('carrier', [ 'rides', 'agencies' ])
-.controller('Trip', [ '$scope', 'chart', 'sfMuni', function($scope, chart, SfMuni) {
+angular.module('carrier', [ 'rides', 'agencies', 'etappe' ])
+.controller('Trip', [ '$scope', 'chart', 'sfMuni', 'plan', function($scope, chart, SfMuni, Plan) {
     $scope.disableOrigin = true;
     $scope.disableDestination = true;
     $scope.carriers = [
@@ -60,9 +60,11 @@ angular.module('carrier', [ 'rides', 'agencies' ])
             var segment = { originStops: originStops, destinationStops: destinationStops };
             SfMuni.getRidesForSegment(segment).then(function(response) {
                 var rides = response.data;
-                var plan =  { spanStart: now, spanEnd: then,
-                    rides: rides
-                };
+                //var plan =  { spanStart: now, spanEnd: then,
+                //    rides: rides
+                //};
+                var plan = Plan.createPlan(now, then);
+                plan.addSegment('abc', 'def', rides);
                 $scope.plan = plan;
                 $scope.rideList = rides.length;
             }, function(fail) { $scope.rideList = fail; });

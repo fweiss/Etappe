@@ -13,8 +13,8 @@ angular.module('etappe')
                     getSegments: function() {
                         return segments;
                     },
-                    addSegment: function(segment) {
-                        segments.push(segment);
+                    addSegment: function(origin, destination, rides) {
+                        segments.push({ origin: origin, destination: destination, rides: rides });
                     }
                 };
             },

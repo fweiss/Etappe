@@ -60,7 +60,7 @@ describe('canvas', function() {
 
             var plan = Plan.createPlan(spanStart, spanEnd);
             var ride = Plan.createRide(rideStart, rideEnd);
-            plan.addSegment([ ride ]);
+            plan.addSegment('abc', 'def', [ ride ]);
 
             setPlanAndApply(plan);
             expect(mockContext.moveTo).toHaveBeenCalledWith(100, 0);
@@ -74,7 +74,7 @@ describe('canvas', function() {
             var plan = Plan.createPlan(spanStart, spanEnd);
             var ride0 = Plan.createRide(rideStart0, rideEnd0);
             var ride1 = Plan.createRide(rideStart1, rideEnd1);
-            plan.addSegment([ ride0, ride1 ]);
+            plan.addSegment('abc', 'def', [ ride0, ride1 ]);
 
             setPlanAndApply(plan);
             expect(mockContext.moveTo).toHaveBeenCalledWith(110, 0);
@@ -114,6 +114,15 @@ describe('canvas', function() {
                 var plan = Plan.createPlan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
                 setPlanAndApply(plan);
                 expect(mockContext.fillText).toHaveBeenCalledWith('1:15 PM', 452, 10);
+            });
+        });
+        describe('nexus', function() {
+            it('should draw top label', function() {
+                var plan = Plan.createPlan(spanStart, spanEnd);
+                plan.addSegment('abc', 'def', []);
+                setPlanAndApply(plan);
+                // FIXME actual position
+                expect(mockContext.fillText).toHaveBeenCalledWith('abc', 0, 20);
             });
         });
     });
