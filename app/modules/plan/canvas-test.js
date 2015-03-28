@@ -57,15 +57,20 @@ describe('canvas', function() {
         it('should draw a ride', function() {
             var rideStart = addMinutes(spanStart, 10);
             var rideEnd = addMinutes(spanStart, 20);
-            var plan = { spanStart: spanStart, spanEnd: spanEnd, rides: [ { startTime: rideStart, endTime: rideEnd }]};
-            setPlanAndApply(plan);
+            //var plan = { spanStart: spanStart, spanEnd: spanEnd, rides: [ { startTime: rideStart, endTime: rideEnd }]};
+
+            var dplan = Plan.createPlan(spanStart, spanEnd);
+            var ride = Plan.createRide(rideStart, rideEnd);
+            dplan.addSegment([ ride ]);
+
+            setPlanAndApply(dplan);
             expect(mockContext.moveTo).toHaveBeenCalledWith(100, 0);
             expect(mockContext.lineTo).toHaveBeenCalledWith(200, canvasHeight);
         });
         it('should draw two rides', function() {
-            var rideStart0 = addMinutes(spanStart, 10);
-            var rideEnd0 = addMinutes(spanStart, 20);
-            var rideStart1 = addMinutes(spanStart, 30);
+            var rideStart0 = addMinutes(spanStart, 11);
+            var rideEnd0 = addMinutes(spanStart, 21);
+            var rideStart1 = addMinutes(spanStart, 31);
             var rideEnd1 = addMinutes(spanStart, 43);
             var plan = { spanStart: spanStart, spanEnd: spanEnd,
                 rides: [
@@ -73,10 +78,16 @@ describe('canvas', function() {
                     { startTime: rideStart1, endTime: rideEnd1 }
                 ]
             };
-            setPlanAndApply(plan);
-            expect(mockContext.moveTo).toHaveBeenCalledWith(100, 0);
-            expect(mockContext.lineTo).toHaveBeenCalledWith(200, canvasHeight);
-            expect(mockContext.moveTo).toHaveBeenCalledWith(300, 0);
+
+            var pplan = Plan.createPlan(spanStart, spanEnd);
+            var ride0 = Plan.createRide(rideStart0, rideEnd0);
+            var ride1 = Plan.createRide(rideStart1, rideEnd1);
+            pplan.addSegment([ ride0, ride1 ]);
+
+            setPlanAndApply(pplan);
+            expect(mockContext.moveTo).toHaveBeenCalledWith(110, 0);
+            expect(mockContext.lineTo).toHaveBeenCalledWith(210, canvasHeight);
+            expect(mockContext.moveTo).toHaveBeenCalledWith(310, 0);
         });
         describe('time ticks', function() {
             it('should draw a tick', function() {

@@ -28,6 +28,12 @@ describe('plan', function() {
             expect(plan.getSegments().length).toBe(1);
         });
     });
+    describe('ride', function() {
+        it('should create a ride', function() {
+            var ride = Plan.createRide(spanStart, spanEnd);
+            expect(ride).toBeTruthy();
+        });
+    });
     describe('storing', function() {
         it('should store a plan', function() {
             var plan = Plan.createPlan(spanStart, spanEnd);

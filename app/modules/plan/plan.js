@@ -9,7 +9,7 @@ angular.module('etappe')
                 return {
                     spanStart: spanStart,
                     spanEnd: spanEnd,
-                    segments: [],
+                    segments: segments,
                     getSegments: function() {
                         return segments;
                     },
@@ -17,6 +17,9 @@ angular.module('etappe')
                         segments.push(segment);
                     }
                 };
+            },
+            createRide: function(rideStart, rideEnd) {
+                return { startTime: rideStart, endTime: rideEnd };
             },
             store: function(plan) {
                 $window.localStorage.setItem('plan', JSON.stringify(plan));

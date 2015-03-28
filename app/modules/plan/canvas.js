@@ -34,7 +34,9 @@ angular.module('rides')
                         ctx.fillRect(0, 0, width, height);
                         drawTimeTickMajor(ctx, plan.spanStart, plan.spanEnd);
 
-                        _.each(plan.rides, function(ride) {
+                        //var rides = plan.rides;
+                        var rides = plan.rides || (plan.segments && plan.segments[0]);
+                        _.each(rides, function(ride) {
                             var startTime = ride.startTime;
                             var endTime = ride.endTime;
 
