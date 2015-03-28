@@ -1,4 +1,4 @@
-angular.module('carrier', [ 'rides', 'agencies', 'etappe' ])
+angular.module('carrier', [ 'agencies', 'plan' ])
 .controller('Trip', [ '$scope', 'chart', 'sfMuni', 'plan', function($scope, chart, SfMuni, Plan) {
     $scope.disableOrigin = true;
     $scope.disableDestination = true;

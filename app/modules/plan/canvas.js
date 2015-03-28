@@ -1,4 +1,4 @@
-angular.module('rides')
+angular.module('plan')
     .directive('uttRides', function(chart) {
         var rideLine = { lineWidth: 6, strokeStyle: 'rgba(255, 255, 255, 1' };
         var timeTickMajor = { lineWidth: 1, strokeStyle: 'rgba(0, 0, 0, 0.5)' };

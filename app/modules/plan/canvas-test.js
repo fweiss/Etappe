@@ -38,7 +38,7 @@ describe('canvas', function() {
     }
 
     // start of Jasmine specs
-    beforeEach(module('rides', 'etappe')); // FIXME correct modules
+    beforeEach(module('plan')); // FIXME correct modules
     beforeEach(inject(function($rootScope, $compile, _plan_) {
         scope = $rootScope;
         compile = $compile;

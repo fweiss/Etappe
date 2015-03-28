@@ -1,4 +1,4 @@
-angular.module('etappe')
+angular.module('plan')
     .service('plan', [ '$window', function($window) {
         return {
             createPlan: function(spanStart, spanEnd) {

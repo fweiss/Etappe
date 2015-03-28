@@ -8,7 +8,7 @@ describe('scaling', function() {
         return new Date(date.getTime() + minutes * 60000);
     }
 
-    beforeEach(module('rides'));
+    beforeEach(module('plan'));
     describe('configuration', function () {
         var e1 = 'end must be greater than start';
         it('should reject bad times', inject(function (chart) {

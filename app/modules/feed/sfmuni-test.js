@@ -10,7 +10,7 @@ describe('sfmuni2', function() {
     function addMinutes(date, minutes) {
         return new Date(date.getTime() + minutes * 60000);
     }
-    beforeEach(module('agencies', 'etappe'));
+    beforeEach(module('agencies', 'plan'));
     beforeEach(inject(function(_sfMuni_, $httpBackend, plan, $rootScope) {
         SfMuni = _sfMuni_;
         httpBackend = $httpBackend;

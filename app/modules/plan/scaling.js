@@ -1,4 +1,4 @@
-angular.module('rides')
+angular.module('plan')
     .service('chart', function() {
         var startDate;
         var endDate;

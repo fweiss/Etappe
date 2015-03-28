@@ -2,7 +2,7 @@ describe('plan', function() {
     const spanStart = new Date('22 Feb 2013 13:00'); //('2013-02-22T13:00');
     const spanEnd = new Date('22 Feb 2013 14:00'); //('2013-02-22T14:00');
     var Plan;
-    beforeEach(module('etappe'));
+    beforeEach(module('plan'));
     beforeEach(inject(function(_plan_) {
         Plan = _plan_;
     }));

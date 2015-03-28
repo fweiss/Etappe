@@ -1,1 +1,1 @@
-angular.module('rides', []);
+angular.module('plan', []);
