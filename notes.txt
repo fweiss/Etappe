@@ -19,3 +19,8 @@ view
 
 
 agency=carrier
+
+angularjs notes;
+
+http://toddmotto.com/opinionated-angular-js-styleguide-for-teams/
+

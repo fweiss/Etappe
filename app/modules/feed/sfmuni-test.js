@@ -87,6 +87,7 @@ describe('sfmuni2', function() {
                 SfMuni.getAllNexus().then(function(response) {
                     var nexus = response.data;
                     expect(nexus['16th and Mission']).toBeTruthy();
+                    expect(nexus['16th and Mission'].name).toBe('16th and Mission');
                     expect(nexus['16th and Mission'].stops.length).toBe(1);
                     var stop = nexus['16th and Mission'].stops[0];
                     expect(stop.stopId).toBe('12345');

@@ -123,6 +123,7 @@ describe('canvas', function() {
                 setPlanAndApply(plan);
                 // FIXME actual position
                 expect(mockContext.fillText).toHaveBeenCalledWith('abc', 0, 20);
+                expect(mockContext.font).toBe('bold 12pt Calibri');
             });
         });
     });

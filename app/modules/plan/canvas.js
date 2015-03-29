@@ -37,10 +37,7 @@ angular.module('plan')
                         //var rides = plan.rides;
                         //var rides = plan.rides || (plan.segments && plan.segments[0]);
                         var segment = plan.segments && plan.segments[0];
-                        if (segment) {
-                            ctx.fillText(segment.origin, 0, 20);
-                        }
-                        var rides = (segment && segment.rides) || [];
+                       var rides = (segment && segment.rides) || [];
                         _.each(rides, function(ride) {
                             var startTime = ride.startTime;
                             var endTime = ride.endTime;
@@ -52,6 +49,10 @@ angular.module('plan')
                             ctx.lineTo(chart.timeToX(endTime), height);
                             ctx.stroke();
                         });
+                        if (segment) {
+                            ctx.font = 'bold 12pt Calibri';
+                            ctx.fillText(segment.origin, 0, 20);
+                        }
                         ctx.restore();
                     }
                 });

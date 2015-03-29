@@ -27,6 +27,7 @@ angular.module('carrier', [ 'agencies', 'plan' ])
     $scope.changeDestination = function() {
         changePlan();
     };
+        // deprecated
     function changePlan() {
         if ($scope.originStationSelect && $scope.destinationStationSelect) {
             var originStop = $scope.originStationSelect.stopId; // 13293
@@ -53,6 +54,7 @@ angular.module('carrier', [ 'agencies', 'plan' ])
         $scope.savePlan = function() {}
     function changeNexus() {
         if ($scope.originNexusSelect && $scope.destinationNexusSelect) {
+            console.log('ooooooooo ' + _.keys($scope.originNexusSelect));
             var originStops = $scope.originNexusSelect.stops;
             var destinationStops = $scope.destinationNexusSelect.stops;
             var now = new Date();
@@ -64,7 +66,7 @@ angular.module('carrier', [ 'agencies', 'plan' ])
                 //    rides: rides
                 //};
                 var plan = Plan.createPlan(now, then);
-                plan.addSegment('abc', 'def', rides);
+                plan.addSegment($scope.originNexusSelect.name, $scope.destinationNexusSelect.name, rides);
                 $scope.plan = plan;
                 $scope.rideList = rides.length;
             }, function(fail) { $scope.rideList = fail; });

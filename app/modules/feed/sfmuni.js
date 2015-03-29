@@ -125,6 +125,7 @@ angular.module('agencies', [ 'sfmuni.config' ])
             });
             return predictions;
         }
+        // deprecated
        // note that stop is both child of route and route.direction
        function parseStops(root) {
 //            var root = angular.element(parser.parseFromString(data, 'text/xml'));
@@ -155,7 +156,7 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 var stops = nexus[name] && nexus[name].stops;
                 if (stops === undefined) {
                     stops = [];
-                    nexus[name] = { stops: stops };
+                    nexus[name] = { name: name, stops: stops };
                 }
                 return stops;
             }
