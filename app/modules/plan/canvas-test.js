@@ -10,6 +10,7 @@ describe('canvas', function() {
     var scope;
     var compile;
     var Plan;
+    var planConfig;
 
     // mocks
     var element;
@@ -38,21 +39,23 @@ describe('canvas', function() {
     }
 
     // start of Jasmine specs
-    beforeEach(module('plan')); // FIXME correct modules
-    beforeEach(inject(function($rootScope, $compile, _plan_) {
+    beforeEach(module('plan', 'plan.canvas.config'));
+    beforeEach(inject(function($rootScope, $compile, _plan_, _planConfig_) {
         scope = $rootScope;
         compile = $compile;
         Plan = _plan_;
-        //mockCanvasContext(canvasWidth, canvasHeight);
+        planConfig = _planConfig_;
     }));
     describe('600 x 100', function() {
+        var tickLegendHeight;
         beforeEach(function() {
             mockCanvasContext(canvasWidth, canvasHeight);
+            tickLegendHeight = planConfig('tickLegendHeight');
         });
         it('should draw background', function() {
             var plan = Plan.createPlan(spanStart, spanEnd);
             setPlanAndApply(plan);
-            expect(mockContext.fillRect).toHaveBeenCalledWith(0, 0, canvasWidth, canvasHeight);
+            expect(mockContext.fillRect).toHaveBeenCalledWith(0, tickLegendHeight, canvasWidth, canvasHeight);
         });
         it('should draw a ride', function() {
             var rideStart = addMinutes(spanStart, 10);
@@ -122,7 +125,8 @@ describe('canvas', function() {
                 plan.addSegment('abc', 'def', []);
                 setPlanAndApply(plan);
                 // FIXME actual position
-                expect(mockContext.fillText).toHaveBeenCalledWith('abc', 0, 20);
+                var tickLegendHeight = planConfig('tickLegendHeight');
+                expect(mockContext.fillText).toHaveBeenCalledWith('abc', 0, tickLegendHeight);
                 expect(mockContext.font).toBe('bold 12pt Calibri');
             });
         });

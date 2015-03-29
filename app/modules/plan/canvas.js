@@ -33,7 +33,7 @@ angular.module('plan')
                         ctx.save();
 
                         ctx.fillStyle = '#7f7fff';
-                        ctx.fillRect(0, 0, width, height);
+                        ctx.fillRect(0, tickLegendHeight, width, height);
                         drawTimeTickMajor(ctx, plan.spanStart, plan.spanEnd);
 
                         //var rides = plan.rides;
@@ -53,7 +53,7 @@ angular.module('plan')
                         });
                         if (segment) {
                             ctx.font = 'bold 12pt Calibri';
-                            ctx.fillText(segment.origin, 0, 20);
+                            ctx.fillText(segment.origin, 0, tickLegendHeight);
                         }
                         ctx.restore();
                     }
