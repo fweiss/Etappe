@@ -1,5 +1,7 @@
 angular.module('plan')
-    .directive('uttRides', function(chart) {
+    .directive('uttRides', function(chart, planConfig) {
+        //console.log('mmmmmmmm ' + tickLegendHeight);
+        var tickLegendHeight = planConfig('tickLegendHeight');
         var rideLine = { lineWidth: 6, strokeStyle: 'rgba(255, 255, 255, 1' };
         var timeTickMajor = { lineWidth: 1, strokeStyle: 'rgba(0, 0, 0, 0.5)' };
         var timeTickMinor = { lineWidth: 1, strokeStyle: 'rgba(0, 0, 0, 0.1)' };
