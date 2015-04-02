@@ -27,6 +27,13 @@ describe('plan', function() {
             plan.addSegment({ origin: '', destination: '', rides: [ { agency: '', startTime: null, endTime: null }]});
             expect(plan.getSegments().length).toBe(1);
         });
+        it('should add segment nexus', function() {
+            plan.addSegment('abc', 'def', [ { agency: '', startTime: null, endTime: null }]);
+            var nexus = plan.getNexus();
+            expect(nexus.length).toBe(2);
+            expect(nexus[0]).toBe('abc');
+            expect(nexus[1]).toBe('def');
+        });
     });
     describe('ride', function() {
         it('should create a ride', function() {
@@ -35,14 +42,24 @@ describe('plan', function() {
         });
     });
     describe('storing', function() {
+        // note that with karma, the local storage is persistent
         it('should store a plan', function() {
             var plan = Plan.createPlan(spanStart, spanEnd);
+            plan.addSegment('abc', 'def', [ { startTime: spanStart, endTime: spanEnd } ]);
             Plan.store(plan);
             expect(window.localStorage.getItem('plan')).toBeTruthy();
         });
         it('should load a plan', function() {
             var storedPlan = Plan.load('plan');
             expect(storedPlan).toBeTruthy();
+            expect(storedPlan.spanStart).toEqual(spanStart);
+            expect(storedPlan.spanEnd).toEqual(spanEnd);
+            expect(storedPlan.segments.length).toBe(1);
+            expect(storedPlan.getNexus()).toBeTruthy();
+            expect(storedPlan.getNexus().length).toBeGreaterThan(1);
+            var nexus = storedPlan.getNexus();
+            expect (nexus[0]).toEqual('abc');
+            expect (nexus[1]).toEqual('def');
         });
     });
 });

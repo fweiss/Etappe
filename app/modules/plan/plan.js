@@ -6,6 +6,7 @@ angular.module('plan')
                     throw new Error('createPlan: must specify time span');
                 }
                 var segments = [];
+                var nexus = [];
                 return {
                     spanStart: spanStart,
                     spanEnd: spanEnd,
@@ -14,7 +15,12 @@ angular.module('plan')
                         return segments;
                     },
                     addSegment: function(origin, destination, rides) {
+                        nexus.push(origin);
+                        nexus.push(destination);
                         segments.push({ origin: origin, destination: destination, rides: rides });
+                    },
+                    getNexus: function() {
+                        return nexus;
                     }
                 };
             },
@@ -22,10 +28,19 @@ angular.module('plan')
                 return { startTime: rideStart, endTime: rideEnd };
             },
             store: function(plan) {
-                $window.localStorage.setItem('plan', JSON.stringify(plan));
+                var storedPlan = {
+                    name: 'plan',
+                    spanStart: new Date(plan.spanStart),
+                    spanEnd: new Date(plan.spanEnd),
+                    nexus: plan.getNexus()
+                };
+                $window.localStorage.setItem(storedPlan.name, JSON.stringify(storedPlan));
             },
             load: function(planName) {
-                return $window.localStorage.getItem(planName);
+                var storedPlan = JSON.parse($window.localStorage.getItem(planName));
+                var plan = this.createPlan(new Date(storedPlan.spanStart), new Date(storedPlan.spanEnd));
+                plan.addSegment(storedPlan.nexus[0], storedPlan.nexus[1], []);
+                return plan;
             }
         }
     }]);

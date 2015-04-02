@@ -8,3 +8,23 @@ Route
 
 Stop/Station
 
+plan
+- name
+< nexus
+  - name
+< segment
+  - origin
+  - destination
+  < ride
+    - agency
+    - vehicle
+    - startTime
+    - endTime
+
+savedPlan
+- name
+< nexus
+  - name
+
+
+
