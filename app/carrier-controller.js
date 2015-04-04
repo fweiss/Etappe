@@ -55,10 +55,18 @@ angular.module('carrier', [ 'agencies', 'plan' ])
             Plan.store($scope.plan);
         };
         $scope.planRestore = function() {
-            var restoredPlan = Plan.load('plan');
-            $scope.originNexus = restoredPlan.segments[0].origin;
-            $scope.destinationNexus = '';
-            //$scope.plan = restoredPlan;
+            try {
+                var restoredPlan = Plan.load();
+                //$scope.originNexus = restoredPlan.segments[0].origin;
+                $scope.destinationNexus = '';
+                var segments = restoredPlan.getSegments();
+                $scope.nexusStart = segments[0];
+                $scope.nexusEnd = segments[1];
+                //$scope.plan = restoredPlan;
+            }
+            catch (e) {
+                alert('Hello');
+            }
         };
         function changeNexus() {
             if ($scope.originNexusSelect && $scope.destinationNexusSelect) {

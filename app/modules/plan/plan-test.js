@@ -47,19 +47,35 @@ describe('plan', function() {
             var plan = Plan.createPlan(spanStart, spanEnd);
             plan.addSegment('abc', 'def', [ { startTime: spanStart, endTime: spanEnd } ]);
             Plan.store(plan);
-            expect(window.localStorage.getItem('plan')).toBeTruthy();
+            var storedPlan = JSON.parse(window.localStorage.getItem('plan'));
+            expect(storedPlan).toBeTruthy();
+            expect(storedPlan.nexus.length).toBe(2);
+            expect(storedPlan.nexus[0]).toBe('abc');
+            expect(storedPlan.nexus[1]).toBe('def');
         });
         it('should load a plan', function() {
             var storedPlan = Plan.load('plan');
             expect(storedPlan).toBeTruthy();
             expect(storedPlan.spanStart).toEqual(spanStart);
             expect(storedPlan.spanEnd).toEqual(spanEnd);
-            expect(storedPlan.segments.length).toBe(1);
+            expect(storedPlan.segments).toBe(undefined);
+            expect(storedPlan.getSegments().length).toBe(1);
+            expect(storedPlan.getSegments()[0].rides.length).toBe(0);
             expect(storedPlan.getNexus()).toBeTruthy();
             expect(storedPlan.getNexus().length).toBeGreaterThan(1);
             var nexus = storedPlan.getNexus();
             expect (nexus[0]).toEqual('abc');
             expect (nexus[1]).toEqual('def');
+        });
+    });
+    describe('load', function() {
+        it('should throw exception for invalid paln name', function() {
+            var e1 = 'invalid plan name: expected non-empty string';
+            expect(function() { Plan.load(); }).toThrow(e1);
+        });
+        it('should throw exception for nonexistent plan', function() {
+            var e1 = 'no stored plan found: "invalid"';
+            expect(function () { Plan.load('invalid'); }).toThrow(e1);
         });
     });
 });

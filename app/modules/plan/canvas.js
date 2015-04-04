@@ -38,8 +38,8 @@ angular.module('plan')
 
                         //var rides = plan.rides;
                         //var rides = plan.rides || (plan.segments && plan.segments[0]);
-                        var segment = plan.segments && plan.segments[0];
-                       var rides = (segment && segment.rides) || [];
+                        var segment = plan.getSegments() && plan.getSegments()[0];
+                        var rides = (segment && segment.rides) || [];
                         _.each(rides, function(ride) {
                             var startTime = ride.startTime;
                             var endTime = ride.endTime;

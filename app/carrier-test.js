@@ -5,7 +5,6 @@ describe('carrier', function() {
     beforeEach(module('carrier'));
     beforeEach(function() {
         module(function($provide) {
-            console.log('pppppppppp');
             $provide.service('plan', function() {
                 return {
                    load: function() {
@@ -23,8 +22,13 @@ describe('carrier', function() {
 //            .respond('<?xml version="1.0" encoding="utf-8"?><stations></stations>', { 'Content-type': 'text/xml'});
 
     }));
-    describe('plan', function() {
-        it('should set origin and destination nexus', function() {
+    describe('restore', function() {
+        it('should alert for error', function() {
+            scope.planRestore();
+            var alertDialog = driver.switchTo().alert();
+            expect(alertDialog.getText()).toEqual("Hello");
+        });
+        xit('should set origin and destination nexus', function() {
             scope.planRestore();
             scope.$digest();
             expect(scope.originNexus).toEqual('an origin nexus');

@@ -10,7 +10,6 @@ angular.module('plan')
                 return {
                     spanStart: spanStart,
                     spanEnd: spanEnd,
-                    segments: segments,
                     getSegments: function() {
                         return segments;
                     },
@@ -37,7 +36,14 @@ angular.module('plan')
                 $window.localStorage.setItem(storedPlan.name, JSON.stringify(storedPlan));
             },
             load: function(planName) {
-                var storedPlan = JSON.parse($window.localStorage.getItem(planName));
+                if ( ! _.isString(planName) || _.isEmpty(planName)) {
+                    throw 'invalid plan name: expected non-empty string';
+                }
+                var data = $window.localStorage.getItem(planName);
+                if (data === null) {
+                    throw 'no stored plan found: "' + planName + '"';
+                }
+                var storedPlan = JSON.parse(data);
                 var plan = this.createPlan(new Date(storedPlan.spanStart), new Date(storedPlan.spanEnd));
                 plan.addSegment(storedPlan.nexus[0], storedPlan.nexus[1], []);
                 return plan;

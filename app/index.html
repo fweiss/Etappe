@@ -37,12 +37,19 @@
                         <td>{{ originNexusSelect.stops }}</td>
                         <td>{{ destinationNexusSelect.stops }}</td>
                     </tr>
+                <tr>
+                    <td ng-model="nexusStart">{{ nexusStart }}</td>
+                    <td ng-model="nexusEnd">{{ nexusEnd }}</td>
+                </tr>
                 </tbody>
             </table>
             <div ng-bind="rideList"></div>
-            <div><button id="savePlan" ng-click="planSave()">save</button></div>
+            <div>
+                <button id="planSave" ng-click="planSave()">save</button>
+                <input type="text" ng-bind="planSaveName"/>
+            </div>
             <div><button ng-click="ridesRefresh()">Refresh</button></div>
-            <div><button ng-click="planRestore()">Restore</button></div>
+            <div><button id="planRestore" ng-click="planRestore()">Restore</button></div>
             <canvas utt-rides width="1200" height="200"></canvas>
         </div>
         <script src="lib/underscore.js"></script>

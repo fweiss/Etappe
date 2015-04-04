@@ -51,22 +51,38 @@ describe('carrier select', function() {
         it('should show available rides', function() {
             expect(element(by.binding('rideList')).getText()).toBeGreaterThan(0);
         })
-        describe('saving a plan', function() {
-            var savedPlan;
-           browser.addMockModule('plan.save', function() {
+        it('should save plan', function() {
+            element(by.css('#planSave')).click();
+            element(by.binding('planSaveName')).sendKeys('gggg');
+            // something is displayed
+            // remember verify corner cases in unit, but verify UI here
+            // so we do need to do some mocking
+            element(by.css('#planRestore')).click();
+            // verify list
+            // verify content
+            // do click
+            expect(element(by.model('nexusStart')).getText()).toBe('16th St and Mission');
+            expect(element(by.model('nexusEnd')).getText()).toBe('16th St and Harrison');
+        });
+    });
+    describe('saving a plan', function() {
+        var savedPlan;
+        xit('should save plan', function() {
+            browser.addMockModule('plan.save', function() {
                 angular.module('plan.save', {})
-                    .service('save', function($window) {
+                    .service('xplan', function($window) {
                         return {
-                            save: function(plan) {
+                            store: function(plan) {
                                 savedPlan = plan;
                             }
                         }
                     });
             });
-            xit('should save plan', function() {
-                element(by.css('#savePlan')).click();
-                expect(savedPlan).toEqual({ origin: '16th st and Mission'});
-            });
+            var plan = Plan.createPlan(0, 1);
+            plan.addSegment('def', 'ghi', []);
+            Plan.store('ggg');
+            element(by.css('#planSave')).click();
+            expect(savedPlan).toEqual({ origin: '16th st and Mission'});
         });
     });
     function mountebank() {
