@@ -1,4 +1,5 @@
 describe('carrier select', function() {
+    var mountebank = require('./mountebank');
     var PROMPT = 1; // to account for the prompt option in select
     beforeEach(function() {
         // using mountebank here
@@ -96,7 +97,7 @@ describe('carrier select', function() {
             expect(savedPlan).toEqual({ origin: '16th st and Mission'});
         });
     });
-    function mountebank() {
+    function xmountebank() {
         var request = require('request');
         var defer = protractor.promise.defer();
         var options = {};
