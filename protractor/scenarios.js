@@ -61,19 +61,13 @@ describe('carrier select', function() {
             expect(alertDialog.getText()).toEqual("cannot restore plan: invalid plan name: expected non-empty string");
         });
         it('should save and restore plan', function() {
-            //$scope.planSaveName = 'gggg';
-            //$scope.plan.name = 'gggg';
+            element(by.model('planSaveName')).sendKeys('gggg');
             element(by.css('#planSave')).click();
-            element(by.binding('planSaveName')).sendKeys('gggg');
             // something is displayed
             // remember verify corner cases in unit, but verify UI here
             // so we do need to do some mocking
-            //$scope.planRestoreName = 'gggg';
-            console.log('rrrrrrrrrrrrrrrrrrrrr');
             element(by.model('planRestoreName')).sendKeys('gggg');
             element(by.css('#planRestore')).click();
-            //var alertDialog = browser.switchTo().alert();
-            //expect(alertDialog.getText()).toEqual("Hello");
             // verify list
             // verify content
             // do click
