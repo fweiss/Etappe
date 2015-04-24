@@ -2,20 +2,31 @@ describe('carrier', function() {
     var $httpBackend;
     var requestHandler;
     var scope;
+    var Plan;
+    var alertSpy;
     beforeEach(module('carrier'));
     beforeEach(function() {
         module(function($provide) {
-            $provide.service('plan', function() {
+            $provide.service('xplanFolder', function() {
                 return {
                    load: function() {
-                       return { segments: [ { origin: 'an origin nexus'} ] };
+                       return {
+                           getSegments: function() {
+                               return [
+                                   { origin: 'an origin nexus' }
+                               ];
+                           }
+                       }
                    }
                 };
             });
+            alertSpy = jasmine.createSpy('alert');
+            $provide.value('alert', alertSpy);
         });
     });
     beforeEach(inject(function($rootScope, $injector, $controller, plan) {
         scope = $rootScope.$new();
+        Plan = plan;
         $httpBackend = $injector.get('$httpBackend');
         $controller('Trip', { $scope: scope, plan: plan });
         requestHandler = $httpBackend.whenGET(new RegExp('.*'));
@@ -23,15 +34,25 @@ describe('carrier', function() {
 
     }));
     describe('restore', function() {
-        it('should alert for error', function() {
+        // save message
+        it('should show error for invalid plan name', function() {
             scope.planRestore();
-            var alertDialog = driver.switchTo().alert();
-            expect(alertDialog.getText()).toEqual("Hello");
+            expect(alertSpy).toHaveBeenCalledWith('cannot restore plan: invalid plan name: expected non-empty string');
         });
-        xit('should set origin and destination nexus', function() {
-            scope.planRestore();
+        // plan not found?
+        it('should set origin and destination nexus', function() {
+            var plan = Plan.createPlan(0, 1);
+            plan.addSegment('origin', 'destination', []);
+            scope.plan = plan;
+            scope.planSaveName = 'gggg';
             scope.$digest();
-            expect(scope.originNexus).toEqual('an origin nexus');
+            scope.planSave();
+            scope.planRestoreName = 'gggg';
+            scope.$digest();
+            scope.planRestore();
+            expect(alertSpy).not.toHaveBeenCalled();
+            expect(scope.nexusStart).toBe('origin');
+            expect(scope.nexusEnd).toBe('destination');
         });
     });
 });

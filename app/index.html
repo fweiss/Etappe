@@ -46,10 +46,13 @@
             <div ng-bind="rideList"></div>
             <div>
                 <button id="planSave" ng-click="planSave()">save</button>
-                <input type="text" ng-bind="planSaveName"/>
+                <input type="text" ng-model="planSaveName"/>
             </div>
             <div><button ng-click="ridesRefresh()">Refresh</button></div>
-            <div><button id="planRestore" ng-click="planRestore()">Restore</button></div>
+            <div>
+                <button id="planRestore" ng-click="planRestore()">Restore</button>
+                <input type="text" ng-model="planRestoreName"/>
+            </div>
             <canvas utt-rides width="1200" height="200"></canvas>
         </div>
         <script src="lib/underscore.js"></script>

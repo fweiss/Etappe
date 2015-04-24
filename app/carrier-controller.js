@@ -1,5 +1,10 @@
 angular.module('carrier', [ 'agencies', 'plan' ])
-    .controller('Trip', [ '$scope', 'chart', 'sfMuni', 'plan', function($scope, chart, SfMuni, Plan) {
+    .factory('alert', function($window) {
+        return function(message) {
+            $window.alert(message);
+        }
+    })
+    .controller('Trip', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', function($scope, chart, SfMuni, Plan, PlanFolder, alert) {
         $scope.disableOrigin = true;
         $scope.disableDestination = true;
         $scope.carriers = [
@@ -52,20 +57,21 @@ angular.module('carrier', [ 'agencies', 'plan' ])
             changeNexus();
         }
         $scope.planSave = function() {
-            Plan.store($scope.plan);
+            var planName = $scope.planSaveName;
+            PlanFolder.store($scope.plan, planName);
         };
         $scope.planRestore = function() {
             try {
-                var restoredPlan = Plan.load();
+                var restoredPlan = PlanFolder.load($scope.planRestoreName);
                 //$scope.originNexus = restoredPlan.segments[0].origin;
                 $scope.destinationNexus = '';
                 var segments = restoredPlan.getSegments();
-                $scope.nexusStart = segments[0];
-                $scope.nexusEnd = segments[1];
+                $scope.nexusStart = segments[0].origin;
+                $scope.nexusEnd = segments[0].destination;
                 //$scope.plan = restoredPlan;
             }
             catch (e) {
-                alert('Hello');
+                alert('cannot restore plan: ' + e);
             }
         };
         function changeNexus() {

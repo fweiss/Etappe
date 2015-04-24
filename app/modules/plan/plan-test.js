@@ -2,9 +2,11 @@ describe('plan', function() {
     const spanStart = new Date('22 Feb 2013 13:00'); //('2013-02-22T13:00');
     const spanEnd = new Date('22 Feb 2013 14:00'); //('2013-02-22T14:00');
     var Plan;
+    var PlanFolder;
     beforeEach(module('plan'));
-    beforeEach(inject(function(_plan_) {
+    beforeEach(inject(function(_plan_, _planFolder_) {
         Plan = _plan_;
+        PlanFolder = _planFolder_;
     }));
     describe('create', function() {
         var e1 = new Error('createPlan: must specify time span');
@@ -42,19 +44,37 @@ describe('plan', function() {
         });
     });
     describe('storing', function() {
+        beforeEach(function() {
+            window.localStorage.clear();
+            var plan = Plan.createPlan(spanStart, spanEnd);
+            plan.addSegment('abc', 'def', [ ]);
+            PlanFolder.store(plan, 'ffff');
+        });
+        it('should throw exception for invalid plan object', function() {
+            // would like to have a fuzzy match?
+            var e1 = 'invalid plan: TypeError: plan.getNexus is not a function';
+            expect(function() { PlanFolder.store({}, 'a'); }).toThrow(e1);
+        });
+        it('should throw exception for invalid plan name', function() {
+            var e1 = 'invalid plan name: expected string';
+            var plan = Plan.createPlan(spanStart, spanEnd);
+            expect(function() { PlanFolder.store(plan, undefined); }).toThrow(e1);
+        });
+        it('should throw exception for empty plan name', function() {
+            var e1 = 'invalid plan name: expected non-empty string';
+            var plan = Plan.createPlan(spanStart, spanEnd);
+            expect(function() { PlanFolder.store(plan, ''); }).toThrow(e1);
+        });
         // note that with karma, the local storage is persistent
         it('should store a plan', function() {
-            var plan = Plan.createPlan(spanStart, spanEnd);
-            plan.addSegment('abc', 'def', [ { startTime: spanStart, endTime: spanEnd } ]);
-            Plan.store(plan);
-            var storedPlan = JSON.parse(window.localStorage.getItem('plan'));
+            var storedPlan = JSON.parse(window.localStorage.getItem('ffff'));
             expect(storedPlan).toBeTruthy();
             expect(storedPlan.nexus.length).toBe(2);
             expect(storedPlan.nexus[0]).toBe('abc');
             expect(storedPlan.nexus[1]).toBe('def');
         });
         it('should load a plan', function() {
-            var storedPlan = Plan.load('plan');
+            var storedPlan = PlanFolder.load('ffff');
             expect(storedPlan).toBeTruthy();
             expect(storedPlan.spanStart).toEqual(spanStart);
             expect(storedPlan.spanEnd).toEqual(spanEnd);
@@ -69,13 +89,13 @@ describe('plan', function() {
         });
     });
     describe('load', function() {
-        it('should throw exception for invalid paln name', function() {
+        it('should throw exception for invalid plan name', function() {
             var e1 = 'invalid plan name: expected non-empty string';
-            expect(function() { Plan.load(); }).toThrow(e1);
+            expect(function() { PlanFolder.load(); }).toThrow(e1);
         });
         it('should throw exception for nonexistent plan', function() {
             var e1 = 'no stored plan found: "invalid"';
-            expect(function () { Plan.load('invalid'); }).toThrow(e1);
+            expect(function () { PlanFolder.load('invalid'); }).toThrow(e1);
         });
     });
 });

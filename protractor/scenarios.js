@@ -11,6 +11,10 @@ describe('carrier select', function() {
         browser.get('http://localhost:8080/app/index.html');
     });
     afterEach(function () {
+        browser.switchTo().alert().then(
+            function (alert) { alert.dismiss(); },
+            function (err) { }
+        );
         browser.executeScript('window.sessionStorage.clear();');
         browser.executeScript('window.localStorage.clear();');
     });
@@ -50,14 +54,26 @@ describe('carrier select', function() {
         });
         it('should show available rides', function() {
             expect(element(by.binding('rideList')).getText()).toBeGreaterThan(0);
-        })
-        it('should save plan', function() {
+        });
+        it('should show error when no plan name given', function() {
+            element(by.css('#planRestore')).click();
+            var alertDialog = browser.switchTo().alert();
+            expect(alertDialog.getText()).toEqual("cannot restore plan: invalid plan name: expected non-empty string");
+        });
+        it('should save and restore plan', function() {
+            //$scope.planSaveName = 'gggg';
+            //$scope.plan.name = 'gggg';
             element(by.css('#planSave')).click();
             element(by.binding('planSaveName')).sendKeys('gggg');
             // something is displayed
             // remember verify corner cases in unit, but verify UI here
             // so we do need to do some mocking
+            //$scope.planRestoreName = 'gggg';
+            console.log('rrrrrrrrrrrrrrrrrrrrr');
+            element(by.model('planRestoreName')).sendKeys('gggg');
             element(by.css('#planRestore')).click();
+            //var alertDialog = browser.switchTo().alert();
+            //expect(alertDialog.getText()).toEqual("Hello");
             // verify list
             // verify content
             // do click
@@ -66,6 +82,7 @@ describe('carrier select', function() {
         });
     });
     describe('saving a plan', function() {
+
         var savedPlan;
         xit('should save plan', function() {
             browser.addMockModule('plan.save', function() {
