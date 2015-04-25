@@ -1,5 +1,7 @@
 describe('carrier select', function() {
-    var mountebank = require('./mountebank');
+    var xmountebank = require('./mountebank');
+    var Imposter = require('./imposter');
+
     var PROMPT = 1; // to account for the prompt option in select
     beforeEach(function() {
         // using mountebank here
@@ -8,7 +10,19 @@ describe('carrier select', function() {
                 .value('config', { baseUrl: 'http://localhost:4545' });
         });
         var flow = protractor.promise.controlFlow();
-        flow.execute(mountebank);
+
+        var imposter = new Imposter()
+        .addStub({ command: 'routeConfig' }, '<body>'
+        + '<route tag="N">'
+        + '<stop tag="5555" title="16th St and Mission" stopId="15555"></stop>'
+        + '<stop tag="4444" title="16th St and Harrison" stopId="14444"></stop>'
+        + '</route>'
+        + '</body>')
+        .addStub({ command: 'predictionsForMultiStops', stops: 'N|4444'}, '<body><predictions routeTag="N"><direction><prediction epochTime="2222" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>')
+        .addStub({ command: 'predictionsForMultiStops', stops: 'N|5555' }, '<body><predictions routeTag="N"><direction><prediction epochTime="1111" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>');
+        flow.execute(function() { imposter.post() });
+
+        //flow.execute(mountebank);
         browser.get('http://localhost:8080/app/index.html');
     });
     afterEach(function () {
