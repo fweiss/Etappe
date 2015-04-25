@@ -1,35 +1,37 @@
 describe('carrier select', function() {
-    var xmountebank = require('./mountebank');
     var Imposter = require('./imposter');
 
     var PROMPT = 1; // to account for the prompt option in select
     beforeEach(function() {
+        // create mountebank imposter
+        var imposter = new Imposter()
+            .addStub({ command: 'routeConfig' }, '<body>'
+            + '<route tag="N">'
+            + '<stop tag="5555" title="16th St and Mission" stopId="15555"></stop>'
+            + '<stop tag="4444" title="16th St and Harrison" stopId="14444"></stop>'
+            + '</route>'
+            + '</body>')
+            .addStub({ command: 'predictionsForMultiStops', stops: 'N|4444'}, '<body><predictions routeTag="N"><direction><prediction epochTime="2222" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>')
+            .addStub({ command: 'predictionsForMultiStops', stops: 'N|5555' }, '<body><predictions routeTag="N"><direction><prediction epochTime="1111" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>');
+
+        var flow = protractor.promise.controlFlow();
+        flow.execute(function() { imposter.post() });
+
         // using mountebank here
         browser.addMockModule('sfmuni.config', function() {
             angular.module('sfmuni.config', {})
                 .value('config', { baseUrl: 'http://localhost:4545' });
         });
-        var flow = protractor.promise.controlFlow();
 
-        var imposter = new Imposter()
-        .addStub({ command: 'routeConfig' }, '<body>'
-        + '<route tag="N">'
-        + '<stop tag="5555" title="16th St and Mission" stopId="15555"></stop>'
-        + '<stop tag="4444" title="16th St and Harrison" stopId="14444"></stop>'
-        + '</route>'
-        + '</body>')
-        .addStub({ command: 'predictionsForMultiStops', stops: 'N|4444'}, '<body><predictions routeTag="N"><direction><prediction epochTime="2222" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>')
-        .addStub({ command: 'predictionsForMultiStops', stops: 'N|5555' }, '<body><predictions routeTag="N"><direction><prediction epochTime="1111" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>');
-        flow.execute(function() { imposter.post() });
-
-        //flow.execute(mountebank);
         browser.get('http://localhost:8080/app/index.html');
     });
     afterEach(function () {
+        // to clear errant alerts
         browser.switchTo().alert().then(
             function (alert) { alert.dismiss(); },
             function (err) { }
         );
+        // maybe in main beforeEach?
         browser.executeScript('window.sessionStorage.clear();');
         browser.executeScript('window.localStorage.clear();');
     });
@@ -111,67 +113,5 @@ describe('carrier select', function() {
             expect(savedPlan).toEqual({ origin: '16th st and Mission'});
         });
     });
-    function xmountebank() {
-        var request = require('request');
-        var defer = protractor.promise.defer();
-        var options = {};
-        options.url = 'http://localhost:2525/imposters';
-        options.method = 'PUT';
-        options.headers = { 'Content-type': 'application/json' };
-        options.json = true;
-        var headers = {
-            'Content-type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-        };
-        options.body = {
-            imposters: [
-                {
-                    port: 4545,
-                    protocol: 'http',
-                    stubs: []
-                }
-            ]
-        };
-        function addStub(query, body) {
-            var stub = {
-                predicates: [
-                    {
-                        equals: {
-                            query: query
-                        }
-                    }
-                ],
-                responses: [
-                    {
-                        is: {
-                            status: 200,
-                            headers: headers,
-                            body: body
-                        }
-                    }
-                ]};
-            options.body.imposters[0].stubs.push(stub);
-        }
-        addStub({ command: 'routeConfig' }, '<body>'
-        + '<route tag="N">'
-        + '<stop tag="5555" title="16th St and Mission" stopId="15555"></stop>'
-        + '<stop tag="4444" title="16th St and Harrison" stopId="14444"></stop>'
-        + '</route>'
-        + '</body>');
-        addStub({ command: 'predictionsForMultiStops', stops: 'N|4444'}, '<body><predictions routeTag="N"><direction><prediction epochTime="2222" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>');
-        addStub({ command: 'predictionsForMultiStops', stops: 'N|5555' }, '<body><predictions routeTag="N"><direction><prediction epochTime="1111" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>');
-
-        request.put(options, function(error, message, body) {
-            if (error || message.statusCode >= 400) {
-                defer.reject({
-                    error : error,
-                    message : message
-                });
-            } else {
-                defer.fulfill(message);
-            }
-        });
-        return defer.promise;
-    }
 });
 
