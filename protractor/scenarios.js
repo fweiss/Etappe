@@ -15,7 +15,7 @@ describe('carrier select', function() {
             .addStub({ command: 'predictionsForMultiStops', stops: 'N|5555' }, '<body><predictions routeTag="N"><direction><prediction epochTime="1111" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>');
 
         var flow = protractor.promise.controlFlow();
-        flow.execute(function() { imposter.post() });
+        flow.execute(function() { imposter.put() });
 
         // using mountebank here
         browser.addMockModule('sfmuni.config', function() {
