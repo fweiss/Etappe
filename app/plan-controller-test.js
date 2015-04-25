@@ -1,4 +1,4 @@
-describe('carrier', function() {
+describe('plan controller', function() {
     var $httpBackend;
     var requestHandler;
     var scope;
