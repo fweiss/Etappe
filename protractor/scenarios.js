@@ -1,4 +1,4 @@
-describe('carrier select', function() {
+describe('plan controller', function() {
     var Imposter = require('./imposter');
 
     var PROMPT = 1; // to account for the prompt option in select

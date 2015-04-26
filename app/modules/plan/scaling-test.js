@@ -1,4 +1,4 @@
-describe('scaling', function() {
+describe('plan scaling', function() {
     var spanStart = new Date('2013-02-22T13:00');
     var spanEnd = addMinutes(spanStart, 60);
     var canvasWidth = 600;

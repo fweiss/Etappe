@@ -1,4 +1,4 @@
-describe('canvas', function() {
+describe('plan canvas', function() {
     // N.B. Date constructor for ISO 8601 is always UTC, use RFC2822 instead
     //var spanStart = new Date('2013-02-22T13:00');
     var spanStart = new Date('22 Feb 2013 13:00');
