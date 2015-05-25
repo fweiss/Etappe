@@ -53,8 +53,10 @@
                 <button id="planRestore" ng-click="planRestore()">Restore</button>
                 <input type="text" ng-model="planRestoreName"/>
             </div>
+            <div><button id="addSegment" ng-click="addSegment()">Add Segment</button></div>
+            <div><button ng-click="ridesRefresh()">Refresh</button></div>
             <canvas utt-rides width="1200" height="200"></canvas>
-        </div>
+         </div>
         <script src="lib/underscore.js"></script>
         <script src="lib/angular.min.js"></script>
         <script src="lib/angular-resource.js"></script>
