@@ -1,24 +1,23 @@
 {
-    "name": "etappe",
-    "version": "1.0.0",
-    "repository": "https://github.com/angular/angular-seed",
-    "devDependencies": {
-        "karma": "~0.12.0",
-        "karma-jasmine": "~0.2.0",
-        "karma-spec-reporter": "~0.0.13",
-        "karma-jasmine-html-reporter": "~0.1",
-        "http-server": "^0.6.1",
-        "protractor": "^1.1.1",
-        "mountebank": "~1.2.45",
-        "request": "~2.53.0"
-    },
-    "scripts": {
-        "prestart": "npm install http-server",
-        "start": "http-server -a localhost -p 8080 -c-1",
-        "pretest": "npm install karma-jasmine karma-spec-reporter karma-jasmine-html-reporter karma-chrome-launcher protractor",
-        "test": "node node_modules/karma/bin/karma start",
-        "preprotractor": "node node_modules/protractor/bin/webdriver-manager update",
-        "protractor": "node node_modules/protractor/bin/protractor protractor/config.js",
-        "mountebank": "node node_modules/mountebank/bin/mb"
-    }
+  "name": "etappe",
+  "version": "1.0.0",
+  "repository": "https://github.com/angular/angular-seed",
+  "devDependencies": {
+    "http-server": "^0.8.0",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.12.32",
+    "karma-jasmine": "^0.3.5",
+    "mountebank": "^1.2.122",
+    "protractor": "^2.1.0",
+    "request": "^2.55.0"
+  },
+  "scripts": {
+    "prestart": "npm install http-server",
+    "start": "http-server -a localhost -p 8080 -c-1",
+    "pretest": "npm install karma-jasmine karma-spec-reporter karma-jasmine-html-reporter karma-chrome-launcher protractor",
+    "test": "node node_modules/karma/bin/karma start",
+    "preprotractor": "node node_modules/protractor/bin/webdriver-manager update",
+    "protractor": "node node_modules/protractor/bin/protractor protractor/config.js",
+    "mountebank": "node node_modules/mountebank/bin/mb"
+  }
 }

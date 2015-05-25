@@ -10,7 +10,7 @@ module.exports = function(config) {
         plugins: [
             'karma-jasmine',
             'karma-spec-reporter',
-            'karma-jasmine-html-reporter',
+            //'karma-jasmine-html-reporter',
             'karma-chrome-launcher'
         ],
         files: [
@@ -26,6 +26,6 @@ module.exports = function(config) {
         nestedReporter: {
             colors: false
         },
-        reporters: [ 'spec', 'html' ]
+        reporters: [ 'spec' ]
     });
 };

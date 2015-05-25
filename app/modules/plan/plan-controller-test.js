@@ -33,6 +33,9 @@ describe('plan controller', function() {
 //            .respond('<?xml version="1.0" encoding="utf-8"?><stations></stations>', { 'Content-type': 'text/xml'});
 
     }));
+    it('should show segment builder', function() {
+
+    });
     describe('restore', function() {
         // save message
         it('should show error for invalid plan name', function() {
