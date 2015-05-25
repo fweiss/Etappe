@@ -47,6 +47,14 @@ describe('plan controller', function() {
     it('should disable destination selection', function() {
         expect(element(by.model('destinationNexusSelect')).isEnabled()).toBe(false);
     });
+    it('should show origin prompt', function() {
+        expect(element(by.model('originNexusSelect')).all(by.tagName('option')).count()).toBe(0 + PROMPT);
+        expect(element(by.model('originNexusSelect')).all(by.tagName('option')).get(0).getText()).toBe('Choose an origin');
+    });
+    it('should show destination prompt', function() {
+        expect(element(by.model('destinationNexusSelect')).all(by.tagName('option')).count()).toBe(0 + PROMPT);
+        expect(element(by.model('destinationNexusSelect')).all(by.tagName('option')).get(0).getText()).toBe('Choose a destination');
+    });
 
     describe('available stops', function() {
         beforeEach(function() {
