@@ -9,6 +9,7 @@
     "karma-jasmine": "^0.3.5",
     "mountebank": "^1.2.122",
     "protractor": "^2.1.0",
+    "jasmine-spec-reporter": "2.2.3",
     "request": "^2.55.0"
   },
   "scripts": {
