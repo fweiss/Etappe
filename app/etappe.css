@@ -2,5 +2,5 @@ canvas {
     border: 1px solid black;
     margin-top: 10px;
     box-shadow: 10px 10px 5px #888888;
-    transform: rotate(-90deg);
+    /*transform: rotate(-90deg);*/
 }

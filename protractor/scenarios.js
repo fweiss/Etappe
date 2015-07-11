@@ -1,4 +1,4 @@
-describe('plan controller', function() {
+describe('plan builder', function() {
     var Imposter = require('./imposter');
 
     var PROMPT = 1; // to account for the prompt option in select
@@ -56,7 +56,7 @@ describe('plan controller', function() {
         expect(element(by.model('destinationNexusSelect')).all(by.tagName('option')).get(0).getText()).toBe('Choose a destination');
     });
 
-    describe('available stops', function() {
+    describe('agency selected', function() {
         beforeEach(function() {
             element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
         });
@@ -68,7 +68,7 @@ describe('plan controller', function() {
         });
     });
 
-    describe('selected origin and destination', function() {
+    describe('origin and destination selected', function() {
         beforeEach(function() {
             element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
             element(by.cssContainingText('#originNexusSelect option', '16th St and Mission')).click();
@@ -80,27 +80,34 @@ describe('plan controller', function() {
         it('should show available rides', function() {
             expect(element(by.binding('rideList')).getText()).toBeGreaterThan(0);
         });
-        it('should show error when no plan name given', function() {
-            element(by.css('#planRestore')).click();
-            var alertDialog = browser.switchTo().alert();
-            expect(alertDialog.getText()).toEqual("cannot restore plan: invalid plan name: expected non-empty string");
-        });
-        it('should save and restore plan', function() {
-            element(by.model('planSaveName')).sendKeys('gggg');
-            element(by.css('#planSave')).click();
-            // something is displayed
-            // remember verify corner cases in unit, but verify UI here
-            // so we do need to do some mocking
-            element(by.model('planRestoreName')).sendKeys('gggg');
-            element(by.css('#planRestore')).click();
-            // verify list
-            // verify content
-            // do click
-            expect(element(by.model('nexusStart')).getText()).toBe('16th St and Mission');
-            expect(element(by.model('nexusEnd')).getText()).toBe('16th St and Harrison');
+         describe('saving a plan', function() {
+            //clear storage
+            //create a plan
+            //save it
+            //restore it
+             it('should show error when no plan name given', function() {
+                 element(by.css('#planRestore')).click();
+                 var alertDialog = browser.switchTo().alert();
+                 expect(alertDialog.getText()).toEqual("cannot restore plan: invalid plan name: expected non-empty string");
+             });
+             it('should save and restore plan', function() {
+                 element(by.model('planSaveName')).sendKeys('gggg');
+                 element(by.css('#planSave')).click();
+                 // something is displayed
+                 // remember verify corner cases in unit, but verify UI here
+                 // so we do need to do some mocking
+                 element(by.model('planRestoreName')).sendKeys('gggg');
+                 element(by.css('#planRestore')).click();
+                 // verify list
+                 // verify content
+                 // do click
+                 expect(element(by.model('nexusStart')).getText()).toBe('16th St and Mission');
+                 expect(element(by.model('nexusEnd')).getText()).toBe('16th St and Harrison');
+             });
         });
     });
-    describe('saving a plan', function() {
+    // this should go to controller test, not e2e
+    xdescribe('saving a plan', function() {
 
         var savedPlan;
         xit('should save plan', function() {
