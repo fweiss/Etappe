@@ -160,6 +160,17 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 }
                 return stops;
             }
+           // FIXME move to a testable location
+           window.unPermuteStopTitle = function(title) {
+               var sep = ' & ';
+               var p1 = title.indexOf(sep);
+               if (p1 < 0) {
+                   return title;
+               }
+               var s1 = title.substring(0, p1);
+               var s2 = title.substring(p1 + sep.length);
+               return (s1 > s2) ? s2 + sep + s1 : title;
+           }
             var rrx = $(root).find('route');
             angular.forEach(rrx, function(rx) {
                 var route = $(rx).attr('tag');
@@ -168,7 +179,8 @@ angular.module('agencies', [ 'sfmuni.config' ])
                     // because angular.element.children('stop') won't work
                     var title = $(sx).attr('title');
                     if (title !== undefined) {
-                        var stops = getOrCreate(title);
+                        var normalizedTitle = window.unPermuteStopTitle(title);
+                        var stops = getOrCreate(normalizedTitle);
                         var stop = {};
                         stop.stopId = $(sx).attr('stopId');
                         stop.stopTag = $(sx).attr('tag');

@@ -10,6 +10,13 @@ describe('sfmuni2', function() {
     function addMinutes(date, minutes) {
         return new Date(date.getTime() + minutes * 60000);
     }
+    function mockBackend(command, route, xml) {
+        // kind of a hack, since all xml strings need to be properly encoded
+        var encoded = String(xml).replace(/&/g, '&amp;');
+        var query = '?a=sf-muni&command=' + command + (route ? '&r=' + route : '');
+        httpBackend.whenGET(baseUrl + query).respond(encoded);
+    }
+
     beforeEach(module('agencies', 'plan'));
     beforeEach(inject(function(_sfMuni_, $httpBackend, plan, $rootScope) {
         SfMuni = _sfMuni_;
@@ -17,6 +24,19 @@ describe('sfmuni2', function() {
         Plan = plan;
         rootScope = $rootScope;
     }));
+    describe('parser', function() {
+        it('should special characters', function () {
+            var xml = '<body><route><stop title="16th & Potrero"></stop><direction><stop></stop></direction></route></body>';
+            mockBackend('routeConfig', 55, xml);
+            SfMuni.getStopsForRoute('55').then(function (response) {
+                var stops = response.data;
+                expect(stops.length).toBe(1);
+                var stop = stops[0];
+                expect(stop.name).toBe('16th & Potrero');
+            });
+            httpBackend.flush();
+        });
+    });
     describe('stops', function() {
         // route > (stop, direction > stop)
         var xml;
@@ -93,6 +113,21 @@ describe('sfmuni2', function() {
                     expect(stop.stopId).toBe('12345');
                     expect(stop.route).toBe('F');
                     expect(stop.stopTag).toBe('2345');
+                });
+                httpBackend.flush();
+            });
+            // parse '&'
+            it('should merge stops for permuted intersection', function() {
+                // FIXME allow &
+                var xml1 = '<body><route tag="F"><stop tag="2345" title="16th & Mission" stopId="12345"></stop></route><route tag="G"><stop tag="2345" title="Mission & 16th" stopId="12345"></stop></route></body>';
+                //httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
+                mockBackend('routeConfig', null, xml1);
+                SfMuni.getAllNexus().then(function(response) {
+                    var nexus = response.data;
+                    expect(Object.keys(nexus).length).toBe(1);
+                    expect(nexus['16th & Mission']).toBeTruthy();
+                    var n = nexus['16th & Mission'];
+                    expect(n.stops.length).toBe(2);
                 });
                 httpBackend.flush();
             });
@@ -201,6 +236,20 @@ describe('sfmuni2', function() {
                 });
 //                rootScope.$apply(); // is this only needed when there's no $httBackend calls?
                 httpBackend.flush();
+            });
+        });
+    });
+    describe('utilities', function() {
+        describe('permute stop streets', function() {
+            describe('with &', function() {
+                it('should match', function() {
+                    var title = window.unPermuteStopTitle('x & y');
+                    expect(title).toBe('x & y');
+                });
+                it('should flip', function() {
+                    var title = window.unPermuteStopTitle('y & x');
+                    expect(title).toBe('x & y');
+                });
             });
         });
     });
