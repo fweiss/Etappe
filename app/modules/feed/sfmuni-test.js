@@ -1,7 +1,7 @@
 //      http://nathanleclaire.com/blog/2014/04/12/unit-testing-services-in-angularjs-for-fun-and-for-profit/
 "use strict";
 
-describe('sfmuni2', function() {
+describe('sfmuni', function() {
     var baseUrl = 'http://webservices.nextbus.com/service/publicXMLFeed';
     var SfMuni;
     var httpBackend;
@@ -243,11 +243,11 @@ describe('sfmuni2', function() {
         describe('permute stop streets', function() {
             describe('with &', function() {
                 it('should match', function() {
-                    var title = window.unPermuteStopTitle('x & y');
+                    var title = SfMuni.unPermuteStopTitle('x & y');
                     expect(title).toBe('x & y');
                 });
                 it('should flip', function() {
-                    var title = window.unPermuteStopTitle('y & x');
+                    var title = SfMuni.unPermuteStopTitle('y & x');
                     expect(title).toBe('x & y');
                 });
             });

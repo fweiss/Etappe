@@ -21,51 +21,61 @@ angular.module('agencies', [ 'sfmuni.config' ])
         var parser = new DOMParser();
         const baseUrl = config.baseUrl;
         var api = {
-            getStopsForRoute: function(route) {
-                return buildResource('routeConfig', parseStops)({ r: route });
+            getStopsForRoute: function (route) {
+                return buildResource('routeConfig', parseStops)({r: route});
             },
-            getAllStops: function() {
+            getAllStops: function () {
                 return buildResource('routeConfig', parseStops)({});
             },
 
-            getRides: function(originStop, destinationStop) {
+            getRides: function (originStop, destinationStop) {
                 var origin = api.getPredictionsForStopId(originStop);
                 var destination = api.getPredictionsForStopId(destinationStop);
                 var defer = $q.defer();
                 // combine the results of both sets of predictions
-                $q.all([ origin, destination ]).then(function(responses) {
-                    var originPredictions = responses[0].data;
-                    var destinationPredictions = responses[1].data;
-                    var rides = getRidesForSegmentPredictions(originPredictions,destinationPredictions );
-                    defer.resolve({ data: rides });
-                });
-                return defer.promise;
-            },
-            getPredictionsForStopId: function(stopId) {
-                return buildResource('predictions', predictionsTransform)({ stopId: stopId });
-            },
-            getAllNexus: function() {
-                return buildResource('routeConfig', nexusTransform)({});
-            },
-            getPredictionsForMultiStops: function(stops) {
-                var stopList = _.map(stops, function(stop) {
-                    return stop.route + '|' + stop.stopTag;
-                });
-                return buildResource('predictionsForMultiStops', multiPredictionsTransform)({ stops: stopList });
-            },
-            getRidesForSegment: function(segment) {
-                var defer = $q.defer();
-                var origin = api.getPredictionsForMultiStops(segment.originStops);
-                var destination = api.getPredictionsForMultiStops(segment.destinationStops);
-                $q.all([origin, destination]).then(function(responses) {
+                $q.all([origin, destination]).then(function (responses) {
                     var originPredictions = responses[0].data;
                     var destinationPredictions = responses[1].data;
                     var rides = getRidesForSegmentPredictions(originPredictions, destinationPredictions);
-                    defer.resolve({ data: rides });
+                    defer.resolve({data: rides});
                 });
                 return defer.promise;
+            },
+            getPredictionsForStopId: function (stopId) {
+                return buildResource('predictions', predictionsTransform)({stopId: stopId});
+            },
+            getAllNexus: function () {
+                return buildResource('routeConfig', nexusTransform)({});
+            },
+            getPredictionsForMultiStops: function (stops) {
+                var stopList = _.map(stops, function (stop) {
+                    return stop.route + '|' + stop.stopTag;
+                });
+                return buildResource('predictionsForMultiStops', multiPredictionsTransform)({stops: stopList});
+            },
+            getRidesForSegment: function (segment) {
+                var defer = $q.defer();
+                var origin = api.getPredictionsForMultiStops(segment.originStops);
+                var destination = api.getPredictionsForMultiStops(segment.destinationStops);
+                $q.all([origin, destination]).then(function (responses) {
+                    var originPredictions = responses[0].data;
+                    var destinationPredictions = responses[1].data;
+                    var rides = getRidesForSegmentPredictions(originPredictions, destinationPredictions);
+                    defer.resolve({data: rides});
+                });
+                return defer.promise;
+            },
+            unPermuteStopTitle: function (title) {
+                var sep = ' & ';
+                var p1 = title.indexOf(sep);
+                if (p1 < 0) {
+                    return title;
+                }
+                var s1 = title.substring(0, p1);
+                var s2 = title.substring(p1 + sep.length);
+                return (s1 > s2) ? s2 + sep + s1 : title;
             }
-        }
+        };
         function buildResource(command, transform) {
             return function(params) {
                 params.command = command;
@@ -160,17 +170,6 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 }
                 return stops;
             }
-           // FIXME move to a testable location
-           window.unPermuteStopTitle = function(title) {
-               var sep = ' & ';
-               var p1 = title.indexOf(sep);
-               if (p1 < 0) {
-                   return title;
-               }
-               var s1 = title.substring(0, p1);
-               var s2 = title.substring(p1 + sep.length);
-               return (s1 > s2) ? s2 + sep + s1 : title;
-           }
             var rrx = $(root).find('route');
             angular.forEach(rrx, function(rx) {
                 var route = $(rx).attr('tag');
@@ -179,7 +178,7 @@ angular.module('agencies', [ 'sfmuni.config' ])
                     // because angular.element.children('stop') won't work
                     var title = $(sx).attr('title');
                     if (title !== undefined) {
-                        var normalizedTitle = window.unPermuteStopTitle(title);
+                        var normalizedTitle = api.unPermuteStopTitle(title);
                         var stops = getOrCreate(normalizedTitle);
                         var stop = {};
                         stop.stopId = $(sx).attr('stopId');
