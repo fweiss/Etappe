@@ -100,7 +100,7 @@ angular.module('agencies', [ 'sfmuni.config' ])
             return prediction;
         }
         // expecting predictions < direction < prediction
-       function predictionsTransform(root) {
+        function predictionsTransform(root) {
             var px = $(root).find('predictions');
             var ddx = $(px).find('direction');
             var predictions = [];
@@ -136,9 +136,9 @@ angular.module('agencies', [ 'sfmuni.config' ])
             return predictions;
         }
         // deprecated
-       // note that stop is both child of route and route.direction
-       function parseStops(root) {
-//            var root = angular.element(parser.parseFromString(data, 'text/xml'));
+        // note that stop is both child of route and route.direction
+        function parseStops(root) {
+        //            var root = angular.element(parser.parseFromString(data, 'text/xml'));
             var rx = $(root).find('route');
             var ssx = angular.element(rx).find('stop');
             var stops = [];
@@ -154,14 +154,13 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 }
             });
            return _.sortBy(stops, 'name');
-//            return _.uniq(_.sortBy(stops, 'name'), 'stopId');
-       }
-       // here we collect all the stops by title to try to avoid so many
-       // stops, many of which are really at the same location
-       // route[tag] < stop[tag,title,stopId]
-       // route[tag] < direction[name] < stop[tag]
-       function nexusTransform(root) {
-            nexus = {};
+        //            return _.uniq(_.sortBy(stops, 'name'), 'stopId');
+        }
+        // here we collect all the stops by title to try to avoid so many
+        // stops, many of which are really at the same location
+        // route[tag] < stop[tag,title,stopId]
+        // route[tag] < direction[name] < stop[tag]
+        function nexusTransform(root) {
             function getOrCreate(name) {
                 var stops = nexus[name] && nexus[name].stops;
                 if (stops === undefined) {
@@ -170,6 +169,7 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 }
                 return stops;
             }
+            nexus = {};
             var rrx = $(root).find('route');
             angular.forEach(rrx, function(rx) {
                 var route = $(rx).attr('tag');
@@ -188,9 +188,8 @@ angular.module('agencies', [ 'sfmuni.config' ])
                     }
                 });
             });
-
             return nexus;
-       }
+        }
         function getRidesForSegmentPredictions(originPredictions, destinationPredictions) {
             var rides = [];
             // match up predictions by vehicle

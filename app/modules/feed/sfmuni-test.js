@@ -88,7 +88,7 @@ describe('sfmuni', function() {
             });
             httpBackend.flush();
         });
-        describe('nexus', function() {
+        describe('nexuses', function() {
             it('should get all', function() {
                 var xml1 = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Mission" stopId="12346"></stop><stop title="16th and Mission" stopId="12345"></stop></route></body>';
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
