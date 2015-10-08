@@ -21,7 +21,7 @@ angular.module('agencies', [ 'sfmuni.config' ])
         var parser = new DOMParser();
         const baseUrl = config.baseUrl;
         var api = {
-             getStopsForRoute: function(route) {
+            getStopsForRoute: function(route) {
                 return buildResource('routeConfig', parseStops)({ r: route });
             },
             getAllStops: function() {

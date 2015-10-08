@@ -57,7 +57,16 @@ Y
                         return segments;
                     },
                     addSegment: function(origin, destination, rides) {
-                        nexus.push(origin);
+                        if (! _.isString(origin) || _.isEmpty(origin)) {
+                            throw new Error('addSegment: must specify origin');
+                        }
+                        if (! _.isString(destination) || _.isEmpty(destination)) {
+                            throw new Error('addSegment: must specify destination');
+                        }
+                        var lastNexus = nexus.length > 0 ? nexus[nexus.length - 1] : null;
+                        if (lastNexus != origin) {
+                            nexus.push(origin);
+                        }
                         nexus.push(destination);
                         segments.push({ origin: origin, destination: destination, rides: rides });
                     },

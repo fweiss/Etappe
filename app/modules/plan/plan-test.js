@@ -20,13 +20,24 @@ describe('plan domain', function() {
             expect(plan.getSegments().length).toBe(0);
         });
     });
-    describe('with segments', function() {
+    describe('segments', function() {
         var plan;
         beforeEach(function() {
             plan = Plan.createPlan(spanStart, spanEnd);
         });
+        it('should require valid origin', function() {
+            expect(function() {
+                plan.addSegment();
+            }).toThrow(new Error('addSegment: must specify origin'));
+        });
+        it('should require valid destination', function() {
+            expect(function() {
+                plan.addSegment('abc');
+            }).toThrow(new Error('addSegment: must specify destination'));
+        });
         it('should add a segment', function() {
-            plan.addSegment({ origin: '', destination: '', rides: [ { agency: '', startTime: null, endTime: null }]});
+            //plan.addSegment({ origin: '', destination: '', rides: [ { agency: '', startTime: null, endTime: null }]});
+            plan.addSegment('abd', 'xyz',  [ { agency: '', startTime: null, endTime: null }]);
             expect(plan.getSegments().length).toBe(1);
         });
         it('should add segment nexus', function() {
@@ -35,6 +46,12 @@ describe('plan domain', function() {
             expect(nexus.length).toBe(2);
             expect(nexus[0]).toBe('abc');
             expect(nexus[1]).toBe('def');
+        });
+        it('should add two segment nexus', function() {
+            plan.addSegment('abc', 'def');
+            plan.addSegment('def', 'ghi');
+            var nexus = plan.getNexus();
+            expect(nexus.length).toBe(3);
         });
     });
     describe('ride', function() {
