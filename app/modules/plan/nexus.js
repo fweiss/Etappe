@@ -20,8 +20,17 @@ angular.module('plan')
         }
         return {
             nexuses: [],
-            create: function(config) {
-                return new Nexus(config.cannonicalName, config.lat, config.lon );
+            create: function(name, lat, lon) {
+                if (_.isUndefined(name)) {
+                    throw new Error('name is required');
+                }
+                if (_.isUndefined(lat)) {
+                    throw new Error('lat is required');
+                }
+                if (_.isUndefined(lon)) {
+                    throw new Error('lon is required');
+                }
+                return new Nexus(name, lat, lon );
             },
             mergeStop: function(stop) {
                 var nearbyNexus = this.findNearbyNexus(stop.lat, stop.lon);

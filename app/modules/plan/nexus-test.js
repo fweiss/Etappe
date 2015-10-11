@@ -7,7 +7,7 @@ describe('nexus', function() {
     describe('create', function() {
         var nexus;
         beforeEach(function() {
-            nexus = NexusService.create({ cannonicalName: 'abc', lat: 15, lon: -31 });
+            nexus = NexusService.create('abc', 15, -31);
         });
         it('should have Nexus type', function() {
             expect(nexus.constructor.name).toBe('Nexus');
@@ -23,6 +23,23 @@ describe('nexus', function() {
         });
         it('should have empty stops', function() {
             expect(nexus.getStops().length).toBe(0);
+        });
+        describe('validation', function() {
+            it('should require name', function() {
+                expect(function() {
+                    NexusService.create();
+                }).toThrow(new Error('name is required'));
+            });
+            it('should require lat', function() {
+                expect(function() {
+                    NexusService.create('abc');
+                }).toThrow(new Error('lat is required'));
+            });
+            it('should require lon', function() {
+                expect(function() {
+                    NexusService.create('abc', 15);
+                }).toThrow(new Error('lon is required'));
+            });
         });
     });
     describe('merge', function() {
@@ -55,17 +72,17 @@ describe('nexus', function() {
                 it('should have merged name', function() {
                     expect(nexus.getCanonicalName()).toBe('16th St & Mission St');
                 });
-            });
-            describe('first stop info', function() {
-                var stop;
-                beforeEach(function() {
-                    stop = nexuses[0].stops[0];
-                });
-                it('should have stop id', function() {
-                    expect(stop.id).toBe('7890');
-                });
-                it('should have agengy id', function() {
-                    expect(stop.agencyId).toBe('sd-muni');
+                describe('first stop info', function() {
+                    var stop;
+                    beforeEach(function() {
+                        stop = nexus.stops[0];
+                    });
+                    it('should have agency id', function() {
+                        expect(stop.agencyId).toBe('sd-muni');
+                    });
+                    it('should have stop id', function() {
+                        expect(stop.id).toBe('7890');
+                    });
                 });
             });
         });
