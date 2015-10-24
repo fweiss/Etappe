@@ -12,6 +12,11 @@ angular.module('carrier', [ 'agencies', 'plan' ])
             { name: 'SFMUNI' }
         ];
         $scope.rides = null;
+        $scope.agencySelected = function() {
+            Plan.fetchNexuses().then(function(nexuses) {
+                $scope.originNexuses = nexuses;
+            });
+        };
         $scope.changeCarrier = function() {
             //SfMuni.getAllStops().then(function(response) {
             //    $scope.originStations = response.data;

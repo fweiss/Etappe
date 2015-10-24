@@ -42,7 +42,7 @@ angular.module('plan')
         };
 Y
     }])
-    .service('plan', [ '$window', function($window) {
+    .service('plan', [ '$window', '$q', function($window, $q) {
         return {
             createPlan: function(spanStart, spanEnd) {
                 if (spanStart === undefined || spanEnd === undefined) {
@@ -77,6 +77,11 @@ Y
             },
             createRide: function(rideStart, rideEnd) {
                 return { startTime: rideStart, endTime: rideEnd };
+            },
+            fetchNexuses: function () {
+                var defer = $q.defer();
+                defer.resolve([]);
+                return defer.promise;
             }
         }
     }]);

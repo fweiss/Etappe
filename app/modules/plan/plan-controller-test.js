@@ -58,4 +58,25 @@ describe('plan controller', function() {
             expect(scope.nexusEnd).toBe('destination');
         });
     });
+    describe('nexus', function() {
+        var $controller;
+        var mockPlan;
+        var $timeout;
+        beforeEach(inject(function(_$controller_, $q, _$timeout_) {
+            $controller = _$controller_;
+            $timeout = _$timeout_;
+            mockPlan = jasmine.createSpyObj('mockPlan', [ 'fetchNexuses' ]);
+            var nexus = []; // a fake
+            mockPlan.fetchNexuses.and.returnValue($q.when([ nexus ]));
+        }))
+        it('should fetch on selected agency', function() {
+            var $scope = {};
+            $controller('Trip', { $scope: $scope, plan: mockPlan });
+            $scope.agency = 'sf-muni';
+            $scope.agencySelected();
+            //expect(mockPlan.fetchNexuses).toHaveBeenCalled();
+            $timeout.flush();
+            expect($scope.originNexuses.length).toBeGreaterThan(0);
+        });
+    });
 });
