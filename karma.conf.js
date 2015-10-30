@@ -32,6 +32,11 @@ module.exports = function(config) {
         nestedReporter: {
             colors: false
         },
+        singleRun: true,
+        //reporters: ['dots', 'junit'],
+        //junitReporter: {
+        //    outputFile: 'test-results.xml'
+        //},
         reporters: [ 'spec' ]
     });
 };
