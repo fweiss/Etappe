@@ -69,8 +69,8 @@ describe('plan domain', function() {
         });
         it('should throw exception for invalid plan object', function() {
             // would like to have a fuzzy match?
-            var e1 = 'invalid plan: TypeError: plan.getNexus is not a function';
-            expect(function() { PlanFolder.store({}, 'a'); }).toThrow(e1);
+            var e1 = /invalid plan: TypeError: /;
+            expect(function() { PlanFolder.store({}, 'a'); }).toThrowError(e1);
         });
         it('should throw exception for invalid plan name', function() {
             var e1 = 'invalid plan name: expected string';

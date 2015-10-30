@@ -1,5 +1,5 @@
 angular.module('plan')
-    .directive('uttRides', function(chart, planConfig) {
+    .directive('uttRides', function(chart, planConfig, date) {
         //console.log('mmmmmmmm ' + tickLegendHeight);
         var tickLegendHeight = planConfig('tickLegendHeight');
         var rideLine = { lineWidth: 6, strokeStyle: 'rgba(255, 255, 255, 1' };
@@ -98,10 +98,15 @@ angular.module('plan')
             }
         }
         /** Time of Day */
-        function tod(time) {
+        function xtod(time) {
             // 3:34:00 PM - 3:34 PM
             var tt =  time.toLocaleTimeString();
             var p1 = tt.indexOf(" ");
             return tt.substring(0, p1 - 3) + tt.substring(p1);
+        }
+        function tod(time) {
+            // 3:34:00 PM - 3:34 PM
+            var tt =  time.toLocaleTimeString();
+            return date.format(tt);
         }
     });

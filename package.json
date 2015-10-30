@@ -18,7 +18,13 @@
     "pretest": "npm install karma-jasmine karma-spec-reporter karma-jasmine-html-reporter karma-chrome-launcher protractor",
     "test": "node node_modules/karma/bin/karma start",
     "preprotractor": "node node_modules/protractor/bin/webdriver-manager update",
-    "protractor": "node node_modules/protractor/bin/protractor protractor/config.js",
+    "protractor": "node node_modules/protractor/bin/protractor",
     "mountebank": "node node_modules/mountebank/bin/mb"
+  },
+  "dependencies": {
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "karma-safari-launcher": "^0.1.1",
+    "phantomjs": "^1.9.18"
   }
 }

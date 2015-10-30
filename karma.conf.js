@@ -5,13 +5,19 @@ module.exports = function(config) {
             'jasmine'
         ],
         browsers: [
-            'Chrome'
+            //'Chrome'
+            //'Firefox'
+            'PhantomJS'
+            //'Safari' // don't have current version for Windows
         ],
         plugins: [
             'karma-jasmine',
             'karma-spec-reporter',
             //'karma-jasmine-html-reporter',
-            'karma-chrome-launcher'
+            //'karma-chrome-launcher'
+            //'karma-firefox-launcher'
+            'karma-phantomjs-launcher'
+            //'karma-safari-launcher'
         ],
         files: [
             'app/lib/angular.min.js',

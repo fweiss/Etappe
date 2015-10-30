@@ -21,7 +21,7 @@ angular.module('plan')
                     };
                 }
                 catch (e) {
-                    throw 'invalid plan: ' + e;
+                    throw new Error('invalid plan: ' + e);
                 }
                 $window.localStorage.setItem(storedPlan.name, JSON.stringify(storedPlan));
             },
