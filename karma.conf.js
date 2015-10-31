@@ -33,10 +33,10 @@ module.exports = function(config) {
             colors: false
         },
         singleRun: true,
-        //reporters: ['dots', 'junit'],
-        //junitReporter: {
-        //    outputFile: 'test-results.xml'
-        //},
+        reporters: [ 'junit' ],
+        junitReporter: {
+            outputFile: 'reports/karma.xml'
+        },
         reporters: [ 'spec' ]
     });
 };
