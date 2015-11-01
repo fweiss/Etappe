@@ -13,7 +13,7 @@ module.exports = function(config) {
         plugins: [
             'karma-jasmine',
             'karma-spec-reporter',
-            //'karma-jasmine-html-reporter',
+            'karma-jasmine-html-reporter',
             //'karma-chrome-launcher'
             //'karma-firefox-launcher'
             'karma-phantomjs-launcher'
@@ -33,10 +33,9 @@ module.exports = function(config) {
             colors: false
         },
         singleRun: true,
-        reporters: [ 'junit' ],
+        reporters: [ 'spec', 'junit', 'html' ],
         junitReporter: {
             outputFile: 'reports/karma.xml'
-        },
-        reporters: [ 'spec' ]
+        }
     });
 };
