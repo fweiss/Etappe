@@ -36,6 +36,9 @@ module.exports = function(config) {
         reporters: [ 'spec', 'junit', 'html' ],
         junitReporter: {
             outputFile: 'reports/karma.xml'
+        },
+        htmlReporter: {
+            outputFile: 'reports/jasmine'
         }
     });
 };
