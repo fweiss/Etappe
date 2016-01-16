@@ -1,16 +1,18 @@
 {
   "name": "etappe",
   "version": "1.0.0",
-  "repository": "https://github.com/angular/angular-seed",
+  "description": "A transit planner",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/fweiss/etappe" },
   "devDependencies": {
-    "http-server": "^0.8.0",
-    "jasmine-core": "^2.3.4",
-    "karma": "^0.12.32",
+    "http-server": "^0.8.5",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.12.37",
     "karma-jasmine": "^0.3.5",
-    "mountebank": "^1.2.122",
-    "protractor": "^2.1.0",
+    "mountebank": "^1.4.2",
+    "protractor": "^2.5.1",
     "jasmine-spec-reporter": "2.2.3",
-    "request": "^2.55.0"
+    "request": "^2.67.0"
   },
   "scripts": {
     "prestart": "npm install http-server",
@@ -21,10 +23,10 @@
     "protractor": "node node_modules/protractor/bin/protractor",
     "mountebank": "node node_modules/mountebank/bin/mb"
   },
-  "dependencies": {
-    "karma-firefox-launcher": "^0.1.6",
-    "karma-phantomjs-launcher": "^0.2.1",
+  "xdependencies": {
+    "karma-firefox-launcher": "^0.1.7",
+    "karma-phantomjs-launcher": "^0.2.3",
     "karma-safari-launcher": "^0.1.1",
-    "phantomjs": "^1.9.18"
+    "phantomjs": "^1.9.19"
   }
 }

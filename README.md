@@ -38,3 +38,17 @@ http://www.bart.gov/schedules/developers/api
 http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf
 
 http://www.sflivebus.com/
+
+## Developer
+
+### IntelliJ
+
+server run configuration (Node)
+mountebank required for protractor
+protractor
+karma unit tests
+
+protractor tricks for running in jenkins
+selenium driver jar issue
+node ./node_modules/protractor/bin/webdriver-manager update
+
