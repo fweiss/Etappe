@@ -35,6 +35,12 @@ describe('plan builder', function() {
         browser.executeScript('window.sessionStorage.clear();');
         browser.executeScript('window.localStorage.clear();');
     });
+    it('should load page without errors', function() {
+        // in plan, an exception handler gets any angular errors
+        element(by.css('#errors')).getText().then(function(text) {
+            expect(text).toBe('');
+        });
+    });
     it('should prompt to select carrier', function() {
         expect(element(by.model('carrierSelect')).$('option:checked').getText()).toEqual('Choose a carrier');
     });

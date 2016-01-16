@@ -6,6 +6,7 @@
     </head>
     <body>
         <div id="trip" ng-controller="Trip">
+            <span id="errors">{{ error }}</span>
             <div class="segmentSelect" ng-include="template">
 
             </div>
@@ -70,6 +71,7 @@
         <script src="modules/plan/plan.js"></script>
         <script src="modules/plan/scaling.js"></script>
         <script src="modules/plan/canvas.js"></script>
+        <script src="modules/plan/date.js"></script>
         <script src="modules/feed/sfmuni.js"></script>
     </body>
 </html>

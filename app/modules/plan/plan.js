@@ -1,4 +1,13 @@
 angular.module('plan')
+    // handle angular exceptions so that protractor can verify there are none
+    .config(function($provide) {
+        $provide.decorator('$exceptionHandler', function($delegate, $injector) {
+            return function(exception, cause) {
+                var $rootScope = $injector.get('$rootScope');
+                $rootScope.error = exception.message;
+            };
+        });
+    })
 /**
  * A folder to keep saved plans. default implementation is window.localStorage.
  * Also mediates between a stored plan and an domain plan object.

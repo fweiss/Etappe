@@ -5,6 +5,9 @@ angular.module('carrier', [ 'agencies', 'plan' ])
         }
     })
     .controller('Trip', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', function($scope, chart, SfMuni, Plan, PlanFolder, alert) {
+        $scope.addError = function(error) {
+
+        }
         $scope.disableOrigin = true;
         $scope.disableDestination = true;
         $scope.carriers = [
