@@ -31,7 +31,9 @@
                 </select>
             </p>
             <table id="plan">
-                <thead></thead>
+                <thead>
+                    <div ng-bind="currentPlan.wayPoint"></div>
+                </thead>
                 <tbody>
                     <tr>
                         <td>{{ originStationSelect.stopId }}</td>
@@ -60,6 +62,14 @@
             <div><button id="addSegment" ng-click="addSegment()">Add Segment</button></div>
             <div><button ng-click="ridesRefresh()">Refresh</button></div>
             <canvas utt-rides width="1200" height="200"></canvas>
+            <div>
+                <button id="showSavedPlans" ng-click="showSavedPlans()">Saved Plans</button>
+                <div id="savedPlans">
+                    <ol>
+                        <li ng-repeat="plan in savedPlans" ng-click="selectSavedPlan(plan)" ng-class="{ selected: plan.id === currentPlan.id }">{{ plan.wayPoint }}</li>
+                    </ol>
+                </div>
+            </div>
          </div>
         <script src="lib/underscore.js"></script>
         <script src="lib/angular.min.js"></script>

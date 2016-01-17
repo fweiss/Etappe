@@ -5,8 +5,11 @@ angular.module('carrier', [ 'agencies', 'plan' ])
         }
     })
     .controller('Trip', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', function($scope, chart, SfMuni, Plan, PlanFolder, alert) {
-        $scope.addError = function(error) {
-
+        $scope.showSavedPlans = function() {
+            $scope.savedPlans = [ { id: 1, wayPoint: 'Church St' } ];
+        }
+        $scope.selectSavedPlan = function(plan) {
+            $scope.currentPlan = plan;
         }
         $scope.disableOrigin = true;
         $scope.disableDestination = true;

@@ -143,5 +143,28 @@ describe('plan builder', function() {
             expect(element(by.css('#addSegment')).isPresent()).toBeTruthy();
         });
     });
+    describe('saved plans', function() {
+        beforeEach(function() {
+            element(by.css('#showSavedPlans')).click();
+        });
+        it('should list', function() {
+            expect(element(by.css('#savedPlans li')).isPresent()).toBeTruthy();
+            element.all(by.css('#savedPlans li')).then(function(plans) {
+                expect(plans.length).toBe(1);
+                expect(plans[0].getText()).toMatch(/Church St/);
+            });
+        });
+        describe('selector', function() {
+            it('should make selection', function() {
+                element.all(by.css('#savedPlans li')).then(function(plans) {
+                    var thePlan = plans[0];
+                    thePlan.click().then(function() {
+                        expect(thePlan.getAttribute('class')).toMatch(/selected/);
+                        expect(element(by.binding('currentPlan')).getText()).toMatch(/Church St/);
+                    });
+                });
+            });
+        });
+    });
 });
 
