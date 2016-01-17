@@ -4,6 +4,9 @@ canvas {
     box-shadow: 10px 10px 5px #888888;
     /*transform: rotate(-90deg);*/
 }
-#savedPlans li.selected {
+#savedPlans li.plan {
+    cursor: pointer;
+}
+#savedPlans li.selected, #savedPlans li:hover {
     background-color: powderblue;
 }
