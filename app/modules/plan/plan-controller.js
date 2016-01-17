@@ -6,7 +6,7 @@ angular.module('carrier', [ 'agencies', 'plan' ])
     })
     .controller('Trip', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', function($scope, chart, SfMuni, Plan, PlanFolder, alert) {
         $scope.showSavedPlans = function() {
-            $scope.savedPlans = [ { id: 1, wayPoint: 'Church St' } ];
+            $scope.savedPlans = [ { id: 1, name: 'get Cliffs', waypoints: [ { name: 'Mission St' }, { name: 'Castro St' }] } ];
         }
         $scope.selectSavedPlan = function(plan) {
             $scope.currentPlan = plan;

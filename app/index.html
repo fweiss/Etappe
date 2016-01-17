@@ -32,7 +32,7 @@
             </p>
             <table id="plan">
                 <thead>
-                    <div ng-bind="currentPlan.wayPoint"></div>
+                    <div ng-bind="currentPlan.name"></div>
                 </thead>
                 <tbody>
                     <tr>
@@ -66,7 +66,12 @@
                 <button id="showSavedPlans" ng-click="showSavedPlans()">Saved Plans</button>
                 <div id="savedPlans">
                     <ol>
-                        <li ng-repeat="plan in savedPlans" ng-click="selectSavedPlan(plan)" ng-class="{ selected: plan.id === currentPlan.id }">{{ plan.wayPoint }}</li>
+                        <li ng-repeat="plan in savedPlans" ng-click="selectSavedPlan(plan)" ng-class="{ selected: plan.id === currentPlan.id, plan: true }">
+                            <span>{{ plan.name }}</span>
+                            <ol>
+                                <li ng-repeat="waypoint in plan.waypoints" ng-class="{ waypoint: true }">{{ waypoint.name }}</li>
+                            </ol>
+                        </li>
                     </ol>
                 </div>
             </div>

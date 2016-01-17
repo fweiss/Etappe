@@ -147,20 +147,30 @@ describe('plan builder', function() {
         beforeEach(function() {
             element(by.css('#showSavedPlans')).click();
         });
-        it('should list', function() {
-            expect(element(by.css('#savedPlans li')).isPresent()).toBeTruthy();
-            element.all(by.css('#savedPlans li')).then(function(plans) {
-                expect(plans.length).toBe(1);
-                expect(plans[0].getText()).toMatch(/Church St/);
+        describe('list', function() {
+            it('should be displayed', function() {
+                expect(element(by.css('#savedPlans li.plan')).isPresent()).toBe(true);
+                element.all(by.css('#savedPlans li.plan')).then(function(plans) {
+                    expect(plans).not.toBeUndefined();
+                    expect(plans.length).toBe(1);
+                    expect(plans[0].getText()).toMatch(/get Cliffs/);
+                });
+            });
+            it('should display waypoints', function() {
+                element.all(by.css('#savedPlans li.waypoint')).then(function(waypoints) {
+                    expect(waypoints.length).toBe(2);
+                    expect(waypoints[0].getText()).toMatch(/Mission St/);
+                    expect(waypoints[1].getText()).toMatch(/Castro St/);
+                });
             });
         });
-        describe('selector', function() {
+        describe('selection', function() {
             it('should make selection', function() {
                 element.all(by.css('#savedPlans li')).then(function(plans) {
                     var thePlan = plans[0];
                     thePlan.click().then(function() {
                         expect(thePlan.getAttribute('class')).toMatch(/selected/);
-                        expect(element(by.binding('currentPlan')).getText()).toMatch(/Church St/);
+                        expect(element(by.binding('currentPlan')).getText()).toMatch(/get Cliffs/);
                     });
                 });
             });
