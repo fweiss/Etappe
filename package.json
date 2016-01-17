@@ -1,7 +1,7 @@
 {
   "name": "etappe",
   "version": "1.0.0",
-  "description": "A transit planner",
+  "description": "A transit trip planner",
   "license": "MIT",
   "repository": { "type": "git", "url": "https://github.com/fweiss/etappe" },
   "devDependencies": {
