@@ -174,6 +174,7 @@ describe('plan builder', function() {
                     thePlan.click().then(function() {
                         expect(thePlan.getAttribute('class')).toMatch(/selected/);
                         expect(element(by.binding('currentPlan')).getText()).toMatch(/get Cliffs/);
+                        // TODO sync up mock saved plans and mountebank backend
                         //expect(element(by.binding('rideList')).getText()).toMatch(/33 Ashbury/);
                     });
                 });
