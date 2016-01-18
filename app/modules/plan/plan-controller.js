@@ -10,6 +10,7 @@ angular.module('carrier', [ 'agencies', 'plan' ])
         }
         $scope.selectSavedPlan = function(plan) {
             $scope.currentPlan = plan;
+            showSavedRides(plan);
         }
         $scope.disableOrigin = true;
         $scope.disableDestination = true;
@@ -105,5 +106,19 @@ angular.module('carrier', [ 'agencies', 'plan' ])
 
             }
 
+        }
+        function showSavedRides(plan) {
+            var originStops = [{"stopId":"15553","stopTag":"5553","route":"33"},{"stopId":"13338","stopTag":"3338","route":"33"}];
+            var destinationStops = [{"stopId":"13326","stopTag":"3326","route":"33"},{"stopId":"13325","stopTag":"3325","route":"33"}];
+            var now = new Date();
+            var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+            var segment = { originStops: originStops, destinationStops: destinationStops };
+            SfMuni.getRidesForSegment(segment).then(function(response) {
+                var rides = response.data;
+                var plan = Plan.createPlan(now, then);
+                plan.addSegment('Mission St', 'Castro St', rides);
+                $scope.plan = plan;
+                $scope.rideList = rides.length;
+            }, function(fail) { $scope.rideList = fail; });
         }
 }]);

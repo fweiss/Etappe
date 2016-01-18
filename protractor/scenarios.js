@@ -4,6 +4,9 @@ describe('plan builder', function() {
     var PROMPT = 1; // to account for the prompt option in select
     beforeEach(function() {
         // create mountebank imposter
+        // TODO builder DSL
+        // when({command:'routeConfig').route('N').stop('5555', '15555', '16th St and Mission').stop(...)
+        // when({command:'pre...',stops:'N|4444').predictions('N').prediction({time:'2222',vehicle:'3333',trip:'7777'}).prediction(...)
         var imposter = new Imposter()
             .addStub({ command: 'routeConfig' }, '<body>'
             + '<route tag="N">'
@@ -171,6 +174,7 @@ describe('plan builder', function() {
                     thePlan.click().then(function() {
                         expect(thePlan.getAttribute('class')).toMatch(/selected/);
                         expect(element(by.binding('currentPlan')).getText()).toMatch(/get Cliffs/);
+                        //expect(element(by.binding('rideList')).getText()).toMatch(/33 Ashbury/);
                     });
                 });
             });
