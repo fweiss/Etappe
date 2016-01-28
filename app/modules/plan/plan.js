@@ -5,6 +5,7 @@ angular.module('plan')
             return function(exception, cause) {
                 var $rootScope = $injector.get('$rootScope');
                 $rootScope.error = exception.message;
+                $delegate(exception, cause);
             };
         });
     })
@@ -12,8 +13,11 @@ angular.module('plan')
  * A folder to keep saved plans. default implementation is window.localStorage.
  * Also mediates between a stored plan and an domain plan object.
  */
-    .service('planFolder', [ 'plan', '$window', function(Plan, $window) {
+    .service('planFolder', [ 'plan', 'initSavedPlans', '$window', function(Plan, initSavedPlans, $window) {
         return {
+            list: function() {
+                return initSavedPlans;
+            },
             store: function(plan, name) {
                 if (!_.isString(name)) {
                     throw 'invalid plan name: expected string';
@@ -53,6 +57,36 @@ Y
     }])
     .service('plan', [ '$window', '$q', function($window, $q) {
         return {
+            createPlan2: function(initializer) {
+                var segments = [];
+                var waypoints = [];
+                plan = {
+                    name: initializer,
+                    spanStart: null,
+                    spanEnd: null,
+                    //waypoints: [],
+                    getWaypoints: function() {
+                        return waypoints;
+                    },
+                    addWaypoints: function(newWaypoints) {
+                        waypoints = newWaypoints;
+                    },
+                    getNexus: function() {
+                        return nexus;
+                    }
+                };
+                if (_.isObject(initializer)) {
+                    plan.name = initializer.name;
+                    waypoints = initializer.waypoints;
+                }
+                return plan;
+            },
+            createWaypoint: function(agency, stopId) {
+                return {
+                    agency: agency,
+                    stopId: stopId
+                };
+            },
             createPlan: function(spanStart, spanEnd) {
                 if (spanStart === undefined || spanEnd === undefined) {
                     throw new Error('createPlan: must specify time span');

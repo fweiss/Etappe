@@ -2,11 +2,13 @@ describe('plan domain', function() {
     const spanStart = new Date('22 Feb 2013 13:00'); //('2013-02-22T13:00');
     const spanEnd = new Date('22 Feb 2013 14:00'); //('2013-02-22T14:00');
     var Plan;
+    var Waypoint;
     var PlanFolder;
     beforeEach(module('plan'));
-    beforeEach(inject(function(_plan_, _planFolder_) {
+    beforeEach(inject(function(_plan_, _planFolder_, nexus) {
         Plan = _plan_;
         PlanFolder = _planFolder_;
+        Waypoint = nexus
     }));
     describe('create', function() {
         var e1 = new Error('createPlan: must specify time span');
@@ -18,6 +20,29 @@ describe('plan domain', function() {
             expect(plan.spanStart).toBe(spanStart);
             expect(plan.spanEnd).toBe(spanEnd);
             expect(plan.getSegments().length).toBe(0);
+        });
+    });
+    // spans are optional part of creation
+    describe('create2', function() {
+        var plan;
+        beforeEach(function() {
+            plan = Plan.createPlan2('test plan');
+        });
+        it('should create empty plan', function() {
+            expect(plan.spanStart).toBeFalsy();
+            expect(plan.spanEnd).toBeFalsy();
+            expect(plan.getWaypoints().length).toBe(0);
+        });
+        it('should add waypoints', function() {
+            var waypoint1 = Waypoint.create('way1', 20, 30);
+            var waypoint2 = Waypoint.create('way2', 21, 31);
+            plan.addWaypoints([ waypoint1, waypoint2 ]);
+            expect(plan.getWaypoints().length).toBe(2);
+        });
+        it('should hydrate from data object', function() {
+            plan = Plan.createPlan2({ name: 'a name', waypoints: [ { name: 'waypoint1' }] });
+            expect(plan.name).toBe('a name');
+            expect(plan.getWaypoints().length).toBe(1);
         });
     });
     describe('segments', function() {

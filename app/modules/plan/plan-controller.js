@@ -6,12 +6,25 @@ angular.module('carrier', [ 'agencies', 'plan' ])
     })
     .controller('Trip', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', function($scope, chart, SfMuni, Plan, PlanFolder, alert) {
         $scope.showSavedPlans = function() {
-            $scope.savedPlans = [ { id: 1, name: 'get Cliffs', waypoints: [ { name: 'Mission St' }, { name: 'Castro St' }] } ];
+            $scope.savedPlans = PlanFolder.list();
         }
-        $scope.selectSavedPlan = function(plan) {
+        $scope.selectSavedPlanx = function(planData) {
             $scope.currentPlan = plan;
             showSavedRides(plan);
-        }
+        };
+        $scope.selectSavedPlan = function(planData) {
+            $scope.currentPlan = planData;
+            var plan = Plan.createPlan2(planData);
+            var waypoints = plan.getWaypoints();
+            var originStops = waypoints[0].stops;
+            var destinationStops = waypoints[1].stops;
+            var segment = { originStops: originStops, destinationStops: destinationStops };
+            SfMuni.getRidesForSegment(segment).then(function(response) {
+                var rides = response.data;
+                $scope.rideList = rides;
+                $scope.routes = '33 Ashbury'; //response.routes;
+            });
+        };
         $scope.disableOrigin = true;
         $scope.disableDestination = true;
         $scope.carriers = [
@@ -108,15 +121,27 @@ angular.module('carrier', [ 'agencies', 'plan' ])
 
         }
         function showSavedRides(plan) {
-            var originStops = [{"stopId":"15553","stopTag":"5553","route":"33"},{"stopId":"13338","stopTag":"3338","route":"33"}];
-            var destinationStops = [{"stopId":"13326","stopTag":"3326","route":"33"},{"stopId":"13325","stopTag":"3325","route":"33"}];
+            var waypoints = plan.waypoints;
+            //var originStops = [{"stopId":"15553","stopTag":"5553","route":"33"},{"stopId":"13338","stopTag":"3338","route":"33"}];
+            //var destinationStops = [{"stopId":"13326","stopTag":"3326","route":"33"},{"stopId":"13325","stopTag":"3325","route":"33"}];
             var now = new Date();
+            var originStops = waypoints[0].stops;
+            var destinationStops = waypoints[1].stops;
             var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
             var segment = { originStops: originStops, destinationStops: destinationStops };
+            console.log('getting rides: ' + plan.name);
             SfMuni.getRidesForSegment(segment).then(function(response) {
+                console.log('got rides: ');
                 var rides = response.data;
-                var plan = Plan.createPlan(now, then);
-                plan.addSegment('Mission St', 'Castro St', rides);
+                console.log('got rides: ' + rides);
+                try {
+                    var plan = Plan.createPlan(now, then);
+                }
+                catch(e) {
+                    console.log('err: ' + e)
+                }
+                console.log($scope);
+                plan.addSegment(waypoints[0].name, waypoints[1].name, rides);
                 $scope.plan = plan;
                 $scope.rideList = rides.length;
             }, function(fail) { $scope.rideList = fail; });

@@ -25,7 +25,7 @@ describe('sfmuni', function() {
         rootScope = $rootScope;
     }));
     describe('parser', function() {
-        it('should special characters', function () {
+        it('should accept special characters', function () {
             var xml = '<body><route><stop title="16th & Potrero"></stop><direction><stop></stop></direction></route></body>';
             mockBackend('routeConfig', 55, xml);
             SfMuni.getStopsForRoute('55').then(function (response) {
@@ -145,11 +145,11 @@ describe('sfmuni', function() {
         beforeEach(function() {
             now = new Date();
             epochMilliSeconds = now.getTime();
-            xmlOrigin = '<body><predictions><direction routeTag="55">'
+            xmlOrigin = '<body><predictions><direction routeTag="55" routeTitle="foo">'
                 + prediction(2356, 11, '6596789')
                 + prediction(4444, 22, '6596789')
                 + '</direction></predictions></body>';
-            xmlDestination = '<body><predictions><direction routeTag="55">'
+            xmlDestination = '<body><predictions><direction routeTag="55" routeTitle="foo">'
                 + prediction(2356, 22, '6596789')
                 + prediction(2357, 33, '6596789')
                 + '</direction></predictions></body>';
@@ -222,6 +222,11 @@ describe('sfmuni', function() {
                     expect(ride0.vehicle).toBe('2356');
                 });
                 httpBackend.flush();
+            });
+            it('should error for no stops', function() {
+                expect(function() {
+                    SfMuni.getRidesForSegment({originStops: [  ], destinationStops: [ ]})
+                }).toThrow(new Error('segment does not specify any stops'));
             });
             it('should get a ride for multi stops', function() {
                 var originXml = '<body><predictions routeCode="N"><direction>' + prediction('4444', 0, '44444') + '</direction></predictions></body>';

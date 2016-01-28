@@ -26,6 +26,16 @@ describe('plan builder', function() {
                 .value('config', { baseUrl: 'http://localhost:4545' });
         });
 
+        browser.addMockModule('plan.config', function() {
+            angular.module('plan.config', {})
+                .value('initSavedPlans', [
+                    { id: 1, name: 'get Cliffs', waypoints: [
+                        { name: 'Mission St', stops: [ { route: 'N', stopTag: '5555' } ] },
+                        { name: 'Castro St', stops: [ { route: 'N', stopTag: '4444' } ] } ]
+                    }
+                ]);
+        });
+
         browser.get('http://localhost:8080/app/index.html');
     });
     afterEach(function () {
@@ -168,6 +178,10 @@ describe('plan builder', function() {
             });
         });
         describe('selection', function() {
+            // wish we could just fail instead of having to check the log
+            afterEach(function() {
+                expect(element(by.css('#errors')).getText()).toBeFalsy();
+            });
             it('should make selection', function() {
                 element.all(by.css('#savedPlans li')).then(function(plans) {
                     var thePlan = plans[0];
@@ -175,7 +189,10 @@ describe('plan builder', function() {
                         expect(thePlan.getAttribute('class')).toMatch(/selected/);
                         expect(element(by.binding('currentPlan')).getText()).toMatch(/get Cliffs/);
                         // TODO sync up mock saved plans and mountebank backend
-                        //expect(element(by.binding('rideList')).getText()).toMatch(/33 Ashbury/);
+                        //browser.driver.sleep(1);
+                        //browser.waitForAngular();
+
+                        expect(element(by.binding('routes')).getText()).toMatch(/33 Ashbury/);
                     });
                 });
             });

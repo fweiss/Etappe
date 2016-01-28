@@ -54,6 +54,12 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 return buildResource('predictionsForMultiStops', multiPredictionsTransform)({stops: stopList});
             },
             getRidesForSegment: function (segment) {
+                function invalid(stops) {
+                    return _.isUndefined(stops) || ! (_.isObject( stops) && _.isArray(stops) && stops.length > 0);
+                }
+                if (invalid(segment.originStops) || invalid(segment.destinationStops)) {
+                    throw new Error('segment does not specify any stops');
+                }
                 var defer = $q.defer();
                 var origin = api.getPredictionsForMultiStops(segment.originStops);
                 var destination = api.getPredictionsForMultiStops(segment.destinationStops);
