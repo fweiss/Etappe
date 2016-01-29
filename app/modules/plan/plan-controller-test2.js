@@ -41,6 +41,8 @@ describe('plan controller', function() {
             $scope.selectSavedPlan(planData);
             $rootScope.$apply();
             expect($scope.rideList.length).toBe(2);
+            expect($scope.plan.spanEnd).toBeGreaterThan($scope.plan.spanStart)
+            expect($scope.plan.getSegment(0).rides.length).toBe(2);
         });
 
     });

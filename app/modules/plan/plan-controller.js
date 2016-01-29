@@ -19,8 +19,14 @@ angular.module('carrier', [ 'agencies', 'plan' ])
             var originStops = waypoints[0].stops;
             var destinationStops = waypoints[1].stops;
             var segment = { originStops: originStops, destinationStops: destinationStops };
+            var now = new Date();
+            var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+            plan.spanStart =  now;
+            plan.spanEnd = then;
             SfMuni.getRidesForSegment(segment).then(function(response) {
                 var rides = response.data;
+                plan.addSegment(waypoints[0].name, waypoints[1].name, rides);
+                $scope.plan = plan;
                 $scope.rideList = rides;
                 $scope.routes = '33 Ashbury'; //response.routes;
             });

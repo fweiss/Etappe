@@ -73,6 +73,21 @@ Y
                     },
                     getNexus: function() {
                         return nexus;
+                    },
+                    addSegment: function(origin, destination, rides) {
+                        if (! _.isString(origin) || _.isEmpty(origin)) {
+                            throw new Error('addSegment: must specify origin');
+                        }
+                        if (! _.isString(destination) || _.isEmpty(destination)) {
+                            throw new Error('addSegment: must specify destination');
+                        }
+                       segments.push({ origin: origin, destination: destination, rides: rides });
+                    },
+                    getSegment: function(index) {
+                        return segments[index];
+                    },
+                    getSegments: function() {
+                        return segments;
                     }
                 };
                 if (_.isObject(initializer)) {
