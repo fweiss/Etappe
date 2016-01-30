@@ -4,7 +4,7 @@ angular.module('carrier', [ 'agencies', 'plan' ])
             $window.alert(message);
         }
     })
-    .controller('Trip', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', function($scope, chart, SfMuni, Plan, PlanFolder, alert) {
+    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', function($scope, chart, SfMuni, Plan, PlanFolder, alert) {
         $scope.showSavedPlans = function() {
             $scope.savedPlans = PlanFolder.list();
         }

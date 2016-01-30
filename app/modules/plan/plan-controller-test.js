@@ -28,7 +28,7 @@ describe('plan controller', function() {
         scope = $rootScope.$new();
         Plan = plan;
         $httpBackend = $injector.get('$httpBackend');
-        $controller('Trip', { $scope: scope, plan: plan });
+        $controller('PlanController', { $scope: scope, plan: plan });
         requestHandler = $httpBackend.whenGET(new RegExp('.*'));
 //            .respond('<?xml version="1.0" encoding="utf-8"?><stations></stations>', { 'Content-type': 'text/xml'});
 
@@ -71,7 +71,7 @@ describe('plan controller', function() {
         }))
         it('should fetch on selected agency', function() {
             var $scope = {};
-            $controller('Trip', { $scope: $scope, plan: mockPlan });
+            $controller('PlanController', { $scope: $scope, plan: mockPlan });
             $scope.agency = 'sf-muni';
             $scope.agencySelected();
             //expect(mockPlan.fetchNexuses).toHaveBeenCalled();

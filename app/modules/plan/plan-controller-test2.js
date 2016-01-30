@@ -25,7 +25,7 @@ describe('plan controller', function() {
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ {}, {} ] }));
 
             var $scope = {};
-            var controller = $controller('Trip', { $scope: $scope, sfMuni: mockSfMuni });
+            var controller = $controller('PlanController', { $scope: $scope, sfMuni: mockSfMuni });
 
             var planData = { id: 1, name: 'get Cliffs', waypoints: [
                 { name: 'Mission St', stops: [{"stopId":"15553","stopTag":"5553","route":"33"},{"stopId":"13338","stopTag":"3338","route":"33"}] },
