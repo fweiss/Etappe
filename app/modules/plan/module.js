@@ -6,8 +6,7 @@ angular.module('plan.config', [])
         }
     ]);
 
-angular
-    .module('plan.canvas.config', [])
+angular.module('plan.canvas.config', [])
     .value('planConfig', function(key) {
         var defaults = {};
         defaults.tickLegendHeight = 26

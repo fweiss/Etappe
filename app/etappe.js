@@ -1,2 +1,2 @@
-angular.module('etappe', [ 'carrier', 'ngResource' ]);
+angular.module('etappe', [ 'carrier' ]);
 
