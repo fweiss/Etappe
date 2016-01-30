@@ -16,7 +16,7 @@ plan
   - origin
   - destination
   < ride
-    - agency
+    - carrier
     - vehicle
     - startTime
     - endTime

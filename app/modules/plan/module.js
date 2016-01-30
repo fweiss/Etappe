@@ -15,6 +15,6 @@ angular.module('plan.canvas.config', [])
     .constant('tickLegendHeight', 20)
     .value('nexusHeight', 30);
 
-angular.module('plan', [ 'plan.canvas.config', 'plan.config' ]);
+angular.module('plan', [ 'plan.canvas.config', 'plan.config', 'agencies' ]);
 
 

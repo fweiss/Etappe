@@ -6,7 +6,7 @@ describe('plan controller', function() {
     var $q;
 
     // oddly, the Trip controller is loaded in the carrier module
-    beforeEach(module('carrier'));
+    beforeEach(module('plan'));
     beforeEach(inject(function(_$controller_, plan, nexus, _$rootScope_, _$q_) {
         $controller = _$controller_;
         Plan = plan;

@@ -4,7 +4,7 @@ describe('plan controller', function() {
     var scope;
     var Plan;
     var alertSpy;
-    beforeEach(module('carrier'));
+    beforeEach(module('plan'));
     beforeEach(function() {
         module(function($provide) {
             $provide.service('xplanFolder', function() {

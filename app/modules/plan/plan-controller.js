@@ -1,4 +1,4 @@
-angular.module('carrier', [ 'agencies', 'plan' ])
+angular.module('plan')
     .factory('alert', function($window) {
         return function(message) {
             $window.alert(message);

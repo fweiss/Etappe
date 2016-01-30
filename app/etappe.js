@@ -1,2 +1,2 @@
-angular.module('etappe', [ 'carrier' ]);
+angular.module('etappe', [ 'plan', 'agencies' ]);
 
