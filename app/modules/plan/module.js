@@ -17,4 +17,15 @@ angular.module('plan.canvas.config', [])
 
 angular.module('plan', [ 'plan.canvas.config', 'plan.config', 'agencies' ]);
 
+angular.module('plan')
+    // handle angular exceptions so that protractor can verify there are none
+    .config(function($provide) {
+        $provide.decorator('$exceptionHandler', function($delegate, $injector) {
+            return function(exception, cause) {
+                var $rootScope = $injector.get('$rootScope');
+                $rootScope.error = exception.message;
+                $delegate(exception, cause);
+            };
+        });
+    })
 
