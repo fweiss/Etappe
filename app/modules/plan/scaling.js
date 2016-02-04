@@ -13,13 +13,13 @@ angular.module('plan')
                     throw new Error('chart: scale not initialized');
                 }
                 if (time === undefined || startDate === undefined) {
-                    throw new Error("invalid parameter: " + (time === undefined ? 'time' : 'startTime'));
+                    throw new Error("chart: invalid parameter: " + (time === undefined ? 'time' : 'startTime'));
                 }
                 return Math.floor(chartWidth * (time.getTime() - startDate.getTime()) / timeSpanSeconds);
             },
             setTimeSpan: function(start, end) {
                 if (start >= end) {
-                    throw "end must be greater than start";
+                    throw "chart: end must be greater than start";
                 };
                 startDate = start;
                 endDate = end;

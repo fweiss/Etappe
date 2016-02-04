@@ -13,7 +13,7 @@ describe('nexus domain', function() {
             expect(nexus.constructor.name).toBe('Nexus');
         });
         it('should have canonical name', function() {
-            expect(nexus.getCanonicalName() ).toBe('abc');
+            expect(nexus.getName() ).toBe('abc');
         });
         it('should have lat', function() {
             expect(nexus.getLat()).toBe(15);
@@ -28,17 +28,17 @@ describe('nexus domain', function() {
             it('should require name', function() {
                 expect(function() {
                     NexusService.create();
-                }).toThrow(new Error('name is required'));
+                }).toThrow(new Error('Waypoint.create: name is required'));
             });
             it('should require lat', function() {
                 expect(function() {
                     NexusService.create('abc');
-                }).toThrow(new Error('lat is required'));
+                }).toThrow(new Error('Waypoint.create: lat is required'));
             });
             it('should require lon', function() {
                 expect(function() {
                     NexusService.create('abc', 15);
-                }).toThrow(new Error('lon is required'));
+                }).toThrow(new Error('Waypoint.create: lon is required'));
             });
         });
     });
@@ -70,7 +70,7 @@ describe('nexus domain', function() {
                     expect(nexus.stops.length).toBe(2);
                 });
                 it('should have merged name', function() {
-                    expect(nexus.getCanonicalName()).toBe('16th St & Mission St');
+                    expect(nexus.getName()).toBe('16th St & Mission St');
                 });
                 describe('first stop info', function() {
                     var stop;

@@ -1,16 +1,35 @@
 angular.module('plan')
-    .service('plan', [ '$window', '$q', function($window, $q) {
+    .service('plan', [ '$q', function($q) {
         return {
-            createPlan2: function(initializer) {
+            createPlan: function(initializer) {
+                var name = initializer;
+                var spanStart = null;
+                var spanEnd = null;
                 var segments = [];
                 var waypoints = [];
                 plan = {
-                    name: initializer,
-                    spanStart: null,
-                    spanEnd: null,
+                    getName: function() {
+                        return name;
+                    },
+                    setSpan: function(start, end) {
+                        if (start === undefined || end === undefined) {
+                            throw new Error('setSpan(): must specify time span');
+                        }
+                        if ( ! (start < end)) {
+                            throw new Error('setSpan(): must specify start < end');
+                        }
+                        spanStart = start;
+                        spanEnd = end;
+                    },
+                    getSpan: function() {
+                        return { spanStart: spanStart, spanEnd: spanEnd };
+                    },
                     //waypoints: [],
                     getWaypoints: function() {
                         return waypoints;
+                    },
+                    addWaypoint: function(waypoint) {
+                        waypoints.push(waypoint);
                     },
                     addWaypoints: function(newWaypoints) {
                         waypoints = newWaypoints;
@@ -32,10 +51,21 @@ angular.module('plan')
                     },
                     getSegments: function() {
                         return segments;
+                    },
+                    getSegments2: function() {
+                        if (waypoints.length < 2) {
+                            throw new Error('getSegments(): needs at least 2 waypoints');
+                        }
+                        var segments = [];
+                        _.reduce(waypoints, function(previousWaypoint, waypoint) {
+                            segments.push({ origin: previousWaypoint.getName(), destination: waypoint.getName(), rides: []});
+                            return waypoint;
+                        });
+                        return segments;
                     }
                 };
                 if (_.isObject(initializer)) {
-                    plan.name = initializer.name;
+                    name = initializer.name;
                     waypoints = initializer.waypoints;
                 }
                 return plan;
@@ -46,7 +76,7 @@ angular.module('plan')
                     stopId: stopId
                 };
             },
-            createPlan: function(spanStart, spanEnd) {
+            xcreatePlan: function(spanStart, spanEnd) {
                 if (spanStart === undefined || spanEnd === undefined) {
                     throw new Error('createPlan: must specify time span');
                 }

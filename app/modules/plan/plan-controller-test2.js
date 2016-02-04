@@ -15,6 +15,8 @@ describe('plan controller', function() {
         $q = _$q_;
     }));
 
+
+
     describe('saved plan', function() {
         var mockSfMuni;
         beforeEach(function() {
@@ -31,7 +33,7 @@ describe('plan controller', function() {
                 { name: 'Mission St', stops: [{"stopId":"15553","stopTag":"5553","route":"33"},{"stopId":"13338","stopTag":"3338","route":"33"}] },
                 { name: 'Castro St', stops: [{"stopId":"13326","stopTag":"3326","route":"33"},{"stopId":"13325","stopTag":"3325","route":"33"}] }]
             };
-            var plan = Plan.createPlan2(planData);
+            var plan = Plan.createPlan(planData);
             //var w1 = Waypoint.create('Mission St', 20, 30);
             //w1.stops = [{"stopId":"15553","stopTag":"5553","route":"33"},{"stopId":"13338","stopTag":"3338","route":"33"}];
             //var w2 = Waypoint.create('Castro St', 21, 31);
@@ -41,7 +43,7 @@ describe('plan controller', function() {
             $scope.selectSavedPlan(planData);
             $rootScope.$apply();
             expect($scope.rideList.length).toBe(2);
-            expect($scope.plan.spanEnd).toBeGreaterThan($scope.plan.spanStart)
+            expect($scope.plan.getSpan().spanEnd).toBeGreaterThan($scope.plan.getSpan().spanStart)
             expect($scope.plan.getSegment(0).rides.length).toBe(2);
         });
 

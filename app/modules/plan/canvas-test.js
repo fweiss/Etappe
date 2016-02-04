@@ -20,6 +20,11 @@ describe('plan canvas', function() {
     function addMinutes(date, minutes) {
         return new Date(date.getTime() + minutes * 60000);
     }
+    function createPlanWithSpan(spanStart, spanEnd) {
+        var plan = Plan.createPlan('test');
+        plan.setSpan(spanStart, spanEnd);
+        return plan;
+    }
     function mockCanvasContext(width, height) {
         var html = '<canvas utt-rides width="' + width + '" height="' + height + '"></canvas>';
         element = angular.element(html);
@@ -53,7 +58,7 @@ describe('plan canvas', function() {
             tickLegendHeight = planConfig('tickLegendHeight');
         });
         it('should draw background', function() {
-            var plan = Plan.createPlan(spanStart, spanEnd);
+            var plan = createPlanWithSpan(spanStart, spanEnd);
             setPlanAndApply(plan);
             expect(mockContext.fillRect).toHaveBeenCalledWith(0, tickLegendHeight, canvasWidth, canvasHeight);
         });
@@ -61,7 +66,7 @@ describe('plan canvas', function() {
             var rideStart = addMinutes(spanStart, 10);
             var rideEnd = addMinutes(spanStart, 20);
 
-            var plan = Plan.createPlan(spanStart, spanEnd);
+            var plan = createPlanWithSpan(spanStart, spanEnd);
             var ride = Plan.createRide(rideStart, rideEnd);
             plan.addSegment('abc', 'def', [ ride ]);
 
@@ -74,7 +79,7 @@ describe('plan canvas', function() {
             var rideEnd0 = addMinutes(spanStart, 21);
             var rideStart1 = addMinutes(spanStart, 31);
             var rideEnd1 = addMinutes(spanStart, 43);
-            var plan = Plan.createPlan(spanStart, spanEnd);
+            var plan = createPlanWithSpan(spanStart, spanEnd);
             var ride0 = Plan.createRide(rideStart0, rideEnd0);
             var ride1 = Plan.createRide(rideStart1, rideEnd1);
             plan.addSegment('abc', 'def', [ ride0, ride1 ]);
@@ -86,7 +91,7 @@ describe('plan canvas', function() {
         });
         describe('time ticks', function() {
             it('should draw a tick', function() {
-                var plan = Plan.createPlan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
+                var plan = createPlanWithSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
                 setPlanAndApply(plan);
                 // 5 minute span 600 px 4/5 of 600 = 480
                 var x = 4 / 5 * 600;
@@ -96,32 +101,32 @@ describe('plan canvas', function() {
                 expect(mockContext.stroke).toHaveBeenCalled();
             });
             it('should draw all ticks for span', function() {
-                var plan = Plan.createPlan(spanStart, addMinutes(spanStart, 60));
+                var plan = createPlanWithSpan(spanStart, addMinutes(spanStart, 60));
                 setPlanAndApply(plan);
                 expect(mockContext.moveTo.calls.count()).toBe(12);
             });
             // can't spy on strokeStyle property
             it('should draw minor tick', function() {
-                var plan = Plan.createPlan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
+                var plan = createPlanWithSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
                 setPlanAndApply(plan);
                 expect(mockContext.strokeStyle).toBe('rgba(0, 0, 0, 0.1)');
             });
             it('should draw major tick', function() {
-                var plan = Plan.createPlan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
+                var plan = createPlanWithSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
                 setPlanAndApply(plan);
                 expect(mockContext.strokeStyle).toBe('rgba(0, 0, 0, 0.5)');
             });
         });
         describe('tick labels', function() {
             it('should draw at 15 minute mark', function() {
-                var plan = Plan.createPlan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
+                var plan = createPlanWithSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
                 setPlanAndApply(plan);
                 expect(mockContext.fillText).toHaveBeenCalledWith('1:15 PM', 452, 10);
             });
         });
         describe('nexus', function() {
             it('should draw top label', function() {
-                var plan = Plan.createPlan(spanStart, spanEnd);
+                var plan = createPlanWithSpan(spanStart, spanEnd);
                 plan.addSegment('abc', 'def', []);
                 setPlanAndApply(plan);
                 // FIXME actual position
@@ -134,7 +139,7 @@ describe('plan canvas', function() {
     describe('1200 x 200', function() {
         it('should have ticks for entire length', function() {
             mockCanvasContext(1200, 200);
-            var plan = Plan.createPlan(spanStart, addMinutes(spanStart, 60));
+            var plan = createPlanWithSpan(spanStart, addMinutes(spanStart, 60));
             setPlanAndApply(plan);
             // there should be 12 ticks in 60 minute span
             expect(mockContext.moveTo.calls.count()).toBe(12);

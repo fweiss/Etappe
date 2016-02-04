@@ -4,7 +4,8 @@ angular.module('plan')
             $window.alert(message);
         }
     })
-    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', function($scope, chart, SfMuni, Plan, PlanFolder, alert) {
+    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', 'nexus', function($scope, chart, SfMuni, Plan, PlanFolder, alert, Waypoint) {
+        //$scope.originStationSelect = null;
         $scope.showSavedPlans = function() {
             $scope.savedPlans = PlanFolder.list();
         }
@@ -14,15 +15,16 @@ angular.module('plan')
         };
         $scope.selectSavedPlan = function(planData) {
             $scope.currentPlan = planData;
-            var plan = Plan.createPlan2(planData);
+            var plan = Plan.createPlan(planData);
             var waypoints = plan.getWaypoints();
             var originStops = waypoints[0].stops;
             var destinationStops = waypoints[1].stops;
             var segment = { originStops: originStops, destinationStops: destinationStops };
             var now = new Date();
             var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-            plan.spanStart =  now;
-            plan.spanEnd = then;
+            //plan.spanStart =  now;
+            //plan.spanEnd = then;
+            plan.setSpan(now, then);
             SfMuni.getRidesForSegment(segment).then(function(response) {
                 var rides = response.data;
                 plan.addSegment(waypoints[0].name, waypoints[1].name, rides);
@@ -65,6 +67,7 @@ angular.module('plan')
         };
             // deprecated
         function changePlan() {
+            console.log('hereh');
             if ($scope.originStationSelect && $scope.destinationStationSelect) {
                 var originStop = $scope.originStationSelect.stopId; // 13293
                 var destinationStop = $scope.destinationStationSelect.stopId; // 17324
@@ -96,7 +99,7 @@ angular.module('plan')
                 var restoredPlan = PlanFolder.load($scope.planRestoreName);
                 //$scope.originNexus = restoredPlan.segments[0].origin;
                 $scope.destinationNexus = '';
-                var segments = restoredPlan.getSegments();
+                var segments = restoredPlan.getSegments2();
                 $scope.nexusStart = segments[0].origin;
                 $scope.nexusEnd = segments[0].destination;
                 //$scope.plan = restoredPlan;
@@ -111,15 +114,21 @@ angular.module('plan')
                 var destinationStops = $scope.destinationNexusSelect.stops;
                 var now = new Date();
                 var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-                var segment = { originStops: originStops, destinationStops: destinationStops };
+                var plan = Plan.createPlan('cplan');
+                var w1 = Waypoint.create($scope.originNexusSelect.name, 21, 31); // originStops
+                plan.addWaypoint(w1);
+                var w2 = Waypoint.create($scope.destinationNexusSelect.name, 22, 33);
+                plan.addWaypoint(w2); // destinationStops);
+                var segment = plan.getSegments2()[0];
+                $scope.plan = plan;
                 SfMuni.getRidesForSegment(segment).then(function(response) {
                     var rides = response.data;
                     //var plan =  { spanStart: now, spanEnd: then,
                     //    rides: rides
                     //};
-                    var plan = Plan.createPlan(now, then);
-                    plan.addSegment($scope.originNexusSelect.name, $scope.destinationNexusSelect.name, rides);
-                    $scope.plan = plan;
+                    //var plan = Plan.createPlan(now, then);
+                    //plan.addSegment($scope.originNexusSelect.name, $scope.destinationNexusSelect.name, rides);
+                    segment.rides = rides;
                     $scope.rideList = rides.length;
                 }, function(fail) { $scope.rideList = fail; });
 

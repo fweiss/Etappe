@@ -10,7 +10,7 @@ describe('plan scaling', function() {
 
     beforeEach(module('plan'));
     describe('configuration', function () {
-        var e1 = 'end must be greater than start';
+        var e1 = 'chart: end must be greater than start';
         it('should reject bad times', inject(function (chart) {
             expect(function () {
                 chart.setTimeSpan(1, 0);
@@ -24,7 +24,7 @@ describe('plan scaling', function() {
     });
     describe('error exceptions', function () {
         var e1 = 'chart: scale not initialized';
-        var e2 = 'invalid parameter: time';
+        var e2 = 'chart: invalid parameter: time';
         it('should detect no initialization', inject(function (chart) {
             expect(function () {
                 chart.timeToX(0);

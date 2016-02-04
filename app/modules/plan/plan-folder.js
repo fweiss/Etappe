@@ -3,7 +3,7 @@
  * Also mediates between a stored plan and an domain plan object.
  */
 angular.module('plan')
-    .service('planFolder', [ 'plan', 'initSavedPlans', '$window', function(Plan, initSavedPlans, $window) {
+    .service('planFolder', [ 'plan', 'initSavedPlans', '$window', 'nexus', function(Plan, initSavedPlans, $window, Waypoint) {
         return {
             list: function() {
                 return initSavedPlans;
@@ -17,10 +17,12 @@ angular.module('plan')
                 }
                 try {
                     var storedPlan = {
-                        name: name,
+                        //name: name,
+                        name: plan.getName(),
                         spanStart: new Date(plan.spanStart),
                         spanEnd: new Date(plan.spanEnd),
-                        nexus: plan.getNexus()
+                        waypoints: plan.getWaypoints()
+                        //nexus: plan.getNexus()
                     };
                 }
                 catch (e) {
@@ -37,8 +39,14 @@ angular.module('plan')
                     throw 'no stored plan found: "' + planName + '"';
                 }
                 var storedPlan = JSON.parse(data);
-                var plan = Plan.createPlan(new Date(storedPlan.spanStart), new Date(storedPlan.spanEnd));
-                plan.addSegment(storedPlan.nexus[0], storedPlan.nexus[1], []);
+                //var plan = Plan.createPlan(new Date(storedPlan.spanStart), new Date(storedPlan.spanEnd));
+                var plan = Plan.createPlan(storedPlan.name);
+                //plan.addSegment(storedPlan.nexus[0], storedPlan.nexus[1], []);
+                //plan.addSegment('a', 'b', []);
+                _.each(storedPlan.waypoints, function(wp) {
+                    var waypoint = Waypoint.create(wp.name, wp.lat, wp.lon);
+                    plan.addWaypoint(waypoint);
+                });
                 return plan;
             }
 

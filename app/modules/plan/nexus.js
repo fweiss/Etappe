@@ -1,12 +1,12 @@
 angular.module('plan')
     .service('nexus', function() {
-        function Nexus(canonicalName, lat, lon) {
-            this.canonicalName = canonicalName;
+        function Nexus(name, lat, lon) {
+            this.name = name;
             this.lat = lat;
             this.lon = lon;
             this.stops = [];
-            this.getCanonicalName = function() {
-                return this.canonicalName
+            this.getName = function() {
+                return this.name
             };
             this.getLat = function() {
                 return this.lat;
@@ -22,13 +22,13 @@ angular.module('plan')
             nexuses: [],
             create: function(name, lat, lon) {
                 if (_.isUndefined(name)) {
-                    throw new Error('name is required');
+                    throw new Error('Waypoint.create: name is required');
                 }
                 if (_.isUndefined(lat)) {
-                    throw new Error('lat is required');
+                    throw new Error('Waypoint.create: lat is required');
                 }
                 if (_.isUndefined(lon)) {
-                    throw new Error('lon is required');
+                    throw new Error('Waypoint.create: lon is required');
                 }
                 return new Nexus(name, lat, lon );
             },

@@ -27,14 +27,15 @@ angular.module('plan')
                 chart.setWidth(width);
                 scope.$watch('plan', function(plan) {
                     if (plan) {
-                        chart.setTimeSpan(plan.spanStart, plan.spanEnd);
+                        var span = plan.getSpan();
+                        chart.setTimeSpan(span.spanStart, span.spanEnd);
                         clearCanvas(element[0]);
                         var ctx = element[0].getContext('2d');
                         ctx.save();
 
                         ctx.fillStyle = '#7f7fff';
                         ctx.fillRect(0, tickLegendHeight, width, height);
-                        drawTimeTickMajor(ctx, plan.spanStart, plan.spanEnd);
+                        drawTimeTickMajor(ctx, span.spanStart, span.spanEnd);
 
                         //var rides = plan.rides;
                         //var rides = plan.rides || (plan.segments && plan.segments[0]);
