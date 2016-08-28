@@ -109,7 +109,7 @@ describe('plan builder', function() {
                  var alertDialog = browser.switchTo().alert();
                  expect(alertDialog.getText()).toEqual("cannot restore plan: invalid plan name: expected non-empty string");
              });
-             it('should save and restore plan', function() {
+             xit('should save and restore plan', function() {
                  element(by.model('planSaveName')).sendKeys('gggg');
                  element(by.css('#planSave')).click();
                  // something is displayed

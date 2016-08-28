@@ -57,12 +57,12 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 function invalid(stops) {
                     return _.isUndefined(stops) || ! (_.isObject( stops) && _.isArray(stops) && stops.length > 0);
                 }
-                if (invalid(segment.originStops) || invalid(segment.destinationStops)) {
+                if (invalid(segment.originWaypoint.stops) || invalid(segment.destinationWaypoint.stops)) {
                     throw new Error('segment does not specify any stops');
                 }
                 var defer = $q.defer();
-                var origin = api.getPredictionsForMultiStops(segment.originStops);
-                var destination = api.getPredictionsForMultiStops(segment.destinationStops);
+                var origin = api.getPredictionsForMultiStops(segment.originWaypoint.stops);
+                var destination = api.getPredictionsForMultiStops(segment.destinationWaypoint.stops);
                 $q.all([origin, destination]).then(function (responses) {
                     var originPredictions = responses[0].data;
                     var destinationPredictions = responses[1].data;

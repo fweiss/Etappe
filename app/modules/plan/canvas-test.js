@@ -70,6 +70,15 @@ describe('plan canvas', function() {
             var ride = Plan.createRide(rideStart, rideEnd);
             plan.addSegment('abc', 'def', [ ride ]);
 
+            // var plan = Plan.create('name');
+            // var w1 = Waypoint.create();
+            // plan.addWaypoint(w1);
+            // plan.addWaypiint(w2);
+            // var itinerary = Itinerary.create(plan);
+            // var ride = Itinerary.createRide();
+            // itninerary.createSegments(function(segment) { return [ ride ]; }).then()
+            // setItineraryAndApply(itinerary)
+
             setPlanAndApply(plan);
             expect(mockContext.moveTo).toHaveBeenCalledWith(100, 0);
             expect(mockContext.lineTo).toHaveBeenCalledWith(200, canvasHeight);

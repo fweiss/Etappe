@@ -4,7 +4,7 @@ angular.module('plan')
             $window.alert(message);
         }
     })
-    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', 'nexus', function($scope, chart, SfMuni, Plan, PlanFolder, alert, Waypoint) {
+    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', 'nexus', 'itinerary', function($scope, chart, SfMuni, Plan, PlanFolder, alert, Waypoint, Itinerary) {
         //$scope.originStationSelect = null;
         $scope.showSavedPlans = function() {
             $scope.savedPlans = PlanFolder.list();
@@ -19,7 +19,8 @@ angular.module('plan')
             var waypoints = plan.getWaypoints();
             var originStops = waypoints[0].stops;
             var destinationStops = waypoints[1].stops;
-            var segment = { originStops: originStops, destinationStops: destinationStops };
+            //var segment = { originStops: originStops, destinationStops: destinationStops };
+            var segment = { originWaypoint: waypoints[0],  destinationWaypoint: waypoints[1], rides: [] };
             var now = new Date();
             var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
             //plan.spanStart =  now;
@@ -100,8 +101,10 @@ angular.module('plan')
                 //$scope.originNexus = restoredPlan.segments[0].origin;
                 $scope.destinationNexus = '';
                 var segments = restoredPlan.getSegments2();
-                $scope.nexusStart = segments[0].origin;
-                $scope.nexusEnd = segments[0].destination;
+                //$scope.nexusStart = segments[0].origin;
+                //$scope.nexusEnd = segments[0].destination;
+                $scope.nexusStart = segments[0].originWaypoint;
+                $scope.nexusEnd = segments[0].destinationWaypoint;
                 //$scope.plan = restoredPlan;
             }
             catch (e) {
@@ -115,12 +118,20 @@ angular.module('plan')
                 var now = new Date();
                 var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
                 var plan = Plan.createPlan('cplan');
+                plan.setSpan(now, then);
                 var w1 = Waypoint.create($scope.originNexusSelect.name, 21, 31); // originStops
+                _.each(originStops, function(stop) {
+                    w1.addStop(stop);
+                });
                 plan.addWaypoint(w1);
                 var w2 = Waypoint.create($scope.destinationNexusSelect.name, 22, 33);
+                _.each(destinationStops, function(stop) {
+                    w2.addStop(stop);
+                });
                 plan.addWaypoint(w2); // destinationStops);
                 var segment = plan.getSegments2()[0];
                 $scope.plan = plan;
+                $scope.itinerary = Itinerary.create(plan);
                 SfMuni.getRidesForSegment(segment).then(function(response) {
                     var rides = response.data;
                     //var plan =  { spanStart: now, spanEnd: then,
@@ -129,6 +140,7 @@ angular.module('plan')
                     //var plan = Plan.createPlan(now, then);
                     //plan.addSegment($scope.originNexusSelect.name, $scope.destinationNexusSelect.name, rides);
                     segment.rides = rides;
+                    $scope.itinerary.getSegments()[0].rides = rides.rides;
                     $scope.rideList = rides.length;
                 }, function(fail) { $scope.rideList = fail; });
 

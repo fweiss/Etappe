@@ -225,7 +225,7 @@ describe('sfmuni', function() {
             });
             it('should error for no stops', function() {
                 expect(function() {
-                    SfMuni.getRidesForSegment({originStops: [  ], destinationStops: [ ]})
+                    SfMuni.getRidesForSegment({originWaypoint: { name: 'w1', stops: [  ]}, destinationWaypoint: { name: 'w2', stops: [ ]}});
                 }).toThrow(new Error('segment does not specify any stops'));
             });
             it('should get a ride for multi stops', function() {
@@ -233,7 +233,7 @@ describe('sfmuni', function() {
                 var destinationXml = '<body><predictions routeCode="N"><direction>' + prediction('4444', 10, '44444') + '</direction></predictions></body>';
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C2222').respond(originXml);
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C3333').respond(destinationXml);
-                var segment = { originStops: [ { route: 'N', stopTag: '2222' }], destinationStops: [ { route: 'N', stopTag: '3333' }]};
+                var segment = { originWaypoint: { name: 'w1', stops: [ { route: 'N', stopTag: '2222' }]}, destinationWaypoint: { name: 'w2', stops: [ { route: 'N', stopTag: '3333' }]}};
                 SfMuni.getRidesForSegment(segment).then(function(response) {
                     var rides = response.data;
                     expect(rides.length).toBe(1);

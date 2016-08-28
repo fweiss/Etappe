@@ -4,11 +4,13 @@ describe('plan domain', function() {
     var Plan;
     var Waypoint;
     var PlanFolder;
+    var Itinerary;
     beforeEach(module('plan'));
-    beforeEach(inject(function(_plan_, _planFolder_, nexus) {
+    beforeEach(inject(function(_plan_, _planFolder_, nexus, itinerary) {
         Plan = _plan_;
         PlanFolder = _planFolder_;
         Waypoint = nexus;
+        Itinerary = itinerary;
     }));
     xdescribe('create', function() {
         var e1 = new Error('createPlan: must specify time span');
@@ -145,10 +147,20 @@ describe('plan domain', function() {
                 plan.addWaypoint(Waypoint.create('w2', 21, 31));
                 plan.addWaypoint(Waypoint.create('w3', 22, 31));
                 var segments = plan.getSegments2();
-                expect(segments[0].origin).toBe('w1');
-                expect(segments[0].destination).toBe('w2');
-                expect(segments[1].origin).toBe('w2');
-                expect(segments[1].destination).toBe('w3');
+                expect(segments[0].originWaypoint.name).toBe('w1');
+                expect(segments[0].destinationWaypoint.name).toBe('w2');
+                expect(segments[1].originWaypoint.name).toBe('w2');
+                expect(segments[1].destinationWaypoint.name).toBe('w3');
+            });
+            it('should have stops', function() {
+                var w1 = Waypoint.create('w1', 20, 30);
+                w1.addStop({ name: 'stop1' });
+                plan.addWaypoint(w1);
+                var w2 = Waypoint.create('w2', 21, 31);
+                plan.addWaypoint(w2);
+                var segments = plan.getSegments2();
+                var segment0 = segments[0];
+                expect(segment0.originWaypoint.stops.length).toBe(1);
             });
         });
     });
@@ -217,4 +229,56 @@ describe('plan domain', function() {
             expect(function () { PlanFolder.load('invalid'); }).toThrow(e1);
         });
     });
+
+    describe('itinerary domain', function() {
+        var plan;
+        var w1;
+        var w2;
+        var w3;
+        beforeEach(function() {
+            plan = Plan.createPlan('iplan');
+            w1 = Waypoint.create('w1', 21, 31);
+            w2 = Waypoint.create('w2', 22, 32);
+            w3 = Waypoint.create('w2', 23, 33);
+        });
+        describe('create', function() {
+            describe('validation', function() {
+                var e1 = new Error('Itinerary.create: plan is required');
+                var e2 = new Error('Itinerary.create: plan must have at least two waypoints');
+                it('should require plan', function() {
+                    expect(function() { Itinerary.create(); }).toThrow(e1);
+                });
+                it('should require two or more waypoints', function() {
+                    expect(function() { Itinerary.create(plan)}).toThrow(e2);
+                });
+            });
+            it('should have plan', function() {
+                plan.addWaypoint(w1);
+                plan.addWaypoint(w2);
+                var itinerary = Itinerary.create(plan);
+                expect(itinerary.getPlan()).toBe(plan);
+            });
+            // it cannot have zero segments
+            it('should have one segment for two waypoints', function() {
+                plan.addWaypoint(w1);
+                plan.addWaypoint(w2);
+                var itinerary = Itinerary.create(plan);
+                expect(itinerary.getSegments().length).toBe(1);
+            });
+            it('should have two segments for three waypoints', function() {
+                plan.addWaypoint(w1);
+                plan.addWaypoint(w2);
+                plan.addWaypoint(w3);
+                var itinerary = Itinerary.create(plan);
+                expect(itinerary.getSegments().length).toBe(2);
+            });
+            it('should have segment with empty rides', function() {
+                plan.addWaypoint(w1);
+                plan.addWaypoint(w2);
+                var itinerary = Itinerary.create(plan);
+                expect(itinerary.getSegments()[0].rides.length).toBe(0);
+            });
+        });
+    });
 });
+

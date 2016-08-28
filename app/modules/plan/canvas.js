@@ -28,6 +28,9 @@ angular.module('plan')
                 scope.$watch('plan', function(plan) {
                     if (plan) {
                         var span = plan.getSpan();
+                        var segment = plan.getSegments() && plan.getSegments()[0];
+                        var rides = (segment && segment.rides) || [];
+
                         chart.setTimeSpan(span.spanStart, span.spanEnd);
                         clearCanvas(element[0]);
                         var ctx = element[0].getContext('2d');
@@ -37,10 +40,6 @@ angular.module('plan')
                         ctx.fillRect(0, tickLegendHeight, width, height);
                         drawTimeTickMajor(ctx, span.spanStart, span.spanEnd);
 
-                        //var rides = plan.rides;
-                        //var rides = plan.rides || (plan.segments && plan.segments[0]);
-                        var segment = plan.getSegments() && plan.getSegments()[0];
-                        var rides = (segment && segment.rides) || [];
                         _.each(rides, function(ride) {
                             var startTime = ride.startTime;
                             var endTime = ride.endTime;

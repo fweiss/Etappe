@@ -5,6 +5,27 @@ angular.module('plan')
             this.lat = lat;
             this.lon = lon;
             this.stops = [];
+        }
+        Nexus.prototype.getName = function() {
+            return this.name;
+        };
+        Nexus.prototype.getLat = function() {
+            return this.lat;
+        };
+        Nexus.prototype.getLon = function() {
+            return this.lon;
+        };
+        Nexus.prototype.addStop = function(stop) {
+            this.stops.push(stop);
+        };
+        Nexus.prototype.getStops = function() {
+            return this.stops;
+        };
+        function xNexus(name, lat, lon) {
+            this.name = name;
+            this.lat = lat;
+            this.lon = lon;
+            this.stops = [];
             this.getName = function() {
                 return this.name
             };
@@ -13,6 +34,9 @@ angular.module('plan')
             };
             this.getLon = function() {
                 return this.lon;
+            };
+            this.addStop = function(stop) {
+                this.stops.push(stop);
             };
             this.getStops = function() {
                 return this.stops;

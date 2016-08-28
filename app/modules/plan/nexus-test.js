@@ -41,6 +41,12 @@ describe('nexus domain', function() {
                 }).toThrow(new Error('Waypoint.create: lon is required'));
             });
         });
+        describe('stops', function() {
+            it('should add one', function() {
+                nexus.addStop({ name: 's1' });
+                expect(nexus.getStops().length).toBe(1);
+            });
+        });
     });
     describe('merge', function() {
         // route 33 <stop tag="3292" title="16th St & Mission St" lat="37.76502" lon="-122.41928" stopId="13292"/>
