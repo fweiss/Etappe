@@ -27,6 +27,19 @@ describe('domain trip', function() {
         it('has no initial inner waypoints', function() {
             expect(trip.getInnerWaypoints()).toEqual([]);
         });
+        describe('name', function() {
+            it('has generated name', function() {
+                expect(trip.getName()).toMatch('Trip1')
+;           });
+            it('has unique generated name', function() {
+                var trip2 = Trip.createTrip('o', 'd');
+                expect(trip.getName()).not.toEqual(trip2.getName());
+            });
+            it('can set name', function() {
+                trip.setName('another trip');
+                expect(trip.getName()).toEqual('another trip');
+            });
+        });
     });
     describe('waypoints', function() {
         var trip;

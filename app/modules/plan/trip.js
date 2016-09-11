@@ -1,7 +1,9 @@
 angular.module('plan')
     .service('trip', [ function() {
+        var nameSerial = 1;
         return {
             createTrip: function (origin, destination) {
+                var name = 'Trip' + (nameSerial++);
                 var waypoints = [];
                 if (! origin) {
                     throw new Error('createTrip: must specify origin');
@@ -10,6 +12,12 @@ angular.module('plan')
                     throw new Error('createTrip: must specify destination');
                 }
                 return {
+                    getName: function() {
+                        return name;
+                    },
+                    setName: function(newName) {
+                        name = newName;
+                    },
                     getOrigin: function() {
                         return origin;
                     },
