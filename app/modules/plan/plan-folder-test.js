@@ -3,14 +3,16 @@ describe('plan folder', function() {
     var PlanFolder;
     var localStorage;
     var Waypoint;
+    var Trip;
     var savedPlan = '{ "name": "another", "waypoints": [ { "name": "w1", "lat": 21, "lon": 45 }, { "name": "w2", "lat": 31, "lon": 45 } ]}';
 
     beforeEach(module('plan'));
-    beforeEach(inject(function(_plan_, _planFolder_, $window, nexus) {
+    beforeEach(inject(function(_plan_, _planFolder_, $window, nexus, _trip_) {
         Plan = _plan_;
         PlanFolder = _planFolder_;
         localStorage = $window.localStorage;
         Waypoint = nexus;
+        Trip = _trip_;
     }));
     describe('store', function() {
         beforeEach(function() {
