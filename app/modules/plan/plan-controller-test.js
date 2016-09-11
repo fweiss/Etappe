@@ -78,7 +78,7 @@ describe('plan controller', function() {
             // add waypoints doesn't create segments
             plan.addSegment('w1', 'w2', []);
             scope.plan = plan;
-            scope.itinerary = Itinerary.create(plan);
+            scope.itinerary = Itinerary.createItinerary(plan);
             var ride = { startTime: 1, endTime: 2, agency: 'a', vehicle: 'v' }
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: { rides: [ ride ] } }));
             scope.ridesRefresh2();

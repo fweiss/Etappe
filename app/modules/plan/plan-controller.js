@@ -32,7 +32,7 @@ angular.module('plan')
             // but $scope.itinerary is really the domain object
             // plan is not supposed to have rides
             // also the getRidesPerSegment is called other places, and should be centralized
-            $scope.itinerary = Itinerary.create(plan);
+            $scope.itinerary = Itinerary.createItinerary(plan);
 
             SfMuni.getRidesForSegment(segment).then(function(response) {
                 var rides = response.data;
@@ -145,7 +145,7 @@ angular.module('plan')
                 var segment = plan.getSegments2()[0];
                 $scope.plan = plan;
                 // Itinerary is in plan.js
-                itinerary = Itinerary.create(plan);
+                itinerary = Itinerary.createItinerary(plan);
                 $scope.itinerary = itinerary.getSegments();
                 refreshRides(segment, itinerary);
             }
