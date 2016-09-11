@@ -5,6 +5,7 @@ angular.module('plan')
         }
     })
     .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', 'nexus', 'itinerary', function($scope, chart, SfMuni, Plan, PlanFolder, alert, Waypoint, Itinerary) {
+
         //$scope.originStationSelect = null;
         $scope.showSavedPlans = function() {
             $scope.savedPlans = PlanFolder.list();
@@ -26,10 +27,18 @@ angular.module('plan')
             //plan.spanStart =  now;
             //plan.spanEnd = then;
             plan.setSpan(now, then);
+
+            // $scope.plan is watched by canvas
+            // but $scope.itinerary is really the domain object
+            // plan is not supposed to have rides
+            // also the getRidesPerSegment is called other places, and should be centralized
+            $scope.itinerary = Itinerary.create(plan);
+
             SfMuni.getRidesForSegment(segment).then(function(response) {
                 var rides = response.data;
                 plan.addSegment(waypoints[0].name, waypoints[1].name, rides);
                 $scope.plan = plan;
+                //setPlanFromItinerary(Itinerary.create(plan));
                 $scope.rideList = rides;
                 $scope.routes = '33 Ashbury'; //response.routes;
             });
@@ -91,6 +100,9 @@ angular.module('plan')
         $scope.ridesRefresh = function() {
             changeNexus();
         }
+        $scope.ridesRefresh2 = function() {
+            refreshRides($scope.itinerary.getSegments()[0], $scope.itinerary);
+        }
         $scope.planSave = function() {
             var planName = $scope.planSaveName;
             PlanFolder.store($scope.plan, planName);
@@ -118,6 +130,7 @@ angular.module('plan')
                 var now = new Date();
                 var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
                 var plan = Plan.createPlan('cplan');
+                var itinerary;
                 plan.setSpan(now, then);
                 var w1 = Waypoint.create($scope.originNexusSelect.name, 21, 31); // originStops
                 _.each(originStops, function(stop) {
@@ -131,21 +144,28 @@ angular.module('plan')
                 plan.addWaypoint(w2); // destinationStops);
                 var segment = plan.getSegments2()[0];
                 $scope.plan = plan;
-                $scope.itinerary = Itinerary.create(plan);
-                SfMuni.getRidesForSegment(segment).then(function(response) {
-                    var rides = response.data;
-                    //var plan =  { spanStart: now, spanEnd: then,
-                    //    rides: rides
-                    //};
-                    //var plan = Plan.createPlan(now, then);
-                    //plan.addSegment($scope.originNexusSelect.name, $scope.destinationNexusSelect.name, rides);
-                    segment.rides = rides;
-                    $scope.itinerary.getSegments()[0].rides = rides.rides;
-                    $scope.rideList = rides.length;
-                }, function(fail) { $scope.rideList = fail; });
-
+                // Itinerary is in plan.js
+                itinerary = Itinerary.create(plan);
+                $scope.itinerary = itinerary.getSegments();
+                refreshRides(segment, itinerary);
             }
-
+        }
+        function refreshRides(segment, itinerary) {
+            SfMuni.getRidesForSegment(segment).then(function(response) {
+                var rides = response.data;
+                //var plan =  { spanStart: now, spanEnd: then,
+                //    rides: rides
+                //};
+                //var plan = Plan.createPlan(now, then);
+                //plan.addSegment($scope.originNexusSelect.name, $scope.destinationNexusSelect.name, rides);
+                segment.rides = rides;
+                itinerary.getSegments()[0].rides = rides.rides;
+                //console.log( $scope.plan.getSegments());
+                if ($scope.plan.getSegments()[0]) {
+                    $scope.plan.getSegments()[0].rides = rides.rides;
+                }
+                $scope.rideList = rides.length;
+            }, function(fail) { $scope.rideList = fail; });
         }
         function showSavedRides(plan) {
             var waypoints = plan.waypoints;

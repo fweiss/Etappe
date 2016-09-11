@@ -45,6 +45,8 @@ describe('plan controller', function() {
             expect($scope.rideList.length).toBe(2);
             expect($scope.plan.getSpan().spanEnd).toBeGreaterThan($scope.plan.getSpan().spanStart)
             expect($scope.plan.getSegment(0).rides.length).toBe(2);
+
+            expect($scope.itinerary).toBeTruthy();
         });
 
     });

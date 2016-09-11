@@ -49,14 +49,16 @@
                 </tr>
                 </tbody>
             </table>
-            <div ng-bind="rideList"></div>
-            <div ng-bind="routes"></div>
-            <div ng-bind="itinerary"></div>
+            <div class="debug">
+                <div ng-bind="rideList"></div>
+                <div ng-bind="routes"></div>
+                <div ng-bind="itinerary"></div>
+            </div>
             <div>
                 <button id="planSave" ng-click="planSave()">save</button>
                 <input type="text" ng-model="planSaveName"/>
             </div>
-            <div><button ng-click="ridesRefresh()">Refresh</button></div>
+            <div><button ng-click="ridesRefresh2()">Refresh</button></div>
             <div>
                 <button id="planRestore" ng-click="planRestore()">Restore</button>
                 <input type="text" ng-model="planRestoreName"/>

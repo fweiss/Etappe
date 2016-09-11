@@ -7,6 +7,7 @@ describe('plan controller', function() {
     var alertSpy;
     var mockSfMuni;
     var $q;
+    var Itinerary;
 
     beforeEach(module('plan'));
     beforeEach(function() {
@@ -28,10 +29,11 @@ describe('plan controller', function() {
             $provide.value('alert', alertSpy);
         });
     });
-    beforeEach(inject(function($rootScope, $injector, $controller, plan, nexus, _$q_) {
+    beforeEach(inject(function($rootScope, $injector, $controller, plan, nexus, itinerary,  _$q_) {
         scope = $rootScope.$new();
         Plan = plan;
         Waypoint = nexus;
+        Itinerary = itinerary;
         $httpBackend = $injector.get('$httpBackend');
         $q = _$q_;
         mockSfMuni = jasmine.createSpyObj('mockSfMuni', [ 'getRidesForSegment' ]);
@@ -69,10 +71,25 @@ describe('plan controller', function() {
             var segments = scope.plan.getSegments2();
             expect(segments.length).toBe(1);
             //expect(segments[0].rides.length).toBe(1);
-
+        });
+        it('should update itinerary on rides refresh', function() {
+            var plan = Plan.createPlan();
+            plan.addWaypoints([ Waypoint.create('w1', 21, 31), Waypoint.create('w2', 22, 32) ]);
+            // add waypoints doesn't create segments
+            plan.addSegment('w1', 'w2', []);
+            scope.plan = plan;
+            scope.itinerary = Itinerary.create(plan);
+            var ride = { startTime: 1, endTime: 2, agency: 'a', vehicle: 'v' }
+            mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: { rides: [ ride ] } }));
+            scope.ridesRefresh2();
+            scope.$digest();
             expect(scope.itinerary).toBeTruthy();
             expect(scope.itinerary.getSegments().length).toBe(1);
             expect(scope.itinerary.getSegments()[0].rides.length).toBe(1);
+            expect(scope.itinerary.getSegments()[0].rides[0].startTime).toBe(1);
+
+            // legacy plan segment rides
+            expect(scope.plan.getSegments()[0].rides[0].startTime).toEqual(1);
         });
     });
     describe('restore', function() {
