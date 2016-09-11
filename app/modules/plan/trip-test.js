@@ -1,4 +1,4 @@
-describe('trip', function() {
+describe('domain trip', function() {
     var Trip;
     beforeEach(module('plan'));
     beforeEach(inject(function(_trip_) {

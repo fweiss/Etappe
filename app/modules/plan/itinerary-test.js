@@ -1,4 +1,4 @@
-describe('itinerary', function() {
+describe('domain itinerary', function() {
     var Itinerary;
     var Plan;
     var Waypoint;

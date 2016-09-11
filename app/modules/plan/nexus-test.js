@@ -1,4 +1,4 @@
-describe('nexus domain', function() {
+describe('domain nexus', function() {
     var NexusService;
     beforeEach(module('plan'));
     beforeEach(inject(function(nexus) {
