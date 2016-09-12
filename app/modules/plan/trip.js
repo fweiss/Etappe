@@ -25,8 +25,9 @@ angular.module('plan')
                         return destination;
                     },
                     getInnerWaypoints: function() {
+                        // _.clone does not preserve type
                         return _.map(waypoints, _.clone);
-                    },
+                     },
                     setInnerWaypoints: function(list) {
                         waypoints = list;
                     }

@@ -1,15 +1,16 @@
 describe('domain trip', function() {
     var Trip;
+    var Waypoint;
     beforeEach(module('plan'));
-    beforeEach(inject(function(_trip_) {
+    beforeEach(inject(function(_trip_, _waypoint_) {
         Trip = _trip_;
+        Waypoint = _waypoint_;
     }));
     describe('creation', function() {
         var trip;
         beforeEach(function() {
             trip = Trip.createTrip('o', 'd');
         });
-        it
         it('error if origin not given', function() {
             var e1 = new Error('createTrip: must specify origin');
             expect(function() { Trip.createTrip(); }).toThrow(e1);
@@ -60,6 +61,12 @@ describe('domain trip', function() {
             trip.setInnerWaypoints([ 'w1' ]);
             trip.getInnerWaypoints()[0] = 'x1';
             expect(trip.getInnerWaypoints()[0]).toEqual('w1');
+        });
+        xit('type preserved by getter', function() {
+            trip.setInnerWaypoints([ Waypoint.createWaypoint('w', 1, 2)]);
+            var waypoint = trip.getInnerWaypoints()[0];
+            console.log(waypoint);
+            expect(waypoint.constructor.name).toEqual('Waypoint');
         });
     });
 });
