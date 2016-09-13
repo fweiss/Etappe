@@ -11,7 +11,15 @@ describe('trip folder', function() {
     describe('deserialize', function() {
         var trip;
         beforeEach(function() {
-            var data = { tripName: 'trip1', origin: 'o', destination: 'd', waypoints: [ { waypointName: 'mission', lat: 1, lon: 2, stops: [] } ] };
+            var origin = { waypointName: 'origin', lat: 1, lon: 2, stops: [] };
+            var destination = { waypointName: 'destination', lat: 1, lon: 3, stops: [] };
+            var inner = { waypointName: 'mission', lat: 1, lon: 4, stops: [] };
+            var data = {
+                tripName: 'trip1',
+                origin: origin,
+                destination: destination,
+                waypoints: [
+                    inner ] };
             trip = TripFolder.deserialize(data);
         });
         it('error on parsing', function() {
@@ -23,10 +31,10 @@ describe('trip folder', function() {
             expect(trip.getName()).toEqual('trip1');
         });
         it('origin', function() {
-            expect(trip.getOrigin()).toEqual('o');
+            expect(trip.getOrigin().getName()).toEqual('origin');
         });
         it('destination', function() {
-            expect(trip.getDestination()).toEqual('d');
+            expect(trip.getDestination().getName()).toEqual('destination');
         });
         describe('waypoint', function() {
             var waypoint;
@@ -46,7 +54,7 @@ describe('trip folder', function() {
                 expect(waypoint.getLat()).toEqual(1);
             });
             it('has lon', function() {
-                expect(waypoint.getLon()).toEqual(2);
+                expect(waypoint.getLon()).toEqual(4);
             });
         });
     });
