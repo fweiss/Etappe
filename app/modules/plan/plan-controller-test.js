@@ -3,6 +3,7 @@ describe('plan controller', function() {
     var requestHandler;
     var scope;
     var Plan;
+    var Trip;
     var Waypoint;
     var alertSpy;
     var mockSfMuni;
@@ -29,10 +30,12 @@ describe('plan controller', function() {
             $provide.value('alert', alertSpy);
         });
     });
-    beforeEach(inject(function($rootScope, $injector, $controller, plan, nexus, itinerary,  _$q_) {
+    beforeEach(inject(function($rootScope, $injector, $controller, plan, nexus, itinerary,  _waypoint_, _trip_, _$q_) {
         scope = $rootScope.$new();
         Plan = plan;
+        Trip = _trip_;
         Waypoint = nexus;
+        Waypoint2 = _waypoint_;
         Itinerary = itinerary;
         $httpBackend = $injector.get('$httpBackend');
         $q = _$q_;
@@ -117,6 +120,14 @@ describe('plan controller', function() {
             expect(scope.nexusEnd.name).toBe('w2');
         });
     });
+    fdescribe('itinerary', function() {
+        it('show selected trip', function() {
+            var w1 = Waypoint2.createWaypoint('w1', 1, 2);
+            var w2 = Waypoint2.createWaypoint('w2', 2, 3);
+            var trip = Trip.createTrip(w1, w2);
+            //var itinerary = Itinerary.createItinerary(w1, w2);
+        });
+    });
     describe('nexus', function() {
         var $controller;
         var mockPlan;
@@ -138,4 +149,5 @@ describe('plan controller', function() {
             expect($scope.originNexuses.length).toBeGreaterThan(0);
         });
     });
+
 });
