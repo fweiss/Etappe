@@ -4,7 +4,7 @@ angular.module('plan')
             $window.alert(message);
         }
     })
-    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', 'nexus', 'itinerary', function($scope, chart, SfMuni, Plan, PlanFolder, alert, Waypoint, Itinerary) {
+    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', 'nexus', 'itinerary', 'trip', function($scope, chart, SfMuni, Plan, PlanFolder, alert, Waypoint, Itinerary, Trip) {
 
         //$scope.originStationSelect = null;
         $scope.showSavedPlans = function() {
@@ -32,7 +32,8 @@ angular.module('plan')
             // but $scope.itinerary is really the domain object
             // plan is not supposed to have rides
             // also the getRidesPerSegment is called other places, and should be centralized
-            $scope.itinerary = Itinerary.createItinerary(plan);
+            var trip = Trip.createTrip(plan.getWaypoints()[0], plan.getWaypoints()[1]);
+            $scope.itinerary = Itinerary.createItinerary(trip);
 
             SfMuni.getRidesForSegment(segment).then(function(response) {
                 var rides = response.data;
@@ -144,8 +145,10 @@ angular.module('plan')
                 plan.addWaypoint(w2); // destinationStops);
                 var segment = plan.getSegments2()[0];
                 $scope.plan = plan;
+
                 // Itinerary is in plan.js
-                itinerary = Itinerary.createItinerary(plan);
+                var trip = Trip.createTrip(w1, w2);
+                itinerary = Itinerary.createItinerary(trip);
                 $scope.itinerary = itinerary.getSegments();
                 refreshRides(segment, itinerary);
             }

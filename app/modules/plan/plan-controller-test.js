@@ -81,7 +81,9 @@ describe('plan controller', function() {
             // add waypoints doesn't create segments
             plan.addSegment('w1', 'w2', []);
             scope.plan = plan;
-            scope.itinerary = Itinerary.createItinerary(plan);
+
+            var trip = Trip.createTrip(Waypoint.create('w1', 21, 31), Waypoint.create('w2', 22, 32));
+            scope.itinerary = Itinerary.createItinerary(trip);
             var ride = { startTime: 1, endTime: 2, agency: 'a', vehicle: 'v' }
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: { rides: [ ride ] } }));
             scope.ridesRefresh2();
@@ -120,7 +122,7 @@ describe('plan controller', function() {
             expect(scope.nexusEnd.name).toBe('w2');
         });
     });
-    fdescribe('itinerary', function() {
+    describe('itinerary', function() {
         it('show selected trip', function() {
             var w1 = Waypoint2.createWaypoint('w1', 1, 2);
             var w2 = Waypoint2.createWaypoint('w2', 2, 3);
