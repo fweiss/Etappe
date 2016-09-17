@@ -122,12 +122,16 @@ describe('plan controller', function() {
             expect(scope.nexusEnd.name).toBe('w2');
         });
     });
-    describe('itinerary', function() {
-        it('show selected trip', function() {
+    describe('itinerary from trip', function() {
+        it('segment', function() {
             var w1 = Waypoint2.createWaypoint('w1', 1, 2);
             var w2 = Waypoint2.createWaypoint('w2', 2, 3);
             var trip = Trip.createTrip(w1, w2);
-            //var itinerary = Itinerary.createItinerary(w1, w2);
+            scope.makeItinerary(trip);
+            expect(scope.itinerary.getSegments().length).toEqual(1);
+            var segment0 = scope.itinerary.getSegments()[0];
+            expect(segment0.originWaypoint.getName()).toEqual('w1');
+            //expect(segment0.rides.length).toEqual(1);
         });
     });
     describe('nexus', function() {

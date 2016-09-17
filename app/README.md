@@ -34,3 +34,37 @@ orient temporally
 places
 saved trip
 
+trip[name, origin, destination, waypoints]
+waypoint[name, lat, lon]
+trip < leg
+leg[origin, destination]
+itinerary[start, end, trip]
+itinerary < segment
+segment[origin, destination]
+segment < ride
+ride[start, end, originStop, destinationStop, agency, route, vehicle]
+stop[name, agency, route, lat, lon]
+route[name, agency]
+route < stop
+route < segment
+system < agency < route < stop
+system < nexus
+nexus[waypoint]
+nexus < stop
+
+a system has a set of nexuses
+a nexus aggregates stops
+
+the segments of an itinerary match the legs of a trip
+a waypoint is roughly coincident with a stop
+a segment is part of both a route and an itinerary
+a leg is invariant within a trip (new trip to change legs)
+a segment is invariant within an itinerary
+a segment is invariant with a route (mostly)
+rides within an itinerary can be refreshed
+
+
+
+
+
+

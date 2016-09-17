@@ -6,6 +6,15 @@ angular.module('plan')
     })
     .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', 'nexus', 'itinerary', 'trip', function($scope, chart, SfMuni, Plan, PlanFolder, alert, Waypoint, Itinerary, Trip) {
 
+        $scope.makeItinerary = function(trip) {
+            var itinerary = Itinerary.createItinerary(trip);
+            var plan = Plan.createPlan(itinerary.getTrip().getName());
+            _.each(itinerary.getSegments(), function(segment) {
+                plan.addSegment(segment.originWaypoint.getName(), segment.destinationWaypoint.getName(), []);
+            });
+            $scope.itinerary = itinerary;
+            $scope.plan = plan;
+        };
         //$scope.originStationSelect = null;
         $scope.showSavedPlans = function() {
             $scope.savedPlans = PlanFolder.list();
