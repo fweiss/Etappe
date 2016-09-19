@@ -62,6 +62,10 @@ describe('domain trip', function() {
             trip.getInnerWaypoints()[0] = 'x1';
             expect(trip.getInnerWaypoints()[0]).toEqual('w1');
         });
+        it('has all', function() {
+            trip.setInnerWaypoints([ 'w1' ]);
+            expect(trip.getWaypoints().length).toEqual(3);
+        });
         xit('type preserved by getter', function() {
             trip.setInnerWaypoints([ Waypoint.createWaypoint('w', 1, 2)]);
             var waypoint = trip.getInnerWaypoints()[0];

@@ -9,6 +9,7 @@ describe('plan controller', function() {
     var mockSfMuni;
     var $q;
     var Itinerary;
+    var System;
 
     beforeEach(module('plan'));
     beforeEach(function() {
@@ -30,8 +31,9 @@ describe('plan controller', function() {
             $provide.value('alert', alertSpy);
         });
     });
-    beforeEach(inject(function($rootScope, $injector, $controller, plan, nexus, itinerary,  _waypoint_, _trip_, _$q_) {
+    beforeEach(inject(function($rootScope, $injector, $controller, plan, nexus, itinerary,  _waypoint_, _trip_, _$q_, _system_) {
         scope = $rootScope.$new();
+        System = _system_;
         Plan = plan;
         Trip = _trip_;
         Waypoint = nexus;
@@ -124,9 +126,13 @@ describe('plan controller', function() {
     });
     describe('itinerary from trip', function() {
         it('segment', function() {
+            System.mergeStop({ name: 's1', lat: 1, lon: 2 });
+            System.mergeStop({ name: 's2', lat: 2, lon: 3 });
+
             var w1 = Waypoint2.createWaypoint('w1', 1, 2);
             var w2 = Waypoint2.createWaypoint('w2', 2, 3);
             var trip = Trip.createTrip(w1, w2);
+
             scope.makeItinerary(trip);
             expect(scope.itinerary.getSegments().length).toEqual(1);
             var segment0 = scope.itinerary.getSegments()[0];

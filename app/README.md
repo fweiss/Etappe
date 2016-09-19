@@ -34,13 +34,13 @@ orient temporally
 places
 saved trip
 
-trip[name, origin, destination, waypoints]
+trip[name, originWaypoint, destinationWaypoint, waypoints]
 waypoint[name, lat, lon]
 trip < leg
-leg[origin, destination]
+leg[originWaypoint, destinationWaypoint]
 itinerary[start, end, trip]
 itinerary < segment
-segment[origin, destination]
+segment[originNexus, destinationNexus]
 segment < ride
 ride[start, end, originStop, destinationStop, agency, route, vehicle]
 stop[name, agency, route, lat, lon]

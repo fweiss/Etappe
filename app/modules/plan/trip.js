@@ -30,6 +30,9 @@ angular.module('plan')
                      },
                     setInnerWaypoints: function(list) {
                         waypoints = list;
+                    },
+                    getWaypoints: function() {
+                        return _.union([ origin ], waypoints, [ destination ]);
                     }
                 };
             }
