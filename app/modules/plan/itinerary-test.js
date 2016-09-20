@@ -29,6 +29,16 @@ describe('domain itinerary', function() {
             var itinerary = Itinerary.createItinerary(trip);
             expect(itinerary.getTrip()).toBe(trip);
         });
+        it('can create with segments', function() {
+            var segments = [ { originNexus: { name: 'n1' }, destinationNexus: {}, rides: [] }];
+            var itinerary = Itinerary.createItinerary(trip, segments);
+            expect(itinerary.getSegments()[0].originNexus.name).toEqual('n1');
+        });
+        it('error when trip waypoints do not match segments', function() {
+            var e1 = new Error('createItinerary: segments to not match trip waypoints');
+
+
+        });
     });
     describe('segments', function() {
         // it cannot have zero segments

@@ -137,7 +137,7 @@ describe('plan controller', function() {
             expect(scope.itinerary.getSegments().length).toEqual(1);
             var segment0 = scope.itinerary.getSegments()[0];
             expect(segment0.originWaypoint.getName()).toEqual('w1');
-            //expect(segment0.rides.length).toEqual(1);
+            expect(segment0.rides.length).toEqual(0);
         });
     });
     describe('nexus', function() {
