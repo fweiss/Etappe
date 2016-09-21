@@ -178,7 +178,7 @@ angular.module('plan')
             SfMuni.getRidesForSegment(segment).then(function(response) {
                 var rides = response.data;
                 segment.rides = rides;
-                itinerary.getSegments()[0].rides = rides.rides;
+                itinerary.getSegments()[0].rides = rides;
 
                 var now = new Date();
                 var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
