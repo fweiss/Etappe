@@ -7,7 +7,7 @@ angular.module('plan')
     .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', 'nexus', 'itinerary', 'trip', 'system',
         function($scope, chart, SfMuni, Plan, PlanFolder, alert, Waypoint, Itinerary, Trip, System) {
 
-        $scope.makeItinerary = function(trip) {
+        $scope.createItineraryFromTrip = function(trip) {
             var nexuses = _.map(trip.getWaypoints(), function(waypoint) {
                 return System.findNexus(waypoint);
             });
@@ -15,17 +15,19 @@ angular.module('plan')
             _.reduce(nexuses, function(origin, destination) {
                 segments.push({ originNexus: origin, destinationNexus: destination, rides: [] });
             });
-            Itinerary.createItinerary(trip, segments);
+            var itinerary = Itinerary.createItinerary(trip, segments);
 
-            var itinerary = Itinerary.createItinerary(trip);
-            var segments = itinerary.getSegments();
+            //var itinerary = Itinerary.createItinerary(trip);
+            //var segments = itinerary.getSegments();
             $scope.itinerary = itinerary;
-
+        };
+        $scope.createPlanFromItinerary = function(itinerary) {
             var plan = Plan.createPlan(itinerary.getTrip().getName());
             _.each(itinerary.getSegments(), function(segment) {
-                plan.addSegment(segment.originWaypoint.getName(), segment.destinationWaypoint.getName(), []);
+                plan.addSegment(segment.originNexus.getName(), segment.destinationNexus.getName(), []);
             });
             $scope.plan = plan;
+
         };
         //$scope.originStationSelect = null;
         $scope.showSavedPlans = function() {
@@ -36,8 +38,19 @@ angular.module('plan')
             showSavedRides(plan);
         };
         $scope.selectSavedPlan = function(planData) {
+            // $scope.plan is watched by canvas
+            // but $scope.itinerary is really the domain object
+            // plan is not supposed to have rides
+            // also the getRidesPerSegment is called other places, and should be centralized
+            console.log(planData);
             $scope.currentPlan = planData;
             var plan = Plan.createPlan(planData);
+            var trip = Trip.createTrip(plan.getWaypoints()[0], plan.getWaypoints()[1]);
+            $scope.itinerary = Itinerary.createItinerary(trip);
+            // needs System nexuses
+            //$scope.createItineraryFromTrip(trip);
+
+
             var waypoints = plan.getWaypoints();
             var originStops = waypoints[0].stops;
             var destinationStops = waypoints[1].stops;
@@ -49,12 +62,6 @@ angular.module('plan')
             //plan.spanEnd = then;
             plan.setSpan(now, then);
 
-            // $scope.plan is watched by canvas
-            // but $scope.itinerary is really the domain object
-            // plan is not supposed to have rides
-            // also the getRidesPerSegment is called other places, and should be centralized
-            var trip = Trip.createTrip(plan.getWaypoints()[0], plan.getWaypoints()[1]);
-            $scope.itinerary = Itinerary.createItinerary(trip);
 
             SfMuni.getRidesForSegment(segment).then(function(response) {
                 var rides = response.data;

@@ -134,11 +134,16 @@ describe('plan controller', function() {
             var w2 = Waypoint2.createWaypoint('w2', 2, 3);
             var trip = Trip.createTrip(w1, w2);
 
-            scope.makeItinerary(trip);
+            scope.createItineraryFromTrip(trip);
+
             expect(scope.itinerary.getSegments().length).toEqual(1);
             var segment0 = scope.itinerary.getSegments()[0];
-            expect(segment0.originWaypoint.getName()).toEqual('w1');
+            expect(segment0.originNexus.getName()).toEqual('s1');
             expect(segment0.rides.length).toEqual(0);
+
+            // strangle
+            scope.createPlanFromItinerary(scope.itinerary);
+            expect(scope.plan.getSegments().length).toEqual(1);
         });
     });
     describe('nexus', function() {
