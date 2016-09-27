@@ -42,7 +42,6 @@ angular.module('plan')
             // but $scope.itinerary is really the domain object
             // plan is not supposed to have rides
             // also the getRidesPerSegment is called other places, and should be centralized
-            console.log(planData);
             $scope.currentPlan = planData;
             var plan = Plan.createPlan(planData);
             var trip = Trip.createTrip(plan.getWaypoints()[0], plan.getWaypoints()[1]);

@@ -7,7 +7,7 @@ describe('domain stop', function() {
     describe('creation', function() {
         var stop;
         beforeEach(function() {
-            stop = Stop.createStop('a', 'r', 'id');
+            stop = Stop.createStop('a', 'r', 'id', 20, 30);
         });
         it('error if no agency given', function() {
             var e1 = new Error('createStop: must specify agency');
@@ -21,6 +21,14 @@ describe('domain stop', function() {
             var e1 = new Error('createStop: must specify stop id');
             expect(function() { Stop.createStop('muni', 'masonic'); }).toThrow(e1);
         });
+        it('error if no lat given', function() {
+            var e1 = new Error('createStop: must specify lat');
+            expect(function() { Stop.createStop('muni', 'masnonc', '4931'); }).toThrow(e1);
+        });
+        it('error if no lon given', function() {
+            var e1 = new Error('createStop: must specify lon');
+            expect(function() { Stop.createStop('muni', 'masnonc', '4931', 1); }).toThrow(e1);
+        });
         it('has initial agency', function() {
             expect(stop.getAgency()).toEqual('a');
         });
@@ -29,6 +37,12 @@ describe('domain stop', function() {
         });
         it('has initial stop id', function() {
             expect(stop.getStopId()).toEqual('id');
+        });
+        it('has initial lat', function() {
+            expect(stop.getLat()).toEqual(20);
+        });
+        it('has initial lon', function() {
+            expect(stop.getLon()).toEqual(30);
         });
     });
 });

@@ -42,7 +42,7 @@ describe('trip folder', function() {
                 waypoint = trip.getInnerWaypoints()[0];
             });
             xit('it is a Waypoint', function() {
-                console.log(waypoint.constructor.name);
+                //console.log(waypoint.constructor.name);
                 //expect(waypoint).toBeInstanceOf('Waypoint');
                 //expect(waypoint).toEqual(jasmine.any(Waypoint.type()));
                 expect(waypoint.constructor.name).toEqual('Waypoint');
