@@ -10,6 +10,7 @@ describe('plan controller', function() {
     var $q;
     var Itinerary;
     var System;
+    var Stop;
 
     beforeEach(module('plan'));
     beforeEach(function() {
@@ -31,7 +32,7 @@ describe('plan controller', function() {
             $provide.value('alert', alertSpy);
         });
     });
-    beforeEach(inject(function($rootScope, $injector, $controller, plan, nexus, itinerary,  _waypoint_, _trip_, _$q_, _system_) {
+    beforeEach(inject(function($rootScope, $injector, $controller, plan, nexus, itinerary,  _waypoint_, _trip_, _$q_, _system_, _stop_) {
         scope = $rootScope.$new();
         System = _system_;
         Plan = plan;
@@ -39,6 +40,7 @@ describe('plan controller', function() {
         Waypoint = nexus;
         Waypoint2 = _waypoint_;
         Itinerary = itinerary;
+        Stop = _stop_;
         $httpBackend = $injector.get('$httpBackend');
         $q = _$q_;
         mockSfMuni = jasmine.createSpyObj('mockSfMuni', [ 'getRidesForSegment' ]);
@@ -127,8 +129,10 @@ describe('plan controller', function() {
     });
     describe('itinerary from trip', function() {
         it('segment', function() {
-            System.mergeStop({ name: 's1', lat: 1, lon: 2 });
-            System.mergeStop({ name: 's2', lat: 2, lon: 3 });
+            //System.mergeStop({ name: 's1', lat: 1, lon: 2 });
+            //System.mergeStop({ name: 's2', lat: 2, lon: 3 });
+            System.mergeStop(Stop.createStop('s1', 'a', 'r', 'sid1', 1, 2 ));
+            System.mergeStop(Stop.createStop('s2', 'a', 'r', 'sid1', 2, 3 ));
 
             var w1 = Waypoint2.createWaypoint('w1', 1, 2);
             var w2 = Waypoint2.createWaypoint('w2', 2, 3);

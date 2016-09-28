@@ -21,27 +21,6 @@ angular.module('plan')
         Nexus.prototype.getStops = function() {
             return this.stops;
         };
-        function xNexus(name, lat, lon) {
-            this.name = name;
-            this.lat = lat;
-            this.lon = lon;
-            this.stops = [];
-            this.getName = function() {
-                return this.name
-            };
-            this.getLat = function() {
-                return this.lat;
-            };
-            this.getLon = function() {
-                return this.lon;
-            };
-            this.addStop = function(stop) {
-                this.stops.push(stop);
-            };
-            this.getStops = function() {
-                return this.stops;
-            };
-        }
         return {
             nexuses: [],
             create: function(name, lat, lon) {
@@ -57,9 +36,9 @@ angular.module('plan')
                 return new Nexus(name, lat, lon );
             },
             mergeStop: function(stop) {
-                var nearbyNexus = this.findNearbyNexus(stop.lat, stop.lon);
+                var nearbyNexus = this.findNearbyNexus(stop.getLat(), stop.getLon());
                 if (_.isUndefined(nearbyNexus)) {
-                    nearbyNexus = new Nexus(stop.name, stop.lat, stop.lon);
+                    nearbyNexus = new Nexus(stop.getName(), stop.getLat(), stop.getLon());
                     this.nexuses.push(nearbyNexus);
                 }
                 nearbyNexus.stops.push(stop);

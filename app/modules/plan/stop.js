@@ -1,14 +1,18 @@
 angular.module('plan')
     .service('stop', function() {
-        function Stop(agency, route, stopId, lat, lon) {
-            this.agency = agency;
+        function Stop(name, agencyId, route, stopId, lat, lon) {
+            this.name = name;
+            this.agencyId = agencyId;
             this.route = route;
             this.stopId = stopId;
             this.lat = lat;
             this.lon = lon;
         }
-        Stop.prototype.getAgency = function() {
-            return this.agency;
+        Stop.prototype.getName = function() {
+            return this.name;
+        };
+        Stop.prototype.getAgencyId = function() {
+            return this.agencyId;
         };
         Stop.prototype.getRoute = function() {
             return this.route;
@@ -23,9 +27,12 @@ angular.module('plan')
             return this.lon;
         };
         return {
-            createStop: function(agency, route, stopId, lat, lon) {
-                if (! agency) {
-                    throw new Error('createStop: must specify agency');
+            createStop: function(name, agencyId, route, stopId, lat, lon) {
+                if (! name) {
+                    throw new Error('createStop: must specify name');
+                }
+                if (! agencyId) {
+                    throw new Error('createStop: must specify agency id');
                 }
                 if (! route) {
                     throw new Error('createStop: must specify route');
@@ -39,7 +46,7 @@ angular.module('plan')
                 if (! lon) {
                     throw new Error('createStop: must specify lon');
                 }
-                return new Stop(agency, route, stopId, lat, lon);
+                return new Stop(name, agencyId, route, stopId, lat, lon);
             }
         };
     });

@@ -7,30 +7,37 @@ describe('domain stop', function() {
     describe('creation', function() {
         var stop;
         beforeEach(function() {
-            stop = Stop.createStop('a', 'r', 'id', 20, 30);
+            stop = Stop.createStop('stop', 'a', 'r', 'id', 20, 30);
+        });
+        it('error if no name given', function() {
+            var e1 = new Error('createStop: must specify name');
+            expect(function() { Stop.createStop(); }).toThrow(e1);
         });
         it('error if no agency given', function() {
-            var e1 = new Error('createStop: must specify agency');
-            expect(function() { Stop.createStop(); }).toThrow(e1);
+            var e1 = new Error('createStop: must specify agency id');
+            expect(function() { Stop.createStop('A & B'); }).toThrow(e1);
         });
         it('error if no route given', function() {
             var e1 = new Error('createStop: must specify route');
-            expect(function() { Stop.createStop('muni'); }).toThrow(e1);
+            expect(function() { Stop.createStop('A & B', 'muni'); }).toThrow(e1);
         });
         it('error if no stop id given', function() {
             var e1 = new Error('createStop: must specify stop id');
-            expect(function() { Stop.createStop('muni', 'masonic'); }).toThrow(e1);
+            expect(function() { Stop.createStop('A & B', 'muni', 'masonic'); }).toThrow(e1);
         });
         it('error if no lat given', function() {
             var e1 = new Error('createStop: must specify lat');
-            expect(function() { Stop.createStop('muni', 'masnonc', '4931'); }).toThrow(e1);
+            expect(function() { Stop.createStop('A & B', 'muni', 'masnonc', '4931'); }).toThrow(e1);
         });
         it('error if no lon given', function() {
             var e1 = new Error('createStop: must specify lon');
-            expect(function() { Stop.createStop('muni', 'masnonc', '4931', 1); }).toThrow(e1);
+            expect(function() { Stop.createStop('A & B', 'muni', 'masnonc', '4931', 1); }).toThrow(e1);
         });
-        it('has initial agency', function() {
-            expect(stop.getAgency()).toEqual('a');
+        it('has initial name', function() {
+            expect(stop.getName()).toEqual('stop');
+        });
+        it('has initial agency id', function() {
+            expect(stop.getAgencyId()).toEqual('a');
         });
         it('has initial route', function() {
             expect(stop.getRoute()).toEqual('r');

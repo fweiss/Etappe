@@ -1,10 +1,12 @@
 describe('domain system', function() {
     var System;
     var Waypoint;
+    var Stop;
     beforeEach(module('plan'));
-    beforeEach(inject(function(_system_, _waypoint_) {
+    beforeEach(inject(function(_system_, _waypoint_, _stop_) {
         System = _system_;
         Waypoint = _waypoint_;
+        Stop = _stop_;
     }));
     describe('initialized', function() {
         it('has no agencies', function() {
@@ -22,7 +24,7 @@ describe('domain system', function() {
     describe('nexuses', function() {
         describe('find', function() {
             beforeEach(function() {
-                var stop = { name: 's1', lat: 1, lon: 2 };
+                var stop = Stop.createStop('s1', 'a', 'r', 'id', 1, 2);
                 System.mergeStop(stop);
             });
             it('error on nexus not found', function() {

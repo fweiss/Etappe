@@ -1,8 +1,10 @@
 describe('domain nexus', function() {
     var NexusService;
+    var Stop;
     beforeEach(module('plan'));
-    beforeEach(inject(function(nexus) {
+    beforeEach(inject(function(nexus, stop) {
         NexusService = nexus;
+        Stop = stop;
     }));
     describe('create', function() {
         var nexus;
@@ -60,8 +62,8 @@ describe('domain nexus', function() {
         describe('nearby stops', function() {
             var nexuses;
             beforeEach(function() {
-                NexusService.mergeStop({ agencyId: 'sd-muni', id: '7890', name: '16th St & Mission St', lat: 37.76502, lon: -122.41928 });
-                NexusService.mergeStop({ name: '16th St & Mission St', lat: 37.7651399, lon: -122.4196 });
+                NexusService.mergeStop(Stop.createStop('16th St & Mission St', 'sd-muni', 'K', '7890', 37.76502, -122.41928));
+                NexusService.mergeStop(Stop.createStop('16th St & Mission St', 'a', 'r', 's', 37.7651399, -122.4196));
                 nexuses = NexusService.getMergedNexuses();
             });
             it('should count 1 nexus', function() {
@@ -84,10 +86,10 @@ describe('domain nexus', function() {
                         stop = nexus.stops[0];
                     });
                     it('should have agency id', function() {
-                        expect(stop.agencyId).toBe('sd-muni');
+                        expect(stop.getAgencyId()).toBe('sd-muni');
                     });
                     it('should have stop id', function() {
-                        expect(stop.id).toBe('7890');
+                        expect(stop.getStopId()).toBe('7890');
                     });
                 });
             });
@@ -95,8 +97,8 @@ describe('domain nexus', function() {
        describe('other stops', function() {
            var nexuses;
            beforeEach(function() {
-               NexusService.mergeStop({  name: '16th St & Mission St', lat: 37.76502, lon: -122.41928 });
-               NexusService.mergeStop({ name: '3rd St & Gene Friend Wy', lat: 37.7695599, lon: -122.3892999 });
+               NexusService.mergeStop(Stop.createStop('16th St & Mission St', 'a', 'r', 's1', 37.76502, -122.41928));
+               NexusService.mergeStop(Stop.createStop('3rd St & Gene Friend Wy', 'a', 'r', 's2', 37.7695599, -122.3892999));
                nexuses = NexusService.getMergedNexuses();
            });
            it('should count 2 nexuses', function() {
