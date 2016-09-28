@@ -27,7 +27,9 @@ angular.module('agencies', [ 'sfmuni.config' ])
             getAllStops: function () {
                 return buildResource('routeConfig', parseStops)({});
             },
-
+            getAllNexus: function () {
+                return buildResource('routeConfig', nexusTransform)({});
+            },
             getRides: function (originStop, destinationStop) {
                 var origin = api.getPredictionsForStopId(originStop);
                 var destination = api.getPredictionsForStopId(destinationStop);
@@ -43,9 +45,6 @@ angular.module('agencies', [ 'sfmuni.config' ])
             },
             getPredictionsForStopId: function (stopId) {
                 return buildResource('predictions', predictionsTransform)({stopId: stopId});
-            },
-            getAllNexus: function () {
-                return buildResource('routeConfig', nexusTransform)({});
             },
             getPredictionsForMultiStops: function (stops) {
                 var stopList = _.map(stops, function (stop) {
