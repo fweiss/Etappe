@@ -1,9 +1,9 @@
 angular.module('plan')
     .service('stop', function() {
-        function Stop(name, agencyId, route, stopId, lat, lon) {
+        function Stop(name, agencyId, routeId, stopId, lat, lon) {
             this.name = name;
             this.agencyId = agencyId;
-            this.route = route;
+            this.routeId = routeId;
             this.stopId = stopId;
             this.lat = lat;
             this.lon = lon;
@@ -14,8 +14,8 @@ angular.module('plan')
         Stop.prototype.getAgencyId = function() {
             return this.agencyId;
         };
-        Stop.prototype.getRoute = function() {
-            return this.route;
+        Stop.prototype.getRouteId = function() {
+            return this.routeId;
         };
         Stop.prototype.getStopId = function() {
             return this.stopId;
@@ -27,26 +27,32 @@ angular.module('plan')
             return this.lon;
         };
         return {
-            createStop: function(name, agencyId, route, stopId, lat, lon) {
+            createStop: function(name, agencyId, routeId, stopId, lat, lon) {
                 if (! name) {
                     throw new Error('createStop: must specify name');
                 }
                 if (! agencyId) {
                     throw new Error('createStop: must specify agency id');
                 }
-                if (! route) {
-                    throw new Error('createStop: must specify route');
+                if (! routeId) {
+                    throw new Error('createStop: must specify route id');
                 }
                 if (! stopId) {
                     throw new Error('createStop: must specify stop id');
                 }
-                if (! lat) {
+                if (_.isUndefined(lat)) {
                     throw new Error('createStop: must specify lat');
                 }
-                if (! lon) {
+                if (_.isNaN(parseFloat(lat))) {
+                    throw new Error('createStop: must specify valid lat');
+                }
+                if (_.isUndefined(lon)) {
                     throw new Error('createStop: must specify lon');
                 }
-                return new Stop(name, agencyId, route, stopId, lat, lon);
+                if (_.isNaN(parseFloat(lon))) {
+                    throw new Error('createStop: must specify valid lon');
+                }
+                return new Stop(name, agencyId, routeId, stopId, parseFloat(lat), parseFloat(lon));
             }
         };
     });
