@@ -171,5 +171,21 @@ describe('plan controller', function() {
             expect($scope.originNexuses.length).toBeGreaterThan(0);
         });
     });
+    describe('trip folder', function() {
+        fit('select trip', function() {
+            System.mergeStop(Stop.createStop('s1', 'a', 'r', 'sid1', 1, 2 ));
+            System.mergeStop(Stop.createStop('s2', 'a', 'r', 'sid1', 2, 3 ));
+            mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ {} ] } ));
+
+            var origin = Waypoint2.createWaypoint('w1', 1, 2);
+            var destination = Waypoint2.createWaypoint('w2', 1, 3);
+            var trip = Trip.createTrip(origin, destination);
+            scope.selectSavedTrip(trip);
+            scope.$digest();
+            expect(scope.itinerary.getSegments().length).toBe(1);
+            var segment = scope.itinerary.getSegments()[0];
+            expect(segment.rides.length).toBe(1);
+        });
+    });
 
 });

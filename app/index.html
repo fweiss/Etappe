@@ -67,6 +67,19 @@
             <div><button ng-click="ridesRefresh()">Refresh</button></div>
             <canvas utt-rides width="1200" height="200"></canvas>
             <div>
+                <button id="showSavedTrips" ng-click="showSavedTrips()">Saved Trips</button>
+                <div id="savedTrips">
+                    <ol>
+                        <li ng-repeat="trip in savedTrips" ng-click="selectSavedTrip(trip)" ng-class="{ selected: trip.id === currentTrip.id, trip: true }">
+                            <span>{{ trip.name }}</span>
+                            <ol>
+                                <li ng-repeat="waypoint in trip.waypoints" ng-class="{ waypoint: true }">{{ waypoint.name }}</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div>
                 <button id="showSavedPlans" ng-click="showSavedPlans()">Saved Plans</button>
                 <div id="savedPlans">
                     <ol>

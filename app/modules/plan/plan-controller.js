@@ -37,6 +37,18 @@ angular.module('plan')
             $scope.currentPlan = plan;
             showSavedRides(plan);
         };
+        $scope.refreshItineraryRides = function() {
+            _.each($scope.itinerary.getSegments(), function(segment) {
+                SfMuni.getRidesForSegment(segment).then(function(response) {
+                    var rides = response.data;
+                    segment.rides = rides;
+                });
+            });
+        };
+        $scope.selectSavedTrip = function(trip) {
+            $scope.createItineraryFromTrip(trip);
+            $scope.refreshItineraryRides();
+        };
         $scope.selectSavedPlan = function(planData) {
             // $scope.plan is watched by canvas
             // but $scope.itinerary is really the domain object
