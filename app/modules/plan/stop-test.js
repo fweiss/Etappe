@@ -4,11 +4,7 @@ describe('domain stop', function() {
     beforeEach(inject(function (_stop_) {
         Stop = _stop_;
     }));
-    describe('creation', function() {
-        var stop;
-        beforeEach(function() {
-            stop = Stop.createStop('stop', 'a', 'r', 'id', 20, 30);
-        });
+    describe('validation', function() {
         it('error if no name given', function() {
             var e1 = new Error('createStop: must specify name');
             expect(function() { Stop.createStop(); }).toThrow(e1);
@@ -40,6 +36,12 @@ describe('domain stop', function() {
         it('error if invalid lon given', function() {
             var e1 = new Error('createStop: must specify valid lon');
             expect(function() { Stop.createStop('A & B', 'muni', 'masnonc', '4931', 12, 'z'); }).toThrow(e1);
+        });
+    });
+    describe('creation', function() {
+        var stop;
+        beforeEach(function() {
+            stop = Stop.createStop('stop', 'a', 'r', 'id', 20, 30);
         });
         it('has initial name', function() {
             expect(stop.getName()).toEqual('stop');
