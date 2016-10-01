@@ -16,16 +16,43 @@ angular.module('sfmuni.config', [])
     .value('config', { baseUrl: 'http://webservices.nextbus.com/service/publicXMLFeed' });
 
 angular.module('agencies', [ 'sfmuni.config' ])
-    .service('sfMuni', function(config, $http, $q) {
+    .service('sfMuni', [ 'config', '$http', '$q', 'stop', function(config, $http, $q, Stop) {
         var $ = $ || angular.element;
         var parser = new DOMParser();
         const baseUrl = config.baseUrl;
+
+        // route[tag] < stop[tag,title,stopId]
+        // route[tag] < direction[name] < stop[tag]
+        function transformStops(root) {
+            var stops = [];
+            var rrx = $(root).find('route');
+            angular.forEach(rrx, function(rx) {
+                var routeId = $(rx).attr('tag');
+                var ssx = $(rx).find('stop');
+                angular.forEach(ssx, function(sx) {
+                    // because angular.element.children('stop') won't work
+                    var title = $(sx).attr('title');
+                    if (title !== undefined) {
+                        var normalizedTitle = api.unPermuteStopTitle(title);
+                        var name = normalizedTitle;
+                        var agencyId = 'sfmuni';
+                        var stopId = $(sx).attr('stopId');
+                        var lat = parseFloat($(sx).attr('lat'));
+                        var lon = parseFloat($(sx).attr('lon'));
+                        var stop = Stop.createStop(name, agencyId, routeId, stopId, lat, lon);
+                        stops.push(stop);
+                    }
+                });
+            });
+            return stops;
+        }
+
         var api = {
             getStopsForRoute: function (route) {
                 return buildResource('routeConfig', parseStops)({r: route});
             },
             getAllStops: function () {
-                return buildResource('routeConfig', parseStops)({});
+                return buildResource('routeConfig', transformStops)({});
             },
             getAllNexus: function () {
                 return buildResource('routeConfig', nexusTransform)({});
@@ -216,4 +243,4 @@ angular.module('agencies', [ 'sfmuni.config' ])
             return rides;
         }
        return api;
-    });
+    }]);

@@ -43,7 +43,7 @@ describe('sfmuni', function() {
         beforeEach(function() {
             xml = '<body><route><stop tag="2345" title="16th and Mission" stopId="12345"></stop><stop title="16th and Potrero"></stop><direction><stop></stop></direction></route></body>';
         });
-        it('should get stops', function() {
+        it('should get stops for route', function() {
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig&r=55').respond(xml);
             SfMuni.getStopsForRoute('55').then(function(response) {
                 var stops = response.data;
@@ -69,7 +69,7 @@ describe('sfmuni', function() {
         });
         // this doesn't really work because it drops stopIds
         xit('should remove duplicates', function() {
-            var xml2 = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Mission" stopId="12346"></stop><stop title="16th and Mission" stopId="12345"></stop></route></body>';
+            var xml2 = '<body><route tag="33"><stop title="16th and Mission" stopId="12345" lat="1.2" lon="2.3"></stop><stop title="16th and Mission" stopId="12346" lat="1.2" lon="2.3"></stop><stop title="16th and Mission" stopId="12345" lat="1.2" lon="2.3"></stop></route></body>';
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml2);
             SfMuni.getAllStops().then(function(response) {
                 var stops = response.data;
@@ -77,7 +77,25 @@ describe('sfmuni', function() {
             });
             httpBackend.flush();
         });
-        it('should get allstops', function() {
+        it('details', function(done) {
+            var xml = '<body><route tag="55"><stop title="16th and Mission" stopId="12345" lat="12.2" lon="21.1"></stop></route></body>';
+            httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml);
+            SfMuni.getAllStops().then(function(response) {
+                var stops = response.data;
+                expect(stops.length).toBe(1);
+                var stop = stops[0];
+                expect(stop.getName()).toBe('16th and Mission');
+                expect(stop.getAgencyId()).toBe('sfmuni');
+                expect(stop.getRouteId()).toBe('55');
+                expect(stop.getStopId()).toBe('12345');
+                expect(stop.getLat()).toBe(12.2);
+                expect(stop.getLon()).toBe(21.1);
+                done();
+            });
+            httpBackend.flush();
+        });
+        // FIXME add lat lon parse errors
+        xit('should get allstops', function() {
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml);
             SfMuni.getAllStops().then(function(response) {
                 var stops = response.data;
