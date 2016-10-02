@@ -172,7 +172,7 @@ describe('plan controller', function() {
         });
     });
     describe('trip folder', function() {
-        fit('select trip', function() {
+        it('select trip', function() {
             System.mergeStop(Stop.createStop('s1', 'a', 'r', 'sid1', 1, 2 ));
             System.mergeStop(Stop.createStop('s2', 'a', 'r', 'sid1', 2, 3 ));
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ {} ] } ));

@@ -198,5 +198,21 @@ describe('plan builder', function() {
             });
         });
     });
+    // remember controller test checks $scope state and actions
+    xdescribe('saved trips', function() {
+        beforeEach(function() {
+            element(by.css('#showSavedTrips')).click();
+        });
+        it('lists trips', function() {
+            expect(element(by.css('#savedTrips li.trip')).isPresent()).toBeTruthy();
+            //element.all(by.css('#savedPlans li.plan')).then(function(plans) {
+            //    expect(plans).not.toBeUndefined();
+            //    expect(plans.length).toBe(1);
+            //    expect(plans[0].getText()).toMatch(/get Cliffs/);
+            //});
+
+        });
+
+    });
 });
 

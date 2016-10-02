@@ -51,5 +51,4 @@ angular.module('plan')
             }
 
         };
-        Y
     }]);
