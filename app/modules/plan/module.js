@@ -6,9 +6,11 @@ angular.module('plan.config', [])
         }
     ])
     .value('initSavedTrips', [
-        { id: 1, name: 'get Cliffs', waypoints: [
-            { name: 'Mission St', lat: 1, lon: 1 },
-            { name: 'Castro St', lat: 1, lon: 2 }]
+        // honestly, time to get rid of origin and destination
+        { id: 1, tripName: 'get Cliffs',
+            origin: { waypointName: 'Mission St', lat: 1, lon: 1 },
+            destination: { waypointName: 'Castro St', lat: 1, lon: 2 },
+            waypoints: [ ]
         }
     ]);
 

@@ -24,7 +24,7 @@ describe('trip folder', function() {
         });
         it('error on parsing', function() {
             var bad = [];
-            var e1 = new Error('TripFolder: error deserializing data');
+            var e1 = new Error('TripFolder: error deserializing data: TypeError: \'undefined\' is not an object (evaluating \'data.origin.waypointName\')');
             expect(function() { TripFolder.deserialize(bad); }).toThrow(e1);
         });
         it('trip name', function() {
@@ -56,6 +56,16 @@ describe('trip folder', function() {
             it('has lon', function() {
                 expect(waypoint.getLon()).toEqual(4);
             });
+        });
+    });
+    describe('list', function() {
+        // assuming initSavedTrips in module.js
+        it('has trip', function() {
+            var trips = TripFolder.list();
+            expect(trips.length).toBe(1);
+            var trip0 = trips[0];
+            expect(trip0.getName()).toEqual('get Cliffs');
+            // assume deserialize works
         });
     });
 });
