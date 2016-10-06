@@ -54,12 +54,8 @@ describe('plan builder', function() {
         browser.executeScript('window.localStorage.clear();');
     });
     it('should load page without errors', function() {
-        // in plan, an exception handler gets any angular errors
-        //element(by.css('#errors')).getText().then(function(text) {
-        //    expect(text).toBe('');
-        //});
-        // by.id('errors')
-        expect(element(by.css('#errors')).getText()).toEqual('');
+        // in module.js, an exception handler gets any angular errors - supposeably
+        expect(element(by.id('errors')).getText()).toEqual('');
     });
     it('should prompt to select carrier', function() {
         expect(element(by.model('carrierSelect')).$('option:checked').getText()).toEqual('Choose a carrier');
@@ -208,16 +204,23 @@ describe('plan builder', function() {
     // remember controller test checks $scope state and actions
     describe('saved trips', function() {
         beforeEach(function() {
-            // by.id('showSavedTrips')
-            element(by.css('#showSavedTrips')).click();
+            element(by.id('showSavedTrips')).click();
         });
-        it('lists trips', function() {
-            expect(element(by.css('#savedTrips li.trip')).isPresent()).toBeTruthy();
-            //element.all(by.css('#savedPlans li.plan')).then(function(plans) {
-            //    expect(plans).not.toBeUndefined();
-            //    expect(plans.length).toBe(1);
-            //    expect(plans[0].getText()).toMatch(/get Cliffs/);
-            //});
+        describe('list', function() {
+            it('has waypoint', function() {
+                expect(element(by.css('#savedTrips li.trip')).isPresent()).toBeTruthy();
+                //element.all(by.css('#savedPlans li.plan')).then(function(plans) {
+                //    expect(plans).not.toBeUndefined();
+                //    expect(plans.length).toBe(1);
+                //    expect(plans[0].getText()).toMatch(/get Cliffs/);
+                //});
+            });
+            describe('select', function() {
+                beforeEach(function() {
+                    element(element(by.css('#savedTrips li.trip'))).click();
+                });
+                it('')
+            });
 
         });
 
