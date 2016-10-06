@@ -71,9 +71,9 @@
                 <div id="savedTrips">
                     <ol>
                         <li ng-repeat="trip in savedTrips" ng-click="selectSavedTrip(trip)" ng-class="{ selected: trip.id === currentTrip.id, trip: true }">
-                            <span>{{ trip.name }}</span>
+                            <span>{{ trip.getName() }}</span>
                             <ol>
-                                <li ng-repeat="waypoint in trip.waypoints" ng-class="{ waypoint: true }">{{ waypoint.name }}</li>
+                                <li ng-repeat="waypoint in trip.getWaypoints()" ng-class="{ waypoint: true }">{{ waypoint.name }}</li>
                             </ol>
                         </li>
                     </ol>
@@ -104,7 +104,9 @@
         <script src="modules/plan/plan-controller.js"></script>
         <script src="modules/plan/plan.js"></script>
         <script src="modules/plan/plan-folder.js"></script>
+        <script src="modules/plan/tripfolder.js"></script>
         <script src="modules/plan/stop.js"></script>
+        <script src="modules/plan/waypoint.js"></script>
         <script src="modules/plan/nexus.js"></script>
         <script src="modules/plan/system.js"></script>
         <script src="modules/plan/scaling.js"></script>

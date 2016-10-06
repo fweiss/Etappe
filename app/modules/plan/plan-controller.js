@@ -4,8 +4,8 @@ angular.module('plan')
             $window.alert(message);
         }
     })
-    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', 'nexus', 'itinerary', 'trip', 'system',
-        function($scope, chart, SfMuni, Plan, PlanFolder, alert, Waypoint, Itinerary, Trip, System) {
+    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder',
+        function($scope, chart, SfMuni, Plan, PlanFolder, alert, Waypoint, Itinerary, Trip, System, TripFolder) {
 
         $scope.createItineraryFromTrip = function(trip) {
             var nexuses = _.map(trip.getWaypoints(), function(waypoint) {
@@ -32,7 +32,10 @@ angular.module('plan')
         //$scope.originStationSelect = null;
         $scope.showSavedPlans = function() {
             $scope.savedPlans = PlanFolder.list();
-        }
+        };
+        $scope.showSavedTrips = function() {
+            $scope.savedTrips = TripFolder.list();
+        };
         $scope.selectSavedPlanx = function(planData) {
             $scope.currentPlan = plan;
             showSavedRides(plan);

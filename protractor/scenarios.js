@@ -33,7 +33,12 @@ describe('plan builder', function() {
                         { name: 'Mission St', stops: [ { route: 'N', stopTag: '5555' } ] },
                         { name: 'Castro St', stops: [ { route: 'N', stopTag: '4444' } ] } ]
                     }
-                ]);
+                ])
+                .value('initSavedTrips', [ { id: 1, tripName: 'get Cliffs',
+                    origin: { waypointName: 'Mission St', lat: 1, lon: 1 },
+                    destination: { waypointName: 'Castro St', lat: 1, lon: 2 },
+                    waypoints: [ ]}]
+            );
         });
 
         browser.get('http://localhost:8080/app/index.html');
@@ -50,9 +55,11 @@ describe('plan builder', function() {
     });
     it('should load page without errors', function() {
         // in plan, an exception handler gets any angular errors
-        element(by.css('#errors')).getText().then(function(text) {
-            expect(text).toBe('');
-        });
+        //element(by.css('#errors')).getText().then(function(text) {
+        //    expect(text).toBe('');
+        //});
+        // by.id('errors')
+        expect(element(by.css('#errors')).getText()).toEqual('');
     });
     it('should prompt to select carrier', function() {
         expect(element(by.model('carrierSelect')).$('option:checked').getText()).toEqual('Choose a carrier');
@@ -199,8 +206,9 @@ describe('plan builder', function() {
         });
     });
     // remember controller test checks $scope state and actions
-    xdescribe('saved trips', function() {
+    describe('saved trips', function() {
         beforeEach(function() {
+            // by.id('showSavedTrips')
             element(by.css('#showSavedTrips')).click();
         });
         it('lists trips', function() {

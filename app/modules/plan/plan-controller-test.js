@@ -172,6 +172,10 @@ describe('plan controller', function() {
         });
     });
     describe('trip folder', function() {
+        it('show list', function() {
+            scope.showSavedTrips();
+            expect(scope.savedTrips.length).toEqual(1);
+        });
         it('select trip', function() {
             System.mergeStop(Stop.createStop('s1', 'a', 'r', 'sid1', 1, 2 ));
             System.mergeStop(Stop.createStop('s2', 'a', 'r', 'sid1', 2, 3 ));
