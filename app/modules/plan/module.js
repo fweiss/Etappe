@@ -8,8 +8,8 @@ angular.module('plan.config', [])
     .value('initSavedTrips', [
         // honestly, time to get rid of origin and destination
         { id: 1, tripName: 'get Cliffs',
-            origin: { waypointName: 'Mission St', lat: 1, lon: 1 },
-            destination: { waypointName: 'Castro St', lat: 1, lon: 2 },
+            origin: { waypointName: '16th St & Mission St', lat: 37.7651399, lon: -122.4196 },
+            destination: { waypointName: 'Castro St', lat: 37.7608499, lon: -122.43484 },
             waypoints: [ ]
         }
     ]);

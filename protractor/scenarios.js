@@ -10,8 +10,8 @@ describe('plan builder', function() {
         var imposter = new Imposter()
             .addStub({ command: 'routeConfig' }, '<body>'
             + '<route tag="N">'
-            + '<stop tag="5555" title="16th St and Mission" stopId="15555"></stop>'
-            + '<stop tag="4444" title="16th St and Harrison" stopId="14444"></stop>'
+            + '<stop tag="5555" title="16th St and Mission" stopId="15555" lat="1" lon="1"></stop>'
+            + '<stop tag="4444" title="16th St and Harrison" stopId="14444" lat="1" lon="2"></stop>'
             + '</route>'
             + '</body>')
             .addStub({ command: 'predictionsForMultiStops', stops: 'N|4444'}, '<body><predictions routeTag="N"><direction><prediction epochTime="2222" vehicle="3333" tripTag="7777"></prediction></direction></predictions></body>')
@@ -219,7 +219,7 @@ describe('plan builder', function() {
                 beforeEach(function() {
                     element(by.css('#savedTrips li.trip')).click();
                 });
-                xit('get nexuses', function() {
+                fit('get nexuses', function() {
                     expect(element(by.id('errors')).getText()).toBe('');
                     expect(element(by.binding('currentTrip')).getText()).toBe('waypoint')
                 });

@@ -50,8 +50,14 @@ angular.module('plan')
         };
         $scope.selectSavedTrip = function(trip) {
             $scope.currentTrip = trip;
-            $scope.createItineraryFromTrip(trip);
-            $scope.refreshItineraryRides();
+            SfMuni.getAllStops().then(function(response) {
+                _.each(response.data, function(stop) {
+                    System.mergeStop(stop);
+                });
+
+                $scope.createItineraryFromTrip(trip);
+                $scope.refreshItineraryRides();
+            });
         };
         $scope.selectSavedPlan = function(planData) {
             // $scope.plan is watched by canvas

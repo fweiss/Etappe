@@ -43,7 +43,7 @@ describe('plan controller', function() {
         Stop = _stop_;
         $httpBackend = $injector.get('$httpBackend');
         $q = _$q_;
-        mockSfMuni = jasmine.createSpyObj('mockSfMuni', [ 'getRidesForSegment' ]);
+        mockSfMuni = jasmine.createSpyObj('mockSfMuni', [ 'getRidesForSegment', 'getAllStops' ]);
         $controller('PlanController', { $scope: scope, plan: plan, sfMuni: mockSfMuni });
         requestHandler = $httpBackend.whenGET(new RegExp('.*'));
 //            .respond('<?xml version="1.0" encoding="utf-8"?><stations></stations>', { 'Content-type': 'text/xml'});
@@ -177,8 +177,11 @@ describe('plan controller', function() {
             expect(scope.savedTrips.length).toEqual(1);
         });
         it('select trip', function() {
-            System.mergeStop(Stop.createStop('s1', 'a', 'r', 'sid1', 1, 2 ));
-            System.mergeStop(Stop.createStop('s2', 'a', 'r', 'sid1', 2, 3 ));
+            //System.mergeStop(Stop.createStop('s1', 'a', 'r', 'sid1', 1, 2 ));
+            //System.mergeStop(Stop.createStop('s2', 'a', 'r', 'sid1', 2, 3 ));
+            var s1 = Stop.createStop('s1', 'a', 'r', 'sid1', 1, 2 );
+            var s2 = Stop.createStop('s2', 'a', 'r', 'sid1', 2, 3 );
+            mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ s1, s2 ] }));
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ {} ] } ));
 
             var origin = Waypoint2.createWaypoint('w1', 1, 2);
