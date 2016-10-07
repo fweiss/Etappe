@@ -49,6 +49,7 @@ angular.module('plan')
             });
         };
         $scope.selectSavedTrip = function(trip) {
+            $scope.currentTrip = trip;
             $scope.createItineraryFromTrip(trip);
             $scope.refreshItineraryRides();
         };

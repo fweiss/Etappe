@@ -217,9 +217,12 @@ describe('plan builder', function() {
             });
             describe('select', function() {
                 beforeEach(function() {
-                    element(element(by.css('#savedTrips li.trip'))).click();
+                    element(by.css('#savedTrips li.trip')).click();
                 });
-                it('')
+                xit('get nexuses', function() {
+                    expect(element(by.id('errors')).getText()).toBe('');
+                    expect(element(by.binding('currentTrip')).getText()).toBe('waypoint')
+                });
             });
 
         });
