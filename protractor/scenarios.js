@@ -34,7 +34,7 @@ describe('plan builder', function() {
                         { name: 'Castro St', stops: [ { route: 'N', stopTag: '4444' } ] } ]
                     }
                 ])
-                .value('initSavedTrips', [ { id: 1, tripName: 'get Cliffs',
+                .value('initSavedTrips', [ { id: 1, tripName: 'Trip to  Cliffs',
                     origin: { waypointName: 'Mission St', lat: 1, lon: 1 },
                     destination: { waypointName: 'Castro St', lat: 1, lon: 2 },
                     waypoints: [ ]}]
@@ -219,9 +219,9 @@ describe('plan builder', function() {
                 beforeEach(function() {
                     element(by.css('#savedTrips li.trip')).click();
                 });
-                fit('get nexuses', function() {
+                it('get nexuses', function() {
                     expect(element(by.id('errors')).getText()).toBe('');
-                    expect(element(by.binding('currentTrip')).getText()).toBe('waypoint')
+                    expect(element(by.binding('currentTrip')).getText()).toBe('Trip to Cliffs')
                 });
             });
 

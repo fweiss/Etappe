@@ -43,7 +43,7 @@ angular.module('plan')
         $scope.refreshItineraryRides = function() {
             _.each($scope.itinerary.getSegments(), function(segment) {
                 SfMuni.getRidesForSegment(segment).then(function(response) {
-                    var rides = response.data;
+                    var rides = response.data;console.log(rides);
                     segment.rides = rides;
                 });
             });
@@ -212,7 +212,7 @@ angular.module('plan')
                 var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
                 var plan = Plan.createPlan(itinerary.getTrip().getName());
                 plan.setSpan(now, then);
-                plan.addSegment(segment.originWaypoint.name, segment.originWaypoint.name, rides);
+                plan.addSegment(segment.originWaypoint.getName(), segment.destinationWaypoint.getName(), rides);
                 $scope.plan = plan;
 
                 $scope.rideList = rides.length;

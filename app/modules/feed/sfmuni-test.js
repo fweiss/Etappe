@@ -7,6 +7,9 @@ describe('sfmuni', function() {
     var httpBackend;
     var Plan;
     var rootScope;
+    var Nexus;
+    var Waypoint;
+    var Stop;
     function addMinutes(date, minutes) {
         return new Date(date.getTime() + minutes * 60000);
     }
@@ -18,11 +21,14 @@ describe('sfmuni', function() {
     }
 
     beforeEach(module('agencies', 'plan'));
-    beforeEach(inject(function(_sfMuni_, $httpBackend, plan, $rootScope) {
+    beforeEach(inject(function(_sfMuni_, $httpBackend, plan, $rootScope, nexus, waypoint, stop) {
         SfMuni = _sfMuni_;
         httpBackend = $httpBackend;
         Plan = plan;
         rootScope = $rootScope;
+        Nexus = nexus;
+        Waypoint = waypoint;
+        Stop = stop;
     }));
     describe('parser', function() {
         it('should accept special characters', function () {
@@ -78,7 +84,7 @@ describe('sfmuni', function() {
             httpBackend.flush();
         });
         it('details', function(done) {
-            var xml = '<body><route tag="55"><stop title="16th and Mission" stopId="12345" lat="12.2" lon="21.1"></stop></route></body>';
+            var xml = '<body><route tag="55"><stop title="16th and Mission" tag="2345" stopId="12345" lat="12.2" lon="21.1"></stop></route></body>';
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml);
             SfMuni.getAllStops().then(function(response) {
                 var stops = response.data;
@@ -90,6 +96,7 @@ describe('sfmuni', function() {
                 expect(stop.getStopId()).toBe('12345');
                 expect(stop.getLat()).toBe(12.2);
                 expect(stop.getLon()).toBe(21.1);
+                expect(stop.getStopTag()).toEqual('2345');
                 done();
             });
             httpBackend.flush();
@@ -204,7 +211,12 @@ describe('sfmuni', function() {
             var predictionXml = '<body><predictions routeCode="N"><direction>' + prediction('4444', 0, '55555') + '</direction></predictions>'
                 + '<predictions routeCode="J"><direction><prediction></prediction></direction></predictions></body>';
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C2355&stops=J%7C5067').respond(predictionXml);
-            SfMuni.getPredictionsForMultiStops([ { route: 'N', stopTag: '2355'}, { route: 'J', stopTag: '5067' } ]).then(function(response) {
+            var stop1 = Stop.createStop('s1', 'a1', 'N', '12355', 1, 1);
+            stop1.setStopTag('2355');
+            var stop2 = Stop.createStop('s2', 'a1', 'J', '15067', 1, 2);
+            stop2.setStopTag('5067');
+            //SfMun>i.getPredictionsForMultiStops([ { route: 'N', stopTag: '2355'}, { route: 'J', stopTag: '5067' } ]).then(function(response) {
+            SfMuni.getPredictionsForMultiStops([ stop1, stop2 ]).then(function(response) {
                 var predictions = response.data;
                 expect(predictions.length).toBe(2);
                 var p0 = predictions[0];
@@ -242,8 +254,10 @@ describe('sfmuni', function() {
                 httpBackend.flush();
             });
             it('should error for no stops', function() {
+                var originNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w1', 1, 2));
+                var destinationNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w2', 1, 3));
                 expect(function() {
-                    SfMuni.getRidesForSegment({originWaypoint: { name: 'w1', stops: [  ]}, destinationWaypoint: { name: 'w2', stops: [ ]}});
+                    SfMuni.getRidesForSegment({ originNexus: originNexus, destinationNexus: destinationNexus });
                 }).toThrow(new Error('segment does not specify any stops'));
             });
             it('should get a ride for multi stops', function() {
@@ -251,7 +265,17 @@ describe('sfmuni', function() {
                 var destinationXml = '<body><predictions routeCode="N"><direction>' + prediction('4444', 10, '44444') + '</direction></predictions></body>';
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C2222').respond(originXml);
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C3333').respond(destinationXml);
-                var segment = { originWaypoint: { name: 'w1', stops: [ { route: 'N', stopTag: '2222' }]}, destinationWaypoint: { name: 'w2', stops: [ { route: 'N', stopTag: '3333' }]}};
+
+                var originNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w1', 1, 2));
+                var stop1 = Stop.createStop('s1', 'a1', 'N', '2222', 1, 1);
+                stop1.setStopTag('2222');
+                originNexus.addStop(stop1);
+                var destinationNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w2', 1, 3));
+                var stop2 = Stop.createStop('s2', 'a1', 'N', '3333', 1, 2);
+                stop2.setStopTag('3333');
+                destinationNexus.addStop(stop2);
+                //var segment = { originWaypoint: { name: 'w1', stops: [ { route: 'N', stopTag: '2222' }]}, destinationWaypoint: { name: 'w2', stops: [ { route: 'N', stopTag: '3333' }]}};
+                var segment = { originNexus: originNexus, destinationNexus: destinationNexus };
                 SfMuni.getRidesForSegment(segment).then(function(response) {
                     var rides = response.data;
                     expect(rides.length).toBe(1);

@@ -145,10 +145,10 @@ describe('plan domain', function() {
                 plan.addWaypoint(Waypoint.create('w2', 21, 31));
                 plan.addWaypoint(Waypoint.create('w3', 22, 31));
                 var segments = plan.getSegments2();
-                expect(segments[0].originWaypoint.name).toBe('w1');
-                expect(segments[0].destinationWaypoint.name).toBe('w2');
-                expect(segments[1].originWaypoint.name).toBe('w2');
-                expect(segments[1].destinationWaypoint.name).toBe('w3');
+                expect(segments[0].originWaypoint.getName()).toBe('w1');
+                expect(segments[0].destinationWaypoint.getName()).toBe('w2');
+                expect(segments[1].originWaypoint.getName()).toBe('w2');
+                expect(segments[1].destinationWaypoint.getName()).toBe('w3');
             });
             it('should have stops', function() {
                 var w1 = Waypoint.create('w1', 20, 30);

@@ -40,6 +40,7 @@ angular.module('agencies', [ 'sfmuni.config' ])
                         var lat = parseFloat($(sx).attr('lat'));
                         var lon = parseFloat($(sx).attr('lon'));
                         var stop = Stop.createStop(name, agencyId, routeId, stopId, lat, lon);
+                        stop.setStopTag($(sx).attr('tag'))
                         stops.push(stop);
                     }
                 });
@@ -75,7 +76,7 @@ angular.module('agencies', [ 'sfmuni.config' ])
             },
             getPredictionsForMultiStops: function (stops) {
                 var stopList = _.map(stops, function (stop) {
-                    return stop.route + '|' + stop.stopTag;
+                    return stop.getRouteId() + '|' + stop.getStopTag();
                 });
                 return buildResource('predictionsForMultiStops', multiPredictionsTransform)({stops: stopList});
             },
@@ -83,12 +84,12 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 function invalid(stops) {
                     return _.isUndefined(stops) || ! (_.isObject( stops) && _.isArray(stops) && stops.length > 0);
                 }
-                if (invalid(segment.originWaypoint.stops) || invalid(segment.destinationWaypoint.stops)) {
+                if (invalid(segment.originNexus.getStops()) || invalid(segment.destinationNexus.getStops())) {
                     throw new Error('segment does not specify any stops');
                 }
                 var defer = $q.defer();
-                var origin = api.getPredictionsForMultiStops(segment.originWaypoint.stops);
-                var destination = api.getPredictionsForMultiStops(segment.destinationWaypoint.stops);
+                var origin = api.getPredictionsForMultiStops(segment.originNexus.getStops());
+                var destination = api.getPredictionsForMultiStops(segment.destinationNexus.getStops());
                 $q.all([origin, destination]).then(function (responses) {
                     var originPredictions = responses[0].data;
                     var destinationPredictions = responses[1].data;

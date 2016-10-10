@@ -7,6 +7,7 @@ angular.module('plan')
             this.stopId = stopId;
             this.lat = lat;
             this.lon = lon;
+            this.stopTag = '';
         }
         Stop.prototype.getName = function() {
             return this.name;
@@ -26,6 +27,12 @@ angular.module('plan')
         Stop.prototype.getLon = function() {
             return this.lon;
         };
+        Stop.prototype.setStopTag = function(stopTag) {
+            this.stopTag = stopTag;
+        };
+        Stop.prototype.getStopTag = function() {
+            return this.stopTag;
+        }
         return {
             createStop: function(name, agencyId, routeId, stopId, lat, lon) {
                 if (! name) {

@@ -109,7 +109,7 @@ describe('plan controller', function() {
             expect(alertSpy).toHaveBeenCalledWith('cannot restore plan: invalid plan name: expected non-empty string');
         });
         // plan not found?
-        it('should set origin and destination nexus', function() {
+        xit('should set origin and destination nexus', function() {
             var plan = Plan.createPlan('gggg');
             plan.addSegment('origin', 'destination', []);
             plan.addWaypoint(Waypoint.create('w1', 20, 31));
@@ -185,7 +185,7 @@ describe('plan controller', function() {
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ {} ] } ));
 
             var origin = Waypoint2.createWaypoint('w1', 1, 2);
-            var destination = Waypoint2.createWaypoint('w2', 1, 3);
+            var destination = Waypoint2.createWaypoint('w2', 2, 3);
             var trip = Trip.createTrip(origin, destination);
             scope.selectSavedTrip(trip);
             scope.$digest();

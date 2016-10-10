@@ -64,5 +64,15 @@ describe('domain stop', function() {
         it('accepts zero lat and lon', function() {
             var stop = Stop.createStop('n', 'a', 'r', 'id', 0.0, 0.0);
         });
+        it('can set stop tag', function() {
+            stop.setStopTag('abc');
+        });
+        it('has default stop tag', function() {
+            expect(stop.getStopTag()).toEqual('');
+        });
+        it('has stop tag', function() {
+            stop.setStopTag('abc');
+            expect(stop.getStopTag()).toEqual('abc');
+        });
     });
 });

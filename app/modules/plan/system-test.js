@@ -35,7 +35,7 @@ describe('domain system', function() {
             it('finds a nexus', function() {
                 var w1 = Waypoint.createWaypoint('w1', 1, 2);
                 var nexus = (System.findNexus(w1));
-                expect(nexus.name).toEqual('s1');
+                expect(nexus.getName()).toEqual('s1');
             });
         });
      });
