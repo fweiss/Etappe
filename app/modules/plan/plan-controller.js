@@ -24,10 +24,14 @@ angular.module('plan')
         $scope.createPlanFromItinerary = function(itinerary) {
             var plan = Plan.createPlan(itinerary.getTrip().getName());
             _.each(itinerary.getSegments(), function(segment) {
-                plan.addSegment(segment.originNexus.getName(), segment.destinationNexus.getName(), []);
+                plan.addSegment(segment.originNexus.getName(), segment.destinationNexus.getName(), segment.rides);
             });
+            var now = new Date();
+            var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+            //plan.spanStart =  now;
+            //plan.spanEnd = then;
+            plan.setSpan(now, then);
             $scope.plan = plan;
-
         };
         //$scope.originStationSelect = null;
         $scope.showSavedPlans = function() {
@@ -40,11 +44,12 @@ angular.module('plan')
             $scope.currentPlan = plan;
             showSavedRides(plan);
         };
-        $scope.refreshItineraryRides = function() {
+        $scope.refreshItineraryRides = function(callback) {
             _.each($scope.itinerary.getSegments(), function(segment) {
                 SfMuni.getRidesForSegment(segment).then(function(response) {
                     var rides = response.data;console.log(rides);
                     segment.rides = rides;
+                    callback();
                 });
             });
         };
@@ -56,7 +61,9 @@ angular.module('plan')
                 });
 
                 $scope.createItineraryFromTrip(trip);
-                $scope.refreshItineraryRides();
+                $scope.refreshItineraryRides(function() {
+                    $scope.createPlanFromItinerary($scope.itinerary);
+                });
             });
         };
         $scope.selectSavedPlan = function(planData) {
@@ -212,7 +219,7 @@ angular.module('plan')
                 var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
                 var plan = Plan.createPlan(itinerary.getTrip().getName());
                 plan.setSpan(now, then);
-                plan.addSegment(segment.originWaypoint.getName(), segment.destinationWaypoint.getName(), rides);
+                plan.addSegment(segment.originNexus.getName(), segment.destinationNexus.getName(), rides);
                 $scope.plan = plan;
 
                 $scope.rideList = rides.length;
