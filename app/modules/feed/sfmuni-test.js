@@ -83,7 +83,7 @@ describe('sfmuni', function() {
             });
             httpBackend.flush();
         });
-        it('details', function(done) {
+        it('details', function() {
             var xml = '<body><route tag="55"><stop title="16th and Mission" tag="2345" stopId="12345" lat="12.2" lon="21.1"></stop></route></body>';
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml);
             SfMuni.getAllStops().then(function(response) {
@@ -97,7 +97,6 @@ describe('sfmuni', function() {
                 expect(stop.getLat()).toBe(12.2);
                 expect(stop.getLon()).toBe(21.1);
                 expect(stop.getStopTag()).toEqual('2345');
-                done();
             });
             httpBackend.flush();
         });
@@ -115,19 +114,19 @@ describe('sfmuni', function() {
         });
         describe('nexuses', function() {
             it('should get all', function() {
-                var xml1 = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Mission" stopId="12346"></stop><stop title="16th and Mission" stopId="12345"></stop></route></body>';
+                var xml1 = '<body><route tag="T"><stop title="16th and Mission" stopId="12345" lat="1" lon="2"></stop><stop title="16th and Mission" stopId="12346" lat="1" lon="2"></stop><stop title="16th and Mission" stopId="12345" lat="1" lon="2"></stop></route></body>';
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
                 SfMuni.getAllNexus().then(function(response) {
                     var nexus = response.data;
                     expect(nexus['16th and Mission']).toBeTruthy();
                     expect(nexus['16th and Mission'].stops.length).toBe(3);
                     var stop = nexus['16th and Mission'].stops[0];
-                    expect(stop.stopId).toBe('12345');
+                    expect(stop.getStopId()).toBe('12345');
                 });
                 httpBackend.flush();
             });
             it('should get with route, direction, tag', function() {
-                var xml1 = '<body><route tag="F"><stop tag="2345" title="16th and Mission" stopId="12345"></stop></route></body>';
+                var xml1 = '<body><route tag="F"><stop tag="2345" title="16th and Mission" stopId="12345" lat="1" lon="2"></stop></route></body>';
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
                 SfMuni.getAllNexus().then(function(response) {
                     var nexus = response.data;
@@ -135,16 +134,16 @@ describe('sfmuni', function() {
                     expect(nexus['16th and Mission'].name).toBe('16th and Mission');
                     expect(nexus['16th and Mission'].stops.length).toBe(1);
                     var stop = nexus['16th and Mission'].stops[0];
-                    expect(stop.stopId).toBe('12345');
-                    expect(stop.route).toBe('F');
-                    expect(stop.stopTag).toBe('2345');
+                    expect(stop.getStopId()).toBe('12345');
+                    expect(stop.getRouteId()).toBe('F');
+                    expect(stop.getStopTag()).toBe('2345');
                 });
                 httpBackend.flush();
             });
             // parse '&'
             it('should merge stops for permuted intersection', function() {
                 // FIXME allow &
-                var xml1 = '<body><route tag="F"><stop tag="2345" title="16th & Mission" stopId="12345"></stop></route><route tag="G"><stop tag="2345" title="Mission & 16th" stopId="12345"></stop></route></body>';
+                var xml1 = '<body><route tag="F"><stop tag="2345" title="16th & Mission" stopId="12345" lat="1" lon="2"></stop></route><route tag="G"><stop tag="2345" title="Mission & 16th" stopId="12345" lat="1" lon="2"></stop></route></body>';
                 //httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
                 mockBackend('routeConfig', null, xml1);
                 SfMuni.getAllNexus().then(function(response) {

@@ -11,7 +11,7 @@ angular.module('plan')
                     segments = _segments;
                 } else {
                     _.reduce(_.union([ trip.getOrigin() ], trip.getInnerWaypoints(), [ trip.getDestination() ]), function(previousWaypoint, waypoint) {
-                        segments.push({ originWaypoint: previousWaypoint, destinationWaypoint: waypoint, rides: []});
+                        segments.push({ originNexus: previousWaypoint, destinationNexus: waypoint, rides: []});
                         return waypoint;
                     });
                 }

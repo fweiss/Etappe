@@ -213,10 +213,13 @@ angular.module('agencies', [ 'sfmuni.config' ])
                     if (title !== undefined) {
                         var normalizedTitle = api.unPermuteStopTitle(title);
                         var stops = getOrCreate(normalizedTitle);
-                        var stop = {};
-                        stop.stopId = $(sx).attr('stopId');
-                        stop.stopTag = $(sx).attr('tag');
-                        stop.route = route;
+                        //var stop = {};
+                        //stop.stopId = $(sx).attr('stopId');
+                        //stop.stopTag = $(sx).attr('tag');
+                        //stop.route = route;
+                        var stop = Stop.createStop(title, 'sf-muni', route, $(sx).attr('stopId'), $(sx).attr('lat'), $(sx).attr('lon'));
+                        //var stop = Stop.createStop('a', 'b', 'c', 'd', 1, 2);
+                        stop.setStopTag($(sx).attr('tag'));
                         stops.push(stop);
                     }
                 });

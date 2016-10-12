@@ -1,4 +1,4 @@
-describe('plan builder', function() {
+describe('etappe', function() {
     var Imposter = require('./imposter');
 
     var PROMPT = 1; // to account for the prompt option in select
@@ -57,75 +57,77 @@ describe('plan builder', function() {
         // in module.js, an exception handler gets any angular errors - supposeably
         expect(element(by.id('errors')).getText()).toEqual('');
     });
-    it('should prompt to select carrier', function() {
-        expect(element(by.model('carrierSelect')).$('option:checked').getText()).toEqual('Choose a carrier');
-    });
-    it('should have available carriers', function() {
-        expect(element(by.model('carrierSelect')).all(by.tagName('option')).count()).toEqual(2 + PROMPT);
-    });
-    it('should disable origin selection', function() {
-        expect(element(by.model('originNexusSelect')).isEnabled()).toBe(false);
-    });
-    it('should disable destination selection', function() {
-        expect(element(by.model('destinationNexusSelect')).isEnabled()).toBe(false);
-    });
-    it('should show origin prompt', function() {
-        expect(element(by.model('originNexusSelect')).all(by.tagName('option')).count()).toBe(0 + PROMPT);
-        expect(element(by.model('originNexusSelect')).all(by.tagName('option')).get(0).getText()).toBe('Choose an origin');
-    });
-    it('should show destination prompt', function() {
-        expect(element(by.model('destinationNexusSelect')).all(by.tagName('option')).count()).toBe(0 + PROMPT);
-        expect(element(by.model('destinationNexusSelect')).all(by.tagName('option')).get(0).getText()).toBe('Choose a destination');
-    });
+    describe('trip builder', function() {
+        it('should prompt to select carrier', function() {
+            expect(element(by.model('carrierSelect')).$('option:checked').getText()).toEqual('Choose a carrier');
+        });
+        it('should have available carriers', function() {
+            expect(element(by.model('carrierSelect')).all(by.tagName('option')).count()).toEqual(2 + PROMPT);
+        });
+        it('should disable origin selection', function() {
+            expect(element(by.model('originNexusSelect')).isEnabled()).toBe(false);
+        });
+        it('should disable destination selection', function() {
+            expect(element(by.model('destinationNexusSelect')).isEnabled()).toBe(false);
+        });
+        it('should show origin prompt', function() {
+            expect(element(by.model('originNexusSelect')).all(by.tagName('option')).count()).toBe(0 + PROMPT);
+            expect(element(by.model('originNexusSelect')).all(by.tagName('option')).get(0).getText()).toBe('Choose an origin');
+        });
+        it('should show destination prompt', function() {
+            expect(element(by.model('destinationNexusSelect')).all(by.tagName('option')).count()).toBe(0 + PROMPT);
+            expect(element(by.model('destinationNexusSelect')).all(by.tagName('option')).get(0).getText()).toBe('Choose a destination');
+        });
 
-    describe('agency selected', function() {
-        beforeEach(function() {
-            element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
+        describe('agency selected', function() {
+            beforeEach(function() {
+                element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
+            });
+            it('should show origin nexus', function() {
+                expect(element(by.model('originNexusSelect')).all(by.tagName('option')).count()).toBeGreaterThan(1 + PROMPT);
+            });
+            it('should show destination nexus', function() {
+                expect(element(by.model('destinationNexusSelect')).all(by.tagName('option')).count()).toBeGreaterThan(1 + PROMPT);
+            });
         });
-        it('should show origin nexus', function() {
-            expect(element(by.model('originNexusSelect')).all(by.tagName('option')).count()).toBeGreaterThan(1 + PROMPT);
-        });
-        it('should show destination nexus', function() {
-            expect(element(by.model('destinationNexusSelect')).all(by.tagName('option')).count()).toBeGreaterThan(1 + PROMPT);
-        });
-    });
 
-    describe('origin and destination selected', function() {
-        beforeEach(function() {
-            element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
-            element(by.cssContainingText('#originNexusSelect option', '16th St and Mission')).click();
-            element(by.cssContainingText('#destinationNexusSelect option', '16th St and Harrison')).click();
-        });
-        xit('should show available routes', function() {
-            expect(element(by.model('availableRoutes')).getText()).toBe('55 16th');
-        });
-        it('should show available rides', function() {
-            expect(element(by.binding('rideList')).getText()).toBeGreaterThan(0);
-        });
-         describe('saving a plan', function() {
-            //clear storage
-            //create a plan
-            //save it
-            //restore it
-             it('should show error when no plan name given', function() {
-                 element(by.css('#planRestore')).click();
-                 var alertDialog = browser.switchTo().alert();
-                 expect(alertDialog.getText()).toEqual("cannot restore plan: invalid plan name: expected non-empty string");
-             });
-             xit('should save and restore plan', function() {
-                 element(by.model('planSaveName')).sendKeys('gggg');
-                 element(by.css('#planSave')).click();
-                 // something is displayed
-                 // remember verify corner cases in unit, but verify UI here
-                 // so we do need to do some mocking
-                 element(by.model('planRestoreName')).sendKeys('gggg');
-                 element(by.css('#planRestore')).click();
-                 // verify list
-                 // verify content
-                 // do click
-                 expect(element(by.model('nexusStart')).getText()).toBe('16th St and Mission');
-                 expect(element(by.model('nexusEnd')).getText()).toBe('16th St and Harrison');
-             });
+        describe('origin and destination selected', function() {
+            beforeEach(function() {
+                element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
+                element(by.cssContainingText('#originNexusSelect option', '16th St and Mission')).click();
+                element(by.cssContainingText('#destinationNexusSelect option', '16th St and Harrison')).click();
+            });
+            xit('should show available routes', function() {
+                expect(element(by.model('availableRoutes')).getText()).toBe('55 16th');
+            });
+            it('should show available rides', function() {
+                expect(element(by.binding('rideList')).getText()).toBeGreaterThan(0);
+            });
+            describe('saving a plan', function() {
+                //clear storage
+                //create a plan
+                //save it
+                //restore it
+                it('should show error when no plan name given', function() {
+                    element(by.css('#planRestore')).click();
+                    var alertDialog = browser.switchTo().alert();
+                    expect(alertDialog.getText()).toEqual("cannot restore plan: invalid plan name: expected non-empty string");
+                });
+                xit('should save and restore plan', function() {
+                    element(by.model('planSaveName')).sendKeys('gggg');
+                    element(by.css('#planSave')).click();
+                    // something is displayed
+                    // remember verify corner cases in unit, but verify UI here
+                    // so we do need to do some mocking
+                    element(by.model('planRestoreName')).sendKeys('gggg');
+                    element(by.css('#planRestore')).click();
+                    // verify list
+                    // verify content
+                    // do click
+                    expect(element(by.model('nexusStart')).getText()).toBe('16th St and Mission');
+                    expect(element(by.model('nexusEnd')).getText()).toBe('16th St and Harrison');
+                });
+            });
         });
     });
     // this should go to controller test, not e2e
@@ -185,7 +187,7 @@ describe('plan builder', function() {
             afterEach(function() {
                 expect(element(by.css('#errors')).getText()).toBeFalsy();
             });
-            it('should make selection', function() {
+            xit('should make selection', function() {
                 element.all(by.css('#savedPlans li')).then(function(plans) {
                     var thePlan = plans[0];
                     thePlan.click().then(function() {

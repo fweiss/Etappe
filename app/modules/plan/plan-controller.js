@@ -47,7 +47,7 @@ angular.module('plan')
         $scope.refreshItineraryRides = function(callback) {
             _.each($scope.itinerary.getSegments(), function(segment) {
                 SfMuni.getRidesForSegment(segment).then(function(response) {
-                    var rides = response.data;console.log(rides);
+                    var rides = response.data;
                     segment.rides = rides;
                     callback();
                 });
@@ -206,7 +206,8 @@ angular.module('plan')
                 var trip = Trip.createTrip(w1, w2);
                 itinerary = Itinerary.createItinerary(trip);
                 $scope.itinerary = itinerary.getSegments();
-                refreshRides(segment, itinerary);
+                //refreshRides(segment, itinerary);
+                refreshRides(itinerary.getSegments()[0], itinerary);
             }
         }
         function refreshRides(segment, itinerary) {
@@ -245,7 +246,7 @@ angular.module('plan')
                 catch(e) {
                     console.log('err: ' + e)
                 }
-                console.log($scope);
+                //console.log($scope);
                 plan.addSegment(waypoints[0].name, waypoints[1].name, rides);
                 $scope.plan = plan;
                 $scope.rideList = rides.length;
