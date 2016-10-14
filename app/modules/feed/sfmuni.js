@@ -84,7 +84,7 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 function invalid(stops) {
                     return _.isUndefined(stops) || ! (_.isObject( stops) && _.isArray(stops) && stops.length > 0);
                 }
-                if (invalid(segment.originNexus.getStops()) || invalid(segment.destinationNexus.getStops())) {
+                if (invalid(segment.getOriginNexus().getStops()) || invalid(segment.getDestinationNexus().getStops())) {
                     throw new Error('segment does not specify any stops');
                 }
                 var defer = $q.defer();

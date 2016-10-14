@@ -4,8 +4,8 @@ angular.module('plan')
             $window.alert(message);
         }
     })
-    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder',
-        function($scope, chart, SfMuni, Plan, PlanFolder, alert, Waypoint, Itinerary, Trip, System, TripFolder) {
+    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'planFolder', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'segment',
+        function($scope, chart, SfMuni, Plan, PlanFolder, alert, Waypoint, Itinerary, Trip, System, TripFolder, Segment) {
 
         $scope.createItineraryFromTrip = function(trip) {
             var nexuses = _.map(trip.getWaypoints(), function(waypoint) {
@@ -13,7 +13,9 @@ angular.module('plan')
             });
             var segments = [];
             _.reduce(nexuses, function(origin, destination) {
-                segments.push({ originNexus: origin, destinationNexus: destination, rides: [] });
+                var segment = Segment.createSegment(origin, destination);
+                //segments.push({ originNexus: origin, destinationNexus: destination, rides: [] });
+                segments.push(segment);
             });
             var itinerary = Itinerary.createItinerary(trip, segments);
 
@@ -204,7 +206,10 @@ angular.module('plan')
 
                 // Itinerary is in plan.js
                 var trip = Trip.createTrip(w1, w2);
-                itinerary = Itinerary.createItinerary(trip);
+                var ss = _.map(plan.getSegments2(), function(segment) {
+                    return Segment.createSegment(segment.originWaypoint, segment.destinationWaypoint);
+                });
+                itinerary = Itinerary.createItinerary(trip, ss);
                 $scope.itinerary = itinerary.getSegments();
                 //refreshRides(segment, itinerary);
                 refreshRides(itinerary.getSegments()[0], itinerary);

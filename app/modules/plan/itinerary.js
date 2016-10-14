@@ -1,5 +1,5 @@
 angular.module('plan')
-.service('itinerary', [ function() {
+.service('itinerary', [ 'segment', 'nexus',  function(Segment, Nexus) {
     function Itinerary(trip, segments) {
         this.trip = trip;
         this.segments = segments;
@@ -21,7 +21,11 @@ angular.module('plan')
                 segments = _segments;
             } else {
                 _.reduce(_.union([ trip.getOrigin() ], trip.getInnerWaypoints(), [ trip.getDestination() ]), function(previousWaypoint, waypoint) {
-                    segments.push({ originNexus: previousWaypoint, destinationNexus: waypoint, rides: []});
+                    var originNexus = Nexus.createFromWaypoint(previousWaypoint);
+                    var destinationNexus = Nexus.createFromWaypoint(waypoint);
+                    var segment = Segment.createSegment(originNexus, destinationNexus);
+                    //segments.push({ originNexus: previousWaypoint, destinationNexus: waypoint, rides: []});
+                    segments.push(segment);
                     return waypoint;
                 });
             }

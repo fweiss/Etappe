@@ -10,6 +10,7 @@ describe('sfmuni', function() {
     var Nexus;
     var Waypoint;
     var Stop;
+    var Segment;
     function addMinutes(date, minutes) {
         return new Date(date.getTime() + minutes * 60000);
     }
@@ -21,7 +22,7 @@ describe('sfmuni', function() {
     }
 
     beforeEach(module('agencies', 'plan'));
-    beforeEach(inject(function(_sfMuni_, $httpBackend, plan, $rootScope, nexus, waypoint, stop) {
+    beforeEach(inject(function(_sfMuni_, $httpBackend, plan, $rootScope, nexus, waypoint, stop, segment) {
         SfMuni = _sfMuni_;
         httpBackend = $httpBackend;
         Plan = plan;
@@ -29,6 +30,7 @@ describe('sfmuni', function() {
         Nexus = nexus;
         Waypoint = waypoint;
         Stop = stop;
+        Segment = segment;
     }));
     describe('parser', function() {
         it('should accept special characters', function () {
@@ -256,7 +258,8 @@ describe('sfmuni', function() {
                 var originNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w1', 1, 2));
                 var destinationNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w2', 1, 3));
                 expect(function() {
-                    SfMuni.getRidesForSegment({ originNexus: originNexus, destinationNexus: destinationNexus });
+                    //SfMuni.getRidesForSegment({ originNexus: originNexus, destinationNexus: destinationNexus });
+                    SfMuni.getRidesForSegment(Segment.createSegment(originNexus, destinationNexus));
                 }).toThrow(new Error('segment does not specify any stops'));
             });
             it('should get a ride for multi stops', function() {
@@ -274,7 +277,7 @@ describe('sfmuni', function() {
                 stop2.setStopTag('3333');
                 destinationNexus.addStop(stop2);
                 //var segment = { originWaypoint: { name: 'w1', stops: [ { route: 'N', stopTag: '2222' }]}, destinationWaypoint: { name: 'w2', stops: [ { route: 'N', stopTag: '3333' }]}};
-                var segment = { originNexus: originNexus, destinationNexus: destinationNexus };
+                var segment = Segment.createSegment(originNexus, destinationNexus);
                 SfMuni.getRidesForSegment(segment).then(function(response) {
                     var rides = response.data;
                     expect(rides.length).toBe(1);

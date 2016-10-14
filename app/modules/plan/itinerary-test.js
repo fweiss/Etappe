@@ -49,7 +49,7 @@ describe('domain itinerary', function() {
         });
         it('should have segment with empty rides', function() {
             var itinerary = Itinerary.createItinerary(trip);
-            expect(itinerary.getSegments()[0].rides.length).toBe(0);
+            expect(itinerary.getSegments()[0].getRides().length).toBe(0);
         });
     });
 });
