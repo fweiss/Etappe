@@ -94,7 +94,7 @@ describe('plan controller', function() {
             scope.ridesRefresh2();
             scope.$digest();
             expect(scope.itinerary).toBeTruthy();
-            expect(scope.itinerary.getSegments().length).toBe(1);console.log(scope.itinerary.getSegments()[0]);
+            expect(scope.itinerary.getSegments().length).toBe(1);
             expect(scope.itinerary.getSegments()[0].getRides().length).toBe(1);
             expect(scope.itinerary.getSegments()[0].rides[0].startTime).toBe(1);
 

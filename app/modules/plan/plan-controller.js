@@ -210,7 +210,7 @@ angular.module('plan')
                     return Segment.createSegment(segment.originWaypoint, segment.destinationWaypoint);
                 });
                 itinerary = Itinerary.createItinerary(trip, ss);
-                $scope.itinerary = itinerary.getSegments();
+                $scope.itinerary = itinerary;
                 //refreshRides(segment, itinerary);
                 refreshRides(itinerary.getSegments()[0], itinerary);
             }
