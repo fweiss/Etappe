@@ -5,7 +5,6 @@ describe('sfmuni', function() {
     var baseUrl = 'http://webservices.nextbus.com/service/publicXMLFeed';
     var SfMuni;
     var httpBackend;
-    var Plan;
     var rootScope;
     var Nexus;
     var Waypoint;
@@ -22,10 +21,9 @@ describe('sfmuni', function() {
     }
 
     beforeEach(module('agencies', 'plan'));
-    beforeEach(inject(function(_sfMuni_, $httpBackend, plan, $rootScope, nexus, waypoint, stop, segment) {
+    beforeEach(inject(function(_sfMuni_, $httpBackend, $rootScope, nexus, waypoint, stop, segment) {
         SfMuni = _sfMuni_;
         httpBackend = $httpBackend;
-        Plan = plan;
         rootScope = $rootScope;
         Nexus = nexus;
         Waypoint = waypoint;

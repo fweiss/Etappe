@@ -1,11 +1,9 @@
 describe('trip folder', function() {
     var TripFolder;
-    var Trip;
     var Waypoint;
     beforeEach(module('plan'));
-    beforeEach(inject(function (_tripfolder_, _plan_, _waypoint_) {
+    beforeEach(inject(function (_tripfolder_, _waypoint_) {
         TripFolder = _tripfolder_;
-        Trip = _plan_;
         Waypoint = _waypoint_;
     }));
     describe('deserialize', function() {
