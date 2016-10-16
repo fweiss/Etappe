@@ -32,10 +32,10 @@ describe('plan controller', function() {
             $provide.value('alert', alertSpy);
         });
     });
-    beforeEach(inject(function($rootScope, $injector, $controller, plan, nexus, itinerary,  _waypoint_, _trip_, _$q_, _system_, _stop_) {
+    beforeEach(inject(function($rootScope, $injector, $controller, nexus, itinerary,  _waypoint_, _trip_, _$q_, _system_, _stop_) {
         scope = $rootScope.$new();
         System = _system_;
-        Plan = plan;
+        //Plan = plan;
         Trip = _trip_;
         Waypoint = nexus;
         Waypoint2 = _waypoint_;
@@ -44,7 +44,8 @@ describe('plan controller', function() {
         $httpBackend = $injector.get('$httpBackend');
         $q = _$q_;
         mockSfMuni = jasmine.createSpyObj('mockSfMuni', [ 'getRidesForSegment', 'getAllStops' ]);
-        $controller('PlanController', { $scope: scope, plan: plan, sfMuni: mockSfMuni });
+        //$controller('PlanController', { $scope: scope, plan: plan, sfMuni: mockSfMuni });
+        $controller('PlanController', { $scope: scope, sfMuni: mockSfMuni });
         requestHandler = $httpBackend.whenGET(new RegExp('.*'));
 //            .respond('<?xml version="1.0" encoding="utf-8"?><stations></stations>', { 'Content-type': 'text/xml'});
 
@@ -81,11 +82,11 @@ describe('plan controller', function() {
             //expect(segments[0].rides.length).toBe(1);
         });
         it('should update itinerary on rides refresh', function() {
-            var plan = Plan.createPlan();
-            plan.addWaypoints([ Waypoint.create('w1', 21, 31), Waypoint.create('w2', 22, 32) ]);
-            // add waypoints doesn't create segments
-            plan.addSegment('w1', 'w2', []);
-            scope.plan = plan;
+            //var plan = Plan.createPlan();
+            //plan.addWaypoints([ Waypoint.create('w1', 21, 31), Waypoint.create('w2', 22, 32) ]);
+            //// add waypoints doesn't create segments
+            //plan.addSegment('w1', 'w2', []);
+            //scope.plan = plan;
 
             var trip = Trip.createTrip(Waypoint.create('w1', 21, 31), Waypoint.create('w2', 22, 32));
             scope.itinerary = Itinerary.createItinerary(trip);
