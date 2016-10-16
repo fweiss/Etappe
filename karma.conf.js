@@ -11,6 +11,7 @@ module.exports = function(config) {
             //'Safari' // don't have current version for Windows
         ],
         plugins: [
+            'karma-coverage',
             'karma-jasmine',
             'karma-spec-reporter',
             'karma-jasmine-html-reporter',
@@ -33,12 +34,15 @@ module.exports = function(config) {
             colors: false
         },
         singleRun: true,
-        reporters: [ 'spec', 'junit', 'html' ],
+        reporters: [ 'coverage', 'spec', 'junit', 'html' ],
         junitReporter: {
             outputFile: 'reports/karma.xml'
         },
         htmlReporter: {
             outputFile: 'reports/jasmine'
+        },
+        preprocessors: {
+            'app/modules/**/!(*test).js': [ 'coverage' ]
         }
     });
 };

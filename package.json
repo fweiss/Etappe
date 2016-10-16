@@ -32,5 +32,8 @@
     "karma-phantomjs-launcher": "^0.2.3",
     "karma-safari-launcher": "^0.1.1",
     "phantomjs": "^1.9.19"
+  },
+  "dependencies": {
+    "karma-coverage": "^1.1.1"
   }
 }
