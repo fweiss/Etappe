@@ -27,10 +27,10 @@ angular.module('plan')
                 chart.setWidth(width);
                 //scope.$watch('plan', function(plan) {
                 scope.$watch('itinerary.getSpan()', function(newValue, oldValue, scope) {
-                    var plan = scope.itinerary;
-                    if (plan) {
-                        var span = plan.getSpan();
-                        var segment = plan.getSegments() && plan.getSegments()[0];
+                    var itinerary = scope.itinerary;
+                    if (itinerary) {
+                        var span = itinerary.getSpan();
+                        var segment = itinerary.getSegments() && itinerary.getSegments()[0];
                         var rides = (segment && segment.rides) || [];
 
                         chart.setTimeSpan(span.spanStart, span.spanEnd);
