@@ -1,4 +1,4 @@
-fdescribe('plan canvas', function() {
+describe('plan canvas', function() {
     // N.B. Date constructor for ISO 8601 is always UTC, use RFC2822 instead
     //var spanStart = new Date('2013-02-22T13:00');
     var spanStart = new Date('22 Feb 2013 13:00');
@@ -9,7 +9,6 @@ fdescribe('plan canvas', function() {
     // captured injects
     var scope;
     var compile;
-    var Plan;
     var planConfig;
     var Itinerary;
     var Trip;
@@ -41,6 +40,10 @@ fdescribe('plan canvas', function() {
             return mockContext;
         };
     }
+    function createRide(rideStart, rideEnd) {
+        return { startTime: rideStart, endTime: rideEnd };
+    }
+
     function setPlanAndApply(plan) {
         scope.plan = plan;
         element.scope().$apply();
@@ -52,10 +55,9 @@ fdescribe('plan canvas', function() {
 
     // start of Jasmine specs
     beforeEach(module('plan', 'plan.canvas.config'));
-    beforeEach(inject(function($rootScope, $compile, _plan_, _planConfig_, itinerary, trip, waypoint, segment) {
+    beforeEach(inject(function($rootScope, $compile, _planConfig_, itinerary, trip, waypoint, segment) {
         scope = $rootScope;
         compile = $compile;
-        Plan = _plan_;
         planConfig = _planConfig_;
         Itinerary = itinerary;
         Trip = trip;
@@ -93,8 +95,8 @@ fdescribe('plan canvas', function() {
             var rideStart1 = addMinutes(spanStart, 31);
             var rideEnd1 = addMinutes(spanStart, 43);
             var rides = itinerary.getSegments()[0].getRides();
-            rides.push(Plan.createRide(rideStart0, rideEnd0));
-            rides.push(Plan.createRide(rideStart1, rideEnd1));
+            rides.push(createRide(rideStart0, rideEnd0));
+            rides.push(createRide(rideStart1, rideEnd1));
             setItineraryAndApply(itinerary);
             expect(mockContext.moveTo).toHaveBeenCalledWith(110, 0);
             expect(mockContext.lineTo).toHaveBeenCalledWith(210, canvasHeight);
