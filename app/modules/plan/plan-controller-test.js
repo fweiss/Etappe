@@ -102,31 +102,6 @@ describe('plan controller', function() {
             expect(scope.plan.getSegments()[0].rides[0].startTime).toEqual(1);
         });
     });
-    describe('restore', function() {
-        // save message
-        it('should show error for invalid plan name', function() {
-            scope.planRestore();
-            expect(alertSpy).toHaveBeenCalledWith('cannot restore plan: invalid plan name: expected non-empty string');
-        });
-        // plan not found?
-        xit('should set origin and destination nexus', function() {
-            var plan = Plan.createPlan('gggg');
-            plan.addSegment('origin', 'destination', []);
-            plan.addWaypoint(Waypoint.create('w1', 20, 31));
-            plan.addWaypoint(Waypoint.create('w2', 21, 31));
-            scope.plan = plan;
-            scope.planSaveName = 'gggg';
-            scope.$digest();
-            scope.planSave();
-            scope.planRestoreName = 'gggg';
-            scope.$digest();
-            scope.planRestore();
-            //expect(alertSpy).toHaveBeenCalledWith('cannot restore plan: invalid plan name: expected non-empty string');
-            expect(alertSpy).not.toHaveBeenCalled();
-            expect(scope.nexusStart.name).toBe('w1');
-            expect(scope.nexusEnd.name).toBe('w2');
-        });
-    });
     describe('itinerary from trip', function() {
         it('segment', function() {
             //System.mergeStop({ name: 's1', lat: 1, lon: 2 });

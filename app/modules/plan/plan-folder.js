@@ -3,7 +3,7 @@
  * Also mediates between a stored plan and an domain plan object.
  */
 angular.module('plan')
-    .service('planFolder', [ 'plan', 'initSavedPlans', '$window', 'nexus', function(Plan, initSavedPlans, $window, Waypoint) {
+    .service('xplanFolder', [ 'plan', 'initSavedPlans', '$window', 'nexus', function(Plan, initSavedPlans, $window, Waypoint) {
         return {
             list: function() {
                 return initSavedPlans;

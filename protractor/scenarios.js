@@ -103,31 +103,31 @@ describe('etappe', function() {
             it('should show available rides', function() {
                 expect(element(by.binding('rideList')).getText()).toBeGreaterThan(0);
             });
-            describe('saving a plan', function() {
-                //clear storage
-                //create a plan
-                //save it
-                //restore it
-                it('should show error when no plan name given', function() {
-                    element(by.css('#planRestore')).click();
-                    var alertDialog = browser.switchTo().alert();
-                    expect(alertDialog.getText()).toEqual("cannot restore plan: invalid plan name: expected non-empty string");
-                });
-                xit('should save and restore plan', function() {
-                    element(by.model('planSaveName')).sendKeys('gggg');
-                    element(by.css('#planSave')).click();
-                    // something is displayed
-                    // remember verify corner cases in unit, but verify UI here
-                    // so we do need to do some mocking
-                    element(by.model('planRestoreName')).sendKeys('gggg');
-                    element(by.css('#planRestore')).click();
-                    // verify list
-                    // verify content
-                    // do click
-                    expect(element(by.model('nexusStart')).getText()).toBe('16th St and Mission');
-                    expect(element(by.model('nexusEnd')).getText()).toBe('16th St and Harrison');
-                });
-            });
+            //describe('saving a plan', function() {
+            //    //clear storage
+            //    //create a plan
+            //    //save it
+            //    //restore it
+            //    it('should show error when no plan name given', function() {
+            //        element(by.css('#planRestore')).click();
+            //        var alertDialog = browser.switchTo().alert();
+            //        expect(alertDialog.getText()).toEqual("cannot restore plan: invalid plan name: expected non-empty string");
+            //    });
+            //    xit('should save and restore plan', function() {
+            //        element(by.model('planSaveName')).sendKeys('gggg');
+            //        element(by.css('#planSave')).click();
+            //        // something is displayed
+            //        // remember verify corner cases in unit, but verify UI here
+            //        // so we do need to do some mocking
+            //        element(by.model('planRestoreName')).sendKeys('gggg');
+            //        element(by.css('#planRestore')).click();
+            //        // verify list
+            //        // verify content
+            //        // do click
+            //        expect(element(by.model('nexusStart')).getText()).toBe('16th St and Mission');
+            //        expect(element(by.model('nexusEnd')).getText()).toBe('16th St and Harrison');
+            //    });
+            //});
         });
     });
     // this should go to controller test, not e2e
@@ -161,48 +161,48 @@ describe('etappe', function() {
             expect(element(by.css('#addSegment')).isPresent()).toBeTruthy();
         });
     });
-    describe('saved plans', function() {
-        beforeEach(function() {
-            element(by.css('#showSavedPlans')).click();
-        });
-        describe('list', function() {
-            it('should be displayed', function() {
-                expect(element(by.css('#savedPlans li.plan')).isPresent()).toBe(true);
-                element.all(by.css('#savedPlans li.plan')).then(function(plans) {
-                    expect(plans).not.toBeUndefined();
-                    expect(plans.length).toBe(1);
-                    expect(plans[0].getText()).toMatch(/get Cliffs/);
-                });
-            });
-            it('should display waypoints', function() {
-                element.all(by.css('#savedPlans li.waypoint')).then(function(waypoints) {
-                    expect(waypoints.length).toBe(2);
-                    expect(waypoints[0].getText()).toMatch(/Mission St/);
-                    expect(waypoints[1].getText()).toMatch(/Castro St/);
-                });
-            });
-        });
-        describe('selection', function() {
-            // wish we could just fail instead of having to check the log
-            afterEach(function() {
-                expect(element(by.css('#errors')).getText()).toBeFalsy();
-            });
-            xit('should make selection', function() {
-                element.all(by.css('#savedPlans li')).then(function(plans) {
-                    var thePlan = plans[0];
-                    thePlan.click().then(function() {
-                        expect(thePlan.getAttribute('class')).toMatch(/selected/);
-                        expect(element(by.binding('currentPlan')).getText()).toMatch(/get Cliffs/);
-                        // TODO sync up mock saved plans and mountebank backend
-                        //browser.driver.sleep(1);
-                        //browser.waitForAngular();
-
-                        expect(element(by.binding('routes')).getText()).toMatch(/33 Ashbury/);
-                    });
-                });
-            });
-        });
-    });
+    //describe('saved plans', function() {
+    //    beforeEach(function() {
+    //        element(by.css('#showSavedPlans')).click();
+    //    });
+    //    describe('list', function() {
+    //        it('should be displayed', function() {
+    //            expect(element(by.css('#savedPlans li.plan')).isPresent()).toBe(true);
+    //            element.all(by.css('#savedPlans li.plan')).then(function(plans) {
+    //                expect(plans).not.toBeUndefined();
+    //                expect(plans.length).toBe(1);
+    //                expect(plans[0].getText()).toMatch(/get Cliffs/);
+    //            });
+    //        });
+    //        it('should display waypoints', function() {
+    //            element.all(by.css('#savedPlans li.waypoint')).then(function(waypoints) {
+    //                expect(waypoints.length).toBe(2);
+    //                expect(waypoints[0].getText()).toMatch(/Mission St/);
+    //                expect(waypoints[1].getText()).toMatch(/Castro St/);
+    //            });
+    //        });
+    //    });
+    //    describe('selection', function() {
+    //        // wish we could just fail instead of having to check the log
+    //        afterEach(function() {
+    //            expect(element(by.css('#errors')).getText()).toBeFalsy();
+    //        });
+    //        xit('should make selection', function() {
+    //            element.all(by.css('#savedPlans li')).then(function(plans) {
+    //                var thePlan = plans[0];
+    //                thePlan.click().then(function() {
+    //                    expect(thePlan.getAttribute('class')).toMatch(/selected/);
+    //                    expect(element(by.binding('currentPlan')).getText()).toMatch(/get Cliffs/);
+    //                    // TODO sync up mock saved plans and mountebank backend
+    //                    //browser.driver.sleep(1);
+    //                    //browser.waitForAngular();
+    //
+    //                    expect(element(by.binding('routes')).getText()).toMatch(/33 Ashbury/);
+    //                });
+    //            });
+    //        });
+    //    });
+    //});
     // remember controller test checks $scope state and actions
     describe('saved trips', function() {
         beforeEach(function() {
