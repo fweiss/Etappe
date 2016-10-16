@@ -3,10 +3,18 @@ angular.module('plan')
     function Itinerary(trip, segments) {
         this.trip = trip;
         this.segments = segments;
+        this.span = { spanStart: 0, spanEnd: 0 };
     };
     Itinerary.prototype.getTrip = function() {
         return this.trip;
     };
+    Itinerary.prototype.getSpan = function() {
+        return this.span;
+    };
+    Itinerary.prototype.setSpan = function(spanStart, spanEnd) {
+        this.span.spanStart = spanStart;
+        this.span.spanEnd = spanEnd;
+    }
     Itinerary.prototype.getSegments = function() {
         return this.segments;
     };

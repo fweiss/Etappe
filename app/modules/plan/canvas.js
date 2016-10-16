@@ -25,7 +25,9 @@ angular.module('plan')
                 width = element[0].width;
                 height = element[0].height;
                 chart.setWidth(width);
-                scope.$watch('plan', function(plan) {
+                //scope.$watch('plan', function(plan) {
+                scope.$watch('itinerary.getSpan()', function(newValue, oldValue, scope) {
+                    var plan = scope.itinerary;
                     if (plan) {
                         var span = plan.getSpan();
                         var segment = plan.getSegments() && plan.getSegments()[0];
@@ -53,11 +55,11 @@ angular.module('plan')
                         });
                         if (segment) {
                             ctx.font = 'bold 12pt Calibri';
-                            ctx.fillText(segment.origin, 0, tickLegendHeight);
+                            ctx.fillText(segment.getOriginNexus().waypoint.name, 0, tickLegendHeight);
                         }
                         ctx.restore();
                     }
-                });
+                }, true);
             }
         };
         function drawTimeTickMajor(ctx, spanStart, spanEnd) {

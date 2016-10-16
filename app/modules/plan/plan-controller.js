@@ -64,6 +64,9 @@ angular.module('plan')
 
                 $scope.createItineraryFromTrip(trip);
                 $scope.refreshItineraryRides(function() {
+                    var now = new Date();
+                    var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+                    $scope.itinerary.setSpan(now, then);
                     $scope.createPlanFromItinerary($scope.itinerary);
                 });
             });
@@ -223,6 +226,7 @@ angular.module('plan')
 
                 var now = new Date();
                 var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+                itinerary.setSpan(now, then);
                 var plan = Plan.createPlan(itinerary.getTrip().getName());
                 plan.setSpan(now, then);
                 plan.addSegment(segment.originNexus.getName(), segment.destinationNexus.getName(), rides);

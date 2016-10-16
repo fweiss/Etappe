@@ -17,7 +17,7 @@ describe('domain itinerary', function() {
         w2 = Waypoint.createWaypoint('w2', 22, 32);
         w2 = Waypoint.createWaypoint('w3', 23, 33);
         trip = Trip.createTrip(w1, w2);
-   });
+    });
     describe('creation', function() {
         describe('validation', function() {
             var e1 = new Error('createItinerary: trip is required');
@@ -38,6 +38,19 @@ describe('domain itinerary', function() {
             var e1 = new Error('createItinerary: segments to not match trip waypoints');
 
 
+        });
+        it('has empty span', function() {
+            var itinerary = Itinerary.createItinerary(trip);
+            expect(itinerary.getSpan().spanStart).toEqual(0);
+            expect(itinerary.getSpan().spanEnd).toEqual(0);
+        });
+    });
+    describe('span', function() {
+        it('set span', function() {
+            var itinerary = Itinerary.createItinerary(trip);
+            itinerary.setSpan(1, 2);
+            expect(itinerary.getSpan().spanStart).toEqual(1);
+            expect(itinerary.getSpan().spanEnd).toEqual(2);
         });
     });
     describe('segments', function() {
