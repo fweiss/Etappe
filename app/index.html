@@ -80,19 +80,6 @@
                     </ol>
                 </div>
             </div>
-            <div>
-                <button id="showSavedPlans" ng-click="showSavedPlans()">Saved Plans</button>
-                <div id="savedPlans">
-                    <ol>
-                        <li ng-repeat="plan in savedPlans" ng-click="selectSavedPlan(plan)" ng-class="{ selected: plan.id === currentPlan.id, plan: true }">
-                            <span>{{ plan.name }}</span>
-                            <ol>
-                                <li ng-repeat="waypoint in plan.waypoints" ng-class="{ waypoint: true }">{{ waypoint.name }}</li>
-                            </ol>
-                        </li>
-                    </ol>
-                </div>
-            </div>
          </div>
         <script src="lib/underscore.js"></script>
         <script src="lib/angular.min.js"></script>
@@ -104,7 +91,6 @@
         <script src="modules/plan/itinerary.js"></script>
         <script src="modules/plan/plan-controller.js"></script>
         <script src="modules/plan/plan.js"></script>
-        <script src="modules/plan/plan-folder.js"></script>
         <script src="modules/plan/tripfolder.js"></script>
         <script src="modules/plan/stop.js"></script>
         <script src="modules/plan/waypoint.js"></script>
