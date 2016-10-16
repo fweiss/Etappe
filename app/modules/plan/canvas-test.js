@@ -28,11 +28,11 @@ describe('plan canvas', function() {
     function addMinutes(date, minutes) {
         return new Date(date.getTime() + minutes * 60000);
     }
-    function createPlanWithSpan(spanStart, spanEnd) {
-        var plan = Plan.createPlan('test');
-        plan.setSpan(spanStart, spanEnd);
-        return plan;
-    }
+    //function createPlanWithSpan(spanStart, spanEnd) {
+    //    var plan = Plan.createPlan('test');
+    //    plan.setSpan(spanStart, spanEnd);
+    //    return plan;
+    //}
     function mockCanvasContext(width, height) {
         var html = '<canvas utt-rides width="' + width + '" height="' + height + '"></canvas>';
         element = angular.element(html);
@@ -93,9 +93,9 @@ describe('plan canvas', function() {
             var rideStart = addMinutes(spanStart, 10);
             var rideEnd = addMinutes(spanStart, 20);
 
-            var plan = createPlanWithSpan(spanStart, spanEnd);
+            //var plan = createPlanWithSpan(spanStart, spanEnd);
             var ride = Plan.createRide(rideStart, rideEnd);
-            plan.addSegment('abc', 'def', [ ride ]);
+            //plan.addSegment('abc', 'def', [ ride ]);
 
             // var plan = Plan.create('name');
             // var w1 = Waypoint.create();
@@ -115,10 +115,10 @@ describe('plan canvas', function() {
             var rideEnd0 = addMinutes(spanStart, 21);
             var rideStart1 = addMinutes(spanStart, 31);
             var rideEnd1 = addMinutes(spanStart, 43);
-            var plan = createPlanWithSpan(spanStart, spanEnd);
-            var ride0 = Plan.createRide(rideStart0, rideEnd0);
-            var ride1 = Plan.createRide(rideStart1, rideEnd1);
-            plan.addSegment('abc', 'def', [ ride0, ride1 ]);
+            //var plan = createPlanWithSpan(spanStart, spanEnd);
+            //var ride0 = Plan.createRide(rideStart0, rideEnd0);
+            //var ride1 = Plan.createRide(rideStart1, rideEnd1);
+            //plan.addSegment('abc', 'def', [ ride0, ride1 ]);
 
 
             var rides = itinerary.getSegments()[0].getRides();
@@ -132,7 +132,7 @@ describe('plan canvas', function() {
         });
         describe('time ticks', function() {
             it('should draw a tick', function() {
-                var plan = createPlanWithSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
+                //var plan = createPlanWithSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
                 itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
                 setItineraryAndApply(itinerary);
                 //setPlanAndApply(plan);
@@ -144,7 +144,7 @@ describe('plan canvas', function() {
                 expect(mockContext.stroke).toHaveBeenCalled();
             });
             it('should draw all ticks for span', function() {
-                var plan = createPlanWithSpan(spanStart, addMinutes(spanStart, 60));
+                //var plan = createPlanWithSpan(spanStart, addMinutes(spanStart, 60));
                 itinerary.setSpan(spanStart, addMinutes(spanStart, 60));
                 setItineraryAndApply(itinerary);
                 //setPlanAndApply(plan);
@@ -152,14 +152,14 @@ describe('plan canvas', function() {
             });
             // can't spy on strokeStyle property
             it('should draw minor tick', function() {
-                var plan = createPlanWithSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
+                //var plan = createPlanWithSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
                 itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
                 setItineraryAndApply(itinerary);
                 //setPlanAndApply(plan);
                 expect(mockContext.strokeStyle).toBe('rgba(0, 0, 0, 0.1)');
             });
             it('should draw major tick', function() {
-                var plan = createPlanWithSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
+                //var plan = createPlanWithSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
                 itinerary.setSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
                 setItineraryAndApply(itinerary);
                 //setPlanAndApply(plan);
@@ -168,7 +168,7 @@ describe('plan canvas', function() {
         });
         describe('tick labels', function() {
             it('should draw at 15 minute mark', function() {
-                var plan = createPlanWithSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
+                //var plan = createPlanWithSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
                 itinerary.setSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
                 setItineraryAndApply(itinerary);
                 //setPlanAndApply(plan);
@@ -177,8 +177,8 @@ describe('plan canvas', function() {
         });
         describe('nexus', function() {
             it('should draw top label', function() {
-                var plan = createPlanWithSpan(spanStart, spanEnd);
-                plan.addSegment('abc', 'def', []);
+                //var plan = createPlanWithSpan(spanStart, spanEnd);
+                //plan.addSegment('abc', 'def', []);
                 setItineraryAndApply(itinerary);
                 //setPlanAndApply(plan);
                 // FIXME actual position
@@ -191,7 +191,7 @@ describe('plan canvas', function() {
     describe('1200 x 200', function() {
         it('should have ticks for entire length', function() {
             mockCanvasContext(1200, 200);
-            var plan = createPlanWithSpan(spanStart, addMinutes(spanStart, 60));
+            //var plan = createPlanWithSpan(spanStart, addMinutes(spanStart, 60));
             setItineraryAndApply(itinerary);
             //setPlanAndApply(plan);
             // there should be 12 ticks in 60 minute span
