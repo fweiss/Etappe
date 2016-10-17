@@ -48,6 +48,7 @@ angular.module('plan')
 
                             ctx.strokeStyle = rideLine.strokeStyle;
                             ctx.lineWidth = rideLine.lineWidth;
+                            ctx.lineCap = 'square';
                             ctx.beginPath();
                             ctx.moveTo(chart.timeToX(startTime), 0);
                             ctx.lineTo(chart.timeToX(endTime), height);
