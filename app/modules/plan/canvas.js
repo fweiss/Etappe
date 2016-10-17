@@ -43,23 +43,27 @@ angular.module('plan')
                 drawTimeTickMajor(ctx, span.spanStart, span.spanEnd);
 
                 _.each(rides, function(ride) {
-                    var startTime = ride.startTime;
-                    var endTime = ride.endTime;
-
-                    ctx.strokeStyle = rideLine.strokeStyle;
-                    ctx.lineWidth = rideLine.lineWidth;
-                    ctx.lineCap = 'square';
-                    ctx.beginPath();
-                    ctx.moveTo(chart.timeToX(startTime), 0);
-                    ctx.lineTo(chart.timeToX(endTime), height);
-                    ctx.stroke();
-                });
+                    drawRide(ctx, ride);
+                 });
                 if (segment) {
                     ctx.font = 'bold 12pt Calibri';
                     ctx.fillText(segment.getOriginNexus().waypoint.name, 0, tickLegendHeight);
                 }
                 ctx.restore();
             }
+        }
+        function drawRide(ctx, ride) {
+            var startTime = ride.startTime;
+            var endTime = ride.endTime;
+
+            ctx.strokeStyle = rideLine.strokeStyle;
+            ctx.lineWidth = rideLine.lineWidth;
+            ctx.lineCap = 'square';
+            ctx.beginPath();
+            ctx.moveTo(chart.timeToX(startTime), 0);
+            ctx.lineTo(chart.timeToX(endTime), height);
+            ctx.stroke();
+
         }
         function drawTimeTickMajor(ctx, spanStart, spanEnd) {
             var fiveMinuteMillis = 5 * minuteMillis;

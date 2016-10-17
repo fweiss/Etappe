@@ -1,4 +1,4 @@
-describe('plan canvas', function() {
+fdescribe('plan canvas', function() {
     // N.B. Date constructor for ISO 8601 is always UTC, use RFC2822 instead
     //var spanStart = new Date('2013-02-22T13:00');
     var spanStart = new Date('22 Feb 2013 13:00');
@@ -136,6 +136,12 @@ describe('plan canvas', function() {
                 setItineraryAndApply(itinerary);
                 expect(mockContext.fillText).toHaveBeenCalledWith('1:15 PM', 452, 10);
             });
+            //it('should draw over ride', function() {
+            //    mockContext.fillText.and.callFake(function() {
+            //        expect(mockContext.moveTo).not.toHaveBeenCalled();
+            //    });
+            //    setItineraryAndApply(itinerary);
+            //});
         });
         describe('nexus', function() {
             it('should draw top label', function() {
