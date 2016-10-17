@@ -60,7 +60,7 @@ angular.module('plan')
             ctx.lineWidth = rideLine.lineWidth;
             ctx.lineCap = 'square';
             ctx.beginPath();
-            ctx.moveTo(chart.timeToX(startTime), 0);
+            ctx.moveTo(chart.timeToX(startTime), tickLegendHeight);
             ctx.lineTo(chart.timeToX(endTime), height);
             ctx.stroke();
 

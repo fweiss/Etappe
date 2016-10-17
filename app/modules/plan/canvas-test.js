@@ -1,4 +1,4 @@
-fdescribe('plan canvas', function() {
+describe('plan canvas', function() {
     // N.B. Date constructor for ISO 8601 is always UTC, use RFC2822 instead
     //var spanStart = new Date('2013-02-22T13:00');
     var spanStart = new Date('22 Feb 2013 13:00');
@@ -14,7 +14,6 @@ fdescribe('plan canvas', function() {
     var Trip;
     var Waypoint;
     var Segment;
-    var Nexus;
 
     // mocks
     var element;
@@ -77,17 +76,17 @@ fdescribe('plan canvas', function() {
         beforeEach(function() {
             mockCanvasContext(canvasWidth, canvasHeight);
             tickLegendHeight = planConfig('tickLegendHeight');
-            //var segment = itinerary.getSegments()[0];
-            //segment.setRides([ 'ride' ]);
         });
         it('should draw background', function() {
             setItineraryAndApply(itinerary);
             expect(mockContext.fillRect).toHaveBeenCalledWith(0, tickLegendHeight, canvasWidth, canvasHeight);
         });
         it('should draw a ride', function() {
-            setItineraryAndApply(itinerary)
-            expect(mockContext.moveTo).toHaveBeenCalledWith(100, 0);
-            expect(mockContext.lineTo).toHaveBeenCalledWith(200, canvasHeight);
+            var segment = itinerary.getSegments()[0];
+            segment.setRides([ { startTime: addMinutes(spanStart, 1), endTime: addMinutes(spanStart, 2) } ]);
+            setItineraryAndApply(itinerary);
+            expect(mockContext.moveTo).toHaveBeenCalledWith(10, tickLegendHeight);
+            expect(mockContext.lineTo).toHaveBeenCalledWith(20, canvasHeight);
         });
         it('should draw two rides', function() {
             var rideStart0 = addMinutes(spanStart, 11);
@@ -98,9 +97,9 @@ fdescribe('plan canvas', function() {
             rides.push(createRide(rideStart0, rideEnd0));
             rides.push(createRide(rideStart1, rideEnd1));
             setItineraryAndApply(itinerary);
-            expect(mockContext.moveTo).toHaveBeenCalledWith(110, 0);
+            expect(mockContext.moveTo).toHaveBeenCalledWith(110, tickLegendHeight);
             expect(mockContext.lineTo).toHaveBeenCalledWith(210, canvasHeight);
-            expect(mockContext.moveTo).toHaveBeenCalledWith(310, 0);
+            expect(mockContext.moveTo).toHaveBeenCalledWith(310, tickLegendHeight);
         });
         describe('time ticks', function() {
             it('should draw a tick', function() {
