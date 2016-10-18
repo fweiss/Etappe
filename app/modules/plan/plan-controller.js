@@ -23,29 +23,21 @@ angular.module('plan')
             //var segments = itinerary.getSegments();
             $scope.itinerary = itinerary;
         };
-        $scope.createPlanFromItinerary = function(itinerary) {
-            //var plan = Plan.createPlan(itinerary.getTrip().getName());
-            //_.each(itinerary.getSegments(), function(segment) {
-            //    plan.addSegment(segment.originNexus.getName(), segment.destinationNexus.getName(), segment.rides);
-            //});
-            //var now = new Date();
-            //var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-            ////plan.spanStart =  now;
-            ////plan.spanEnd = then;
-            //plan.setSpan(now, then);
-            //$scope.plan = plan;
-        };
-        //$scope.originStationSelect = null;
-        //$scope.showSavedPlans = function() {
-        //    $scope.savedPlans = PlanFolder.list();
+        //$scope.createPlanFromItinerary = function(itinerary) {
+        //    //var plan = Plan.createPlan(itinerary.getTrip().getName());
+        //    //_.each(itinerary.getSegments(), function(segment) {
+        //    //    plan.addSegment(segment.originNexus.getName(), segment.destinationNexus.getName(), segment.rides);
+        //    //});
+        //    //var now = new Date();
+        //    //var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+        //    ////plan.spanStart =  now;
+        //    ////plan.spanEnd = then;
+        //    //plan.setSpan(now, then);
+        //    //$scope.plan = plan;
         //};
         $scope.showSavedTrips = function() {
             $scope.savedTrips = TripFolder.list();
         };
-        //$scope.selectSavedPlanx = function(planData) {
-        //    $scope.currentPlan = plan;
-        //    showSavedRides(plan);
-        //};
         $scope.refreshItineraryRides = function(callback) {
             _.each($scope.itinerary.getSegments(), function(segment) {
                 SfMuni.getRidesForSegment(segment).then(function(response) {
@@ -67,44 +59,10 @@ angular.module('plan')
                     var now = new Date();
                     var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
                     $scope.itinerary.setSpan(now, then);
-                    $scope.createPlanFromItinerary($scope.itinerary);
+                    //$scope.createPlanFromItinerary($scope.itinerary);
                 });
             });
         };
-        //$scope.selectSavedPlan = function(planData) {
-        //    // $scope.plan is watched by canvas
-        //    // but $scope.itinerary is really the domain object
-        //    // plan is not supposed to have rides
-        //    // also the getRidesPerSegment is called other places, and should be centralized
-        //    $scope.currentPlan = planData;
-        //    var plan = Plan.createPlan(planData);
-        //    var trip = Trip.createTrip(plan.getWaypoints()[0], plan.getWaypoints()[1]);
-        //    $scope.itinerary = Itinerary.createItinerary(trip);
-        //    // needs System nexuses
-        //    //$scope.createItineraryFromTrip(trip);
-        //
-        //
-        //    var waypoints = plan.getWaypoints();
-        //    var originStops = waypoints[0].stops;
-        //    var destinationStops = waypoints[1].stops;
-        //    //var segment = { originStops: originStops, destinationStops: destinationStops };
-        //    var segment = { originWaypoint: waypoints[0],  destinationWaypoint: waypoints[1], rides: [] };
-        //    var now = new Date();
-        //    var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-        //    //plan.spanStart =  now;
-        //    //plan.spanEnd = then;
-        //    plan.setSpan(now, then);
-        //
-        //
-        //    SfMuni.getRidesForSegment(segment).then(function(response) {
-        //        var rides = response.data;
-        //        plan.addSegment(waypoints[0].name, waypoints[1].name, rides);
-        //        $scope.plan = plan;
-        //        //setPlanFromItinerary(Itinerary.create(plan));
-        //        $scope.rideList = rides;
-        //        $scope.routes = '33 Ashbury'; //response.routes;
-        //    });
-        //};
         $scope.disableOrigin = true;
         $scope.disableDestination = true;
         $scope.carriers = [
@@ -137,22 +95,6 @@ angular.module('plan')
         $scope.changeDestination = function() {
             changePlan();
         };
-            // deprecated
-        //function changePlan() {
-        //    console.log('hereh');
-        //    if ($scope.originStationSelect && $scope.destinationStationSelect) {
-        //        var originStop = $scope.originStationSelect.stopId; // 13293
-        //        var destinationStop = $scope.destinationStationSelect.stopId; // 17324
-        //        var now = new Date();
-        //        var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-        //        SfMuni.getRides(originStop, destinationStop).then(function(response) {
-        //            var plan =  { spanStart: now, spanEnd: then,
-        //                rides: response.data
-        //            };
-        //            $scope.plan = plan;
-        //        });
-        //    }
-        //}
         $scope.originNexusChanged = function() {
             changeNexus();
         }
@@ -165,26 +107,6 @@ angular.module('plan')
         $scope.ridesRefresh2 = function() {
             refreshRides($scope.itinerary.getSegments()[0], $scope.itinerary);
         }
-        //$scope.planSave = function() {
-        //    var planName = $scope.planSaveName;
-        //    PlanFolder.store($scope.plan, planName);
-        //};
-        //$scope.planRestore = function() {
-        //    try {
-        //        var restoredPlan = PlanFolder.load($scope.planRestoreName);
-        //        //$scope.originNexus = restoredPlan.segments[0].origin;
-        //        $scope.destinationNexus = '';
-        //        var segments = restoredPlan.getSegments2();
-        //        //$scope.nexusStart = segments[0].origin;
-        //        //$scope.nexusEnd = segments[0].destination;
-        //        $scope.nexusStart = segments[0].originWaypoint;
-        //        $scope.nexusEnd = segments[0].destinationWaypoint;
-        //        //$scope.plan = restoredPlan;
-        //    }
-        //    catch (e) {
-        //        alert('cannot restore plan: ' + e);
-        //    }
-        //};
         function changeNexus() {
             if ($scope.originNexusSelect && $scope.destinationNexusSelect) {
                 var originStops = $scope.originNexusSelect.stops;
@@ -235,30 +157,4 @@ angular.module('plan')
                 $scope.rideList = rides.length;
             }, function(fail) { $scope.rideList = fail; });
         }
-        //function showSavedRides(plan) {
-        //    var waypoints = plan.waypoints;
-        //    //var originStops = [{"stopId":"15553","stopTag":"5553","route":"33"},{"stopId":"13338","stopTag":"3338","route":"33"}];
-        //    //var destinationStops = [{"stopId":"13326","stopTag":"3326","route":"33"},{"stopId":"13325","stopTag":"3325","route":"33"}];
-        //    var now = new Date();
-        //    var originStops = waypoints[0].stops;
-        //    var destinationStops = waypoints[1].stops;
-        //    var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-        //    var segment = { originStops: originStops, destinationStops: destinationStops };
-        //    console.log('getting rides: ' + plan.name);
-        //    SfMuni.getRidesForSegment(segment).then(function(response) {
-        //        console.log('got rides: ');
-        //        var rides = response.data;
-        //        console.log('got rides: ' + rides);
-        //        try {
-        //            var plan = Plan.createPlan(now, then);
-        //        }
-        //        catch(e) {
-        //            console.log('err: ' + e)
-        //        }
-        //        //console.log($scope);
-        //        plan.addSegment(waypoints[0].name, waypoints[1].name, rides);
-        //        $scope.plan = plan;
-        //        $scope.rideList = rides.length;
-        //    }, function(fail) { $scope.rideList = fail; });
-        //}
 }]);
