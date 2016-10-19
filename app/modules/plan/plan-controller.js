@@ -70,11 +70,11 @@ angular.module('plan')
             { name: 'SFMUNI' }
         ];
         $scope.rides = null;
-        $scope.agencySelected = function() {
-            Plan.fetchNexuses().then(function(nexuses) {
-                $scope.originNexuses = nexuses;
-            });
-        };
+        //$scope.agencySelected = function() {
+        //    Plan.fetchNexuses().then(function(nexuses) {
+        //        $scope.originNexuses = nexuses;
+        //    });
+        //};
         $scope.changeCarrier = function() {
             //SfMuni.getAllStops().then(function(response) {
             //    $scope.originStations = response.data;
@@ -149,10 +149,10 @@ angular.module('plan')
                 var now = new Date();
                 var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
                 itinerary.setSpan(now, then);
-                var plan = Plan.createPlan(itinerary.getTrip().getName());
-                plan.setSpan(now, then);
-                plan.addSegment(segment.originNexus.getName(), segment.destinationNexus.getName(), rides);
-                $scope.plan = plan;
+                //var plan = Plan.createPlan(itinerary.getTrip().getName());
+                //plan.setSpan(now, then);
+                //plan.addSegment(segment.originNexus.getName(), segment.destinationNexus.getName(), rides);
+                //$scope.plan = plan;
 
                 $scope.rideList = rides.length;
             }, function(fail) { $scope.rideList = fail; });
