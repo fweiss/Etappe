@@ -6,18 +6,24 @@ describe('domain trip', function() {
         Trip = _trip_;
         Waypoint = _waypoint_;
     }));
-    describe('creation', function() {
-        var trip;
-        beforeEach(function() {
-            trip = Trip.createTrip('o', 'd');
-        });
+    describe('validation', function() {
         it('error if origin not given', function() {
             var e1 = new Error('createTrip: must specify origin');
             expect(function() { Trip.createTrip(); }).toThrow(e1);
         });
+        xit('error if origin not waypoint type', function() {
+            var e1 = new Error('createTrip: origin must be Waypoint type');
+            expect(function() { Trip.createTrip({ }); }).toThrow(e1);
+        });
         it('error if destination not given', function() {
             var e1 = new Error('createTrip: must specify destination');
             expect(function() { Trip.createTrip('origin'); }).toThrow(e1);
+        });
+    });
+    describe('creation', function() {
+        var trip;
+        beforeEach(function() {
+            trip = Trip.createTrip('o', 'd');
         });
         it('has initial origin', function() {
             expect(trip.getOrigin()).toEqual('o');
