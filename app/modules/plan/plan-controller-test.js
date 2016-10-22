@@ -81,6 +81,14 @@ describe('plan controller', function() {
             expect(segments.length).toBe(1);
             //expect(segments[0].rides.length).toBe(1);
         });
+        xit('build from waypoints', function() {
+            scope.originNexusSelect = Waypoint.create('w1', 21, 31);
+            scope.destinationNexusSelect = Waypoint.create('w2', 22, 32);
+            scope.changeNexus2();
+            expect(scope.itinerary).toBeTruthy();
+            expect(scope.itinerary.getTrip().getName()).toEqual('Trip1');
+            expect(scope.itinerary.getSegments().length).toEqual(1);
+        });
         it('should update itinerary on rides refresh', function() {
             //var plan = Plan.createPlan();
             //plan.addWaypoints([ Waypoint.create('w1', 21, 31), Waypoint.create('w2', 22, 32) ]);
@@ -88,7 +96,7 @@ describe('plan controller', function() {
             //plan.addSegment('w1', 'w2', []);
             //scope.plan = plan;
 
-            var trip = Trip.createTrip(Waypoint.create('w1', 21, 31), Waypoint.create('w2', 22, 32));
+            var trip = Trip.createTrip(Waypoint2.createWaypoint('w1', 21, 31), Waypoint2.createWaypoint('w2', 22, 32));
             scope.itinerary = Itinerary.createItinerary(trip);
             var ride = { startTime: 1, endTime: 2, agency: 'a', vehicle: 'v' }
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ ride ] }));

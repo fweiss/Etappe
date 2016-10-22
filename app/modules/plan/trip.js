@@ -42,6 +42,9 @@ angular.module('plan')
                 if (! destination) {
                     throw new Error('createTrip: must specify destination');
                 }
+                //if (destination.constructor.name != 'Waypoint') {
+                //    throw new Error('createTrip: destination must be Waypoint type');
+                //}
                 return new Trip(name, origin, destination);
             }
         };

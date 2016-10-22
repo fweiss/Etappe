@@ -1,10 +1,15 @@
 describe('domain trip', function() {
     var Trip;
     var Waypoint;
+    var w1;
+    var w2;
     beforeEach(module('plan'));
     beforeEach(inject(function(_trip_, _waypoint_) {
         Trip = _trip_;
         Waypoint = _waypoint_;
+
+        w1 = Waypoint.createWaypoint('w1', 1, 2);
+        w2 = Waypoint.createWaypoint('w2', 1, 3);
     }));
     describe('validation', function() {
         it('error if origin not given', function() {
@@ -17,19 +22,23 @@ describe('domain trip', function() {
         });
         it('error if destination not given', function() {
             var e1 = new Error('createTrip: must specify destination');
-            expect(function() { Trip.createTrip('origin'); }).toThrow(e1);
+            expect(function() { Trip.createTrip(w1); }).toThrow(e1);
+        });
+        xit('error if destination not waypoint type', function() {
+            var e1 = new Error('createTrip: destination must be Waypoint type');
+            expect(function() { Trip.createTrip(w1, {}); }).toThrow(e1);
         });
     });
     describe('creation', function() {
         var trip;
         beforeEach(function() {
-            trip = Trip.createTrip('o', 'd');
+            trip = Trip.createTrip(w1, w2);
         });
         it('has initial origin', function() {
-            expect(trip.getOrigin()).toEqual('o');
+            expect(trip.getOrigin().getName()).toEqual('w1');
         });
         it('has initial destination', function() {
-            expect(trip.getDestination()).toEqual('d');
+            expect(trip.getDestination().getName()).toEqual('w2');
         });
         it('has no initial inner waypoints', function() {
             expect(trip.getInnerWaypoints()).toEqual([]);
@@ -39,7 +48,7 @@ describe('domain trip', function() {
                 expect(trip.getName()).toMatch('Trip1')
 ;           });
             it('has unique generated name', function() {
-                var trip2 = Trip.createTrip('o', 'd');
+                var trip2 = Trip.createTrip(w1, w2);
                 expect(trip.getName()).not.toEqual(trip2.getName());
             });
             it('can set name', function() {
@@ -51,7 +60,7 @@ describe('domain trip', function() {
     describe('waypoints', function() {
         var trip;
         beforeEach(function() {
-            trip = Trip.createTrip('o', 'd');
+            trip = Trip.createTrip(w1, w2);
             trip.setInnerWaypoints([ 'w1', 'w2' ]);
         });
         it('can be set', function() {

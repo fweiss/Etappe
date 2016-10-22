@@ -4,8 +4,8 @@ angular.module('plan')
             $window.alert(message);
         }
     })
-    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'segment',
-        function($scope, chart, SfMuni, Plan, alert, Waypoint, Itinerary, Trip, System, TripFolder, Segment) {
+    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'segment', 'waypoint',
+        function($scope, chart, SfMuni, Plan, alert, Nexus, Itinerary, Trip, System, TripFolder, Segment, Waypoint) {
 
         $scope.createItineraryFromTrip = function(trip) {
             var nexuses = _.map(trip.getWaypoints(), function(waypoint) {
@@ -103,10 +103,19 @@ angular.module('plan')
         }
         $scope.ridesRefresh = function() {
             changeNexus();
-        }
+        };
         $scope.ridesRefresh2 = function() {
             refreshRides($scope.itinerary.getSegments()[0], $scope.itinerary);
         }
+        $scope.changeNexus2 = function() {
+            var trip = new Trip.createTrip(1, 2);
+            var originNexus = Nexus.createNexusFromWaypoint(w1);
+            var originNexus = Nexus.createNexusFromWaypoint(w2);
+            var segemnt = Segment.createSegment(originNexus, destinationNexus);
+            var segments = [ segment ];
+            var itinerary = Itinerary.createItinerary(trip, segments);
+            $scope.itinerary = itinerary;
+        };
         function changeNexus() {
             if ($scope.originNexusSelect && $scope.destinationNexusSelect) {
                 var originStops = $scope.originNexusSelect.stops;
@@ -116,21 +125,21 @@ angular.module('plan')
                 var plan = Plan.createPlan('cplan');
                 var itinerary;
                 plan.setSpan(now, then);
-                var w1 = Waypoint.create($scope.originNexusSelect.name, 21, 31); // originStops
+                var n1 = Nexus.create($scope.originNexusSelect.name, 21, 31); // originStops
                 _.each(originStops, function(stop) {
-                    w1.addStop(stop);
+                    n1.addStop(stop);
                 });
-                plan.addWaypoint(w1);
-                var w2 = Waypoint.create($scope.destinationNexusSelect.name, 22, 33);
+                plan.addWaypoint(n1);
+                var n2 = Nexus.create($scope.destinationNexusSelect.name, 22, 33);
                 _.each(destinationStops, function(stop) {
-                    w2.addStop(stop);
+                    n2.addStop(stop);
                 });
-                plan.addWaypoint(w2); // destinationStops);
+                plan.addWaypoint(n2); // destinationStops);
                 var segment = plan.getSegments2()[0];
                 $scope.plan = plan;
 
                 // Itinerary is in plan.js
-                var trip = Trip.createTrip(w1, w2);
+                var trip = Trip.createTrip(n1, n2);
                 var ss = _.map(plan.getSegments2(), function(segment) {
                     return Segment.createSegment(segment.originWaypoint, segment.destinationWaypoint);
                 });
