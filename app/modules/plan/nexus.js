@@ -1,12 +1,7 @@
 angular.module('plan')
     .service('nexus', [ 'waypoint', function(Waypoint) {
         var nexuses = [];
-        //function Nexus(name, lat, lon) {
-        //    this.name = name;
-        //    this.lat = lat;
-        //    this.lon = lon;
-        //    this.stops = [];
-        //}
+
         function Nexus(waypoint) {
             this.waypoint = waypoint;
             this.stops = [];
@@ -26,20 +21,8 @@ angular.module('plan')
         Nexus.prototype.getStops = function() {
             return this.stops;
         };
+
         return {
-            xcreate: function(name, lat, lon) {
-                //if (_.isUndefined(name)) {
-                //    throw new Error('Waypoint.create: name is required');
-                //}
-                //if (_.isUndefined(lat)) {
-                //    throw new Error('Waypoint.create: lat is required');
-                //}
-                //if (_.isUndefined(lon)) {
-                //    throw new Error('Waypoint.create: lon is required');
-                //}
-                //return new Nexus(name, lat, lon );
-                return new Nexus(Waypoint.createWaypoint(name, lat, lon));
-            },
             create: createNexus,
             createFromWaypoint: function(waypoint) {
                 return new Nexus(waypoint);
@@ -66,7 +49,6 @@ angular.module('plan')
             //if (_.isUndefined(lon)) {
             //    throw new Error('Waypoint.create: lon is required');
             //}
-            //return new Nexus(name, lat, lon );
             return new Nexus(Waypoint.createWaypoint(name, lat, lon));
         }
         function findNearbyNexus(lat, lon) {
@@ -79,7 +61,6 @@ angular.module('plan')
         function mergeStop(stop) {
             var nearbyNexus = findNearbyNexus(stop.getLat(), stop.getLon());
             if (_.isUndefined(nearbyNexus)) {
-                //nearbyNexus = new Nexus(stop.getName(), stop.getLat(), stop.getLon());
                 nearbyNexus = createNexus(stop.getName(), stop.getLat(), stop.getLon());
                 nexuses.push(nearbyNexus);
             }

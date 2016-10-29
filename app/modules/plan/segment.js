@@ -1,10 +1,11 @@
 angular.module('plan')
 .service('segment', function() {
+
     function Segment(originNexus, destinationNexus) {
         this.originNexus = originNexus;
         this.destinationNexus = destinationNexus;
         this.rides = [];
-    };
+    }
     Segment.prototype.getOriginNexus = function() {
         return this.originNexus;
     };
@@ -17,6 +18,7 @@ angular.module('plan')
     Segment.prototype.setRides = function(rides) {
         this.rides = rides;
     };
+
     return {
         createSegment: function(originNexus, destinationNexus) {
             if (_.isUndefined(originNexus)) {

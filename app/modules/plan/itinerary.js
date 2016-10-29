@@ -1,10 +1,11 @@
 angular.module('plan')
 .service('itinerary', [ 'segment', 'nexus',  function(Segment, Nexus) {
+
     function Itinerary(trip, segments) {
         this.trip = trip;
         this.segments = segments;
         this.span = { spanStart: 0, spanEnd: 0 };
-    };
+    }
     Itinerary.prototype.getTrip = function() {
         return this.trip;
     };
@@ -14,10 +15,11 @@ angular.module('plan')
     Itinerary.prototype.setSpan = function(spanStart, spanEnd) {
         this.span.spanStart = spanStart;
         this.span.spanEnd = spanEnd;
-    }
+    };
     Itinerary.prototype.getSegments = function() {
         return this.segments;
     };
+
     return {
         createItinerary: function(_trip, _segments) {
             if (_.isUndefined(_trip)) {
@@ -32,7 +34,6 @@ angular.module('plan')
                     var originNexus = Nexus.createFromWaypoint(previousWaypoint);
                     var destinationNexus = Nexus.createFromWaypoint(waypoint);
                     var segment = Segment.createSegment(originNexus, destinationNexus);
-                    //segments.push({ originNexus: previousWaypoint, destinationNexus: waypoint, rides: []});
                     segments.push(segment);
                     return waypoint;
                 });

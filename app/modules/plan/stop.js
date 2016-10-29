@@ -1,5 +1,6 @@
 angular.module('plan')
     .service('stop', function() {
+
         function Stop(name, agencyId, routeId, stopId, lat, lon) {
             this.name = name;
             this.agencyId = agencyId;
@@ -32,7 +33,8 @@ angular.module('plan')
         };
         Stop.prototype.getStopTag = function() {
             return this.stopTag;
-        }
+        };
+
         return {
             createStop: function(name, agencyId, routeId, stopId, lat, lon) {
                 if (! name) {

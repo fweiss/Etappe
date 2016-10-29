@@ -1,6 +1,7 @@
 angular.module('plan')
     .service('trip', [ function() {
         var nameSerial = 1;
+
         function Trip(name, originWaypoint, destinationWaypoint) {
             this.name = name;
             this.originWaypoint = originWaypoint;
@@ -12,7 +13,7 @@ angular.module('plan')
         };
         Trip.prototype.setName = function(name) {
             this.name = name;
-        }
+        };
         Trip.prototype.getOrigin = function() {
             return this.originWaypoint;
         };
@@ -29,6 +30,7 @@ angular.module('plan')
         Trip.prototype.getWaypoints = function() {
             return _.union([ this.originWaypoint ], this.innerWaypoints, [ this.destinationWaypoint ]);
         };
+
         return {
             createTrip: function (origin, destination) {
                 var name = 'Trip' + (nameSerial++);

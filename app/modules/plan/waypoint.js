@@ -1,5 +1,6 @@
 angular.module('plan')
     .service('waypoint', function() {
+
         function Waypoint(name, lat, lon) {
             this.name = name;
             this.lat = lat;
@@ -18,6 +19,7 @@ angular.module('plan')
         Waypoint.prototype.getStops = function() {
             return this.stops;
         };
+
         return {
             createWaypoint: function(name, lat, lon) {
                 if (! name) {
