@@ -81,6 +81,13 @@ describe('plan controller', function() {
             expect(segments.length).toBe(1);
             //expect(segments[0].rides.length).toBe(1);
         });
+        it('change carrier', function() {
+            var stop = Stop.createStop('n', 'a', 'r', 's', 1, 2);
+            mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ stop ] }));
+            scope.changeCarrier();
+            scope.$digest();
+            expect(scope.originNexus.length).toEqual(1);
+        });
         it('build trip from waypoints', function() {
             var w1 = Waypoint2.createWaypoint('w1', 21, 31);
             var w2 = Waypoint2.createWaypoint('w2', 22, 32);
