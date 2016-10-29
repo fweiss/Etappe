@@ -7,6 +7,19 @@ angular.module('plan')
     .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'plan', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'segment', 'waypoint',
         function($scope, chart, SfMuni, Plan, alert, Nexus, Itinerary, Trip, System, TripFolder, Segment, Waypoint) {
 
+        $scope.createTripFromNexusSelect = function() {
+            var n1 = $scope.originNexusSelect;
+            var n2 = $scope.destinationNexusSelect;
+            var w1 = Waypoint.createWaypoint(n1.getName(), n1.getLat(), n1.getLon());
+            var w2 = Waypoint.createWaypoint(n2.getName(), n2.getLat(), n2.getLon());
+            $scope.trip = new Trip.createTrip(w1, w2);
+            //var originNexus = Nexus.createFromWaypoint(w1);
+            //var destinationNexus = Nexus.createFromWaypoint(w2);
+            //var segment = Segment.createSegment(originNexus, destinationNexus);
+            //var segments = [ segment ];
+            //var itinerary = Itinerary.createItinerary(trip, segments);
+            //$scope.itinerary = itinerary;
+        };
         $scope.createItineraryFromTrip = function(trip) {
             var nexuses = _.map(trip.getWaypoints(), function(waypoint) {
                 return System.findNexus(waypoint);
@@ -21,9 +34,12 @@ angular.module('plan')
 
             //var itinerary = Itinerary.createItinerary(trip);
             //var segments = itinerary.getSegments();
+            var now = new Date();
+            var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+            itinerary.setSpan(now, then);
             $scope.itinerary = itinerary;
         };
-        //$scope.createPlanFromItinerary = function(itinerary) {
+         //$scope.createPlanFromItinerary = function(itinerary) {
         //    //var plan = Plan.createPlan(itinerary.getTrip().getName());
         //    //_.each(itinerary.getSegments(), function(segment) {
         //    //    plan.addSegment(segment.originNexus.getName(), segment.destinationNexus.getName(), segment.rides);
@@ -76,6 +92,16 @@ angular.module('plan')
         //    });
         //};
         $scope.changeCarrier = function() {
+            SfMuni.getAllStops().then(function(response) {
+                Nexus.mergeStops(response.data);
+                var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
+                $scope.originNexus = nexuses;
+                $scope.destinationNexus = nexuses;
+                $scope.disableOrigin = false;
+                $scope.disableDestination = false;
+            });
+        };
+        $scope.xxxchangeCarrier = function() {
             //SfMuni.getAllStops().then(function(response) {
             //    $scope.originStations = response.data;
             //    $scope.destinationStations = response.data;
@@ -107,17 +133,10 @@ angular.module('plan')
         $scope.ridesRefresh2 = function() {
             refreshRides($scope.itinerary.getSegments()[0], $scope.itinerary);
         }
-        $scope.changeNexus2 = function() {
-            var trip = new Trip.createTrip(1, 2);
-            var originNexus = Nexus.createNexusFromWaypoint(w1);
-            var originNexus = Nexus.createNexusFromWaypoint(w2);
-            var segemnt = Segment.createSegment(originNexus, destinationNexus);
-            var segments = [ segment ];
-            var itinerary = Itinerary.createItinerary(trip, segments);
-            $scope.itinerary = itinerary;
-        };
         function changeNexus() {
             if ($scope.originNexusSelect && $scope.destinationNexusSelect) {
+                $scope.createTripFromNexusSelect();
+
                 var originStops = $scope.originNexusSelect.stops;
                 var destinationStops = $scope.destinationNexusSelect.stops;
                 var now = new Date();
@@ -125,12 +144,12 @@ angular.module('plan')
                 var plan = Plan.createPlan('cplan');
                 var itinerary;
                 plan.setSpan(now, then);
-                var n1 = Nexus.create($scope.originNexusSelect.name, 21, 31); // originStops
+                var n1 = Nexus.create($scope.originNexusSelect.getName(), 21, 31); // originStops
                 _.each(originStops, function(stop) {
                     n1.addStop(stop);
                 });
                 plan.addWaypoint(n1);
-                var n2 = Nexus.create($scope.destinationNexusSelect.name, 22, 33);
+                var n2 = Nexus.create($scope.destinationNexusSelect.getName(), 22, 33);
                 _.each(destinationStops, function(stop) {
                     n2.addStop(stop);
                 });
@@ -144,6 +163,7 @@ angular.module('plan')
                     return Segment.createSegment(segment.originWaypoint, segment.destinationWaypoint);
                 });
                 itinerary = Itinerary.createItinerary(trip, ss);
+                itinerary.setSpan(now, then);
                 $scope.itinerary = itinerary;
                 //refreshRides(segment, itinerary);
                 refreshRides(itinerary.getSegments()[0], itinerary);

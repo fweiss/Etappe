@@ -81,13 +81,16 @@ describe('plan controller', function() {
             expect(segments.length).toBe(1);
             //expect(segments[0].rides.length).toBe(1);
         });
-        xit('build from waypoints', function() {
-            scope.originNexusSelect = Waypoint.create('w1', 21, 31);
-            scope.destinationNexusSelect = Waypoint.create('w2', 22, 32);
-            scope.changeNexus2();
-            expect(scope.itinerary).toBeTruthy();
-            expect(scope.itinerary.getTrip().getName()).toEqual('Trip1');
-            expect(scope.itinerary.getSegments().length).toEqual(1);
+        it('build trip from waypoints', function() {
+            var w1 = Waypoint2.createWaypoint('w1', 21, 31);
+            var w2 = Waypoint2.createWaypoint('w2', 22, 32);
+            scope.originNexusSelect = Waypoint.createFromWaypoint(w1);
+            scope.destinationNexusSelect = Waypoint.createFromWaypoint(w2);
+            scope.createTripFromNexusSelect();
+            expect(scope.trip).toBeTruthy();
+            //expect(scope.itinerary).toBeTruthy();
+            //expect(scope.itinerary.getTrip().getName()).toEqual('Trip1');
+            //expect(scope.itinerary.getSegments().length).toEqual(1);
         });
         it('should update itinerary on rides refresh', function() {
             //var plan = Plan.createPlan();

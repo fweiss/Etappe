@@ -1,5 +1,6 @@
 angular.module('plan')
     .service('nexus', [ 'waypoint', function(Waypoint) {
+        var nexuses = [];
         //function Nexus(name, lat, lon) {
         //    this.name = name;
         //    this.lat = lat;
@@ -26,8 +27,7 @@ angular.module('plan')
             return this.stops;
         };
         return {
-            nexuses: [],
-            create: function(name, lat, lon) {
+            xcreate: function(name, lat, lon) {
                 //if (_.isUndefined(name)) {
                 //    throw new Error('Waypoint.create: name is required');
                 //}
@@ -40,27 +40,49 @@ angular.module('plan')
                 //return new Nexus(name, lat, lon );
                 return new Nexus(Waypoint.createWaypoint(name, lat, lon));
             },
+            create: createNexus,
             createFromWaypoint: function(waypoint) {
                 return new Nexus(waypoint);
             },
-            mergeStop: function(stop) {
-                var nearbyNexus = this.findNearbyNexus(stop.getLat(), stop.getLon());
-                if (_.isUndefined(nearbyNexus)) {
-                    //nearbyNexus = new Nexus(stop.getName(), stop.getLat(), stop.getLon());
-                    nearbyNexus = this.create(stop.getName(), stop.getLat(), stop.getLon());
-                    this.nexuses.push(nearbyNexus);
-                }
-                nearbyNexus.stops.push(stop);
+            mergeStop: mergeStop,
+            mergeStops: function(stops) {
+                _.each(stops, function(stop) {
+                    mergeStop(stop);
+                });
+
             },
             getMergedNexuses: function() {
-                return this.nexuses;
+                return nexuses;
             },
-            findNearbyNexus: function(lat, lon) {
-                return _.find(this.nexuses, function(nexus) {
-                    var deltaLat = Math.abs(nexus.getLat() - lat);
-                    var deltaLon = Math.abs(nexus.getLon() - lon);
-                    return deltaLat < .001 && deltaLon < .001;
-                });
-            }
+            findNearbyNexus: findNearbyNexus
         };
+        function createNexus(name, lat, lon) {
+            //if (_.isUndefined(name)) {
+            //    throw new Error('Waypoint.create: name is required');
+            //}
+            //if (_.isUndefined(lat)) {
+            //    throw new Error('Waypoint.create: lat is required');
+            //}
+            //if (_.isUndefined(lon)) {
+            //    throw new Error('Waypoint.create: lon is required');
+            //}
+            //return new Nexus(name, lat, lon );
+            return new Nexus(Waypoint.createWaypoint(name, lat, lon));
+        }
+        function findNearbyNexus(lat, lon) {
+            return _.find(nexuses, function(nexus) {
+                var deltaLat = Math.abs(nexus.getLat() - lat);
+                var deltaLon = Math.abs(nexus.getLon() - lon);
+                return deltaLat < .001 && deltaLon < .001;
+            });
+        }
+        function mergeStop(stop) {
+            var nearbyNexus = findNearbyNexus(stop.getLat(), stop.getLon());
+            if (_.isUndefined(nearbyNexus)) {
+                //nearbyNexus = new Nexus(stop.getName(), stop.getLat(), stop.getLon());
+                nearbyNexus = createNexus(stop.getName(), stop.getLat(), stop.getLon());
+                nexuses.push(nearbyNexus);
+            }
+            nearbyNexus.stops.push(stop);
+        }
     }]);

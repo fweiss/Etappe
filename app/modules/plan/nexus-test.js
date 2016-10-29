@@ -99,19 +99,45 @@ describe('domain nexus', function() {
                 });
             });
         });
-       describe('other stops', function() {
-           var nexuses;
-           beforeEach(function() {
-               NexusService.mergeStop(Stop.createStop('16th St & Mission St', 'a', 'r', 's1', 37.76502, -122.41928));
-               NexusService.mergeStop(Stop.createStop('3rd St & Gene Friend Wy', 'a', 'r', 's2', 37.7695599, -122.3892999));
-               nexuses = NexusService.getMergedNexuses();
-           });
-           it('should count 2 nexuses', function() {
-               expect(nexuses.length).toBe(2);
-           });
-           it('should count 1 stop in a nexus', function() {
-               expect(nexuses[1].stops.length).toBe(1);
-           });
-       });
+        describe('other stops', function() {
+            var nexuses;
+            beforeEach(function() {
+                NexusService.mergeStop(Stop.createStop('16th St & Mission St', 'a', 'r', 's1', 37.76502, -122.41928));
+                NexusService.mergeStop(Stop.createStop('3rd St & Gene Friend Wy', 'a', 'r', 's2', 37.7695599, -122.3892999));
+                nexuses = NexusService.getMergedNexuses();
+            });
+            it('should count 2 nexuses', function() {
+                expect(nexuses.length).toBe(2);
+            });
+            it('should count 1 stop in a nexus', function() {
+                expect(nexuses[1].stops.length).toBe(1);
+            });
+        });
+        describe('stops', function() {
+            var stop1;
+            var stop2;
+            var stop3;
+            beforeEach(function() {
+                stop1 = Stop.createStop('n', 'a', 'r', 's', 1, 1);
+                stop2 = Stop.createStop('n', 'a', 'r', 's', 1, 1);
+                stop3 = Stop.createStop('n', 'a', 'r', 's', 1, 2);
+            });
+            it('empty', function() {
+                NexusService.mergeStops([]);
+                expect(NexusService.getMergedNexuses()).toEqual([]);
+            });
+            it('single', function() {
+                NexusService.mergeStops([ stop1 ]);
+                expect(NexusService.getMergedNexuses().length).toEqual(1);
+            });
+            it('two nearby', function() {
+                NexusService.mergeStops([ stop1, stop2 ]);
+                expect(NexusService.getMergedNexuses().length).toEqual(1);
+            });
+            it('two not nearby', function() {
+                NexusService.mergeStops([ stop1, stop3 ]);
+                expect(NexusService.getMergedNexuses().length).toEqual(2);
+            });
+        });
     });
 });
