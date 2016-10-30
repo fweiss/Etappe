@@ -4,19 +4,20 @@ describe('domain trip', function() {
     var w1;
     var w2;
     beforeEach(module('plan'));
-    beforeEach(inject(function(_trip_, _waypoint_) {
-        Trip = _trip_;
-        Waypoint = _waypoint_;
-
+    beforeEach(inject(function(trip, waypoint) {
+        Trip = trip;
+        Waypoint = waypoint;
+    }));
+    beforeEach(function() {
         w1 = Waypoint.createWaypoint('w1', 1, 2);
         w2 = Waypoint.createWaypoint('w2', 1, 3);
-    }));
+    });
     describe('validation', function() {
         it('error if origin not given', function() {
             var e1 = new Error('createTrip: must specify origin');
             expect(function() { Trip.createTrip(); }).toThrow(e1);
         });
-        xit('error if origin not waypoint type', function() {
+        it('error if origin not waypoint type', function() {
             var e1 = new Error('createTrip: origin must be Waypoint type');
             expect(function() { Trip.createTrip({ }); }).toThrow(e1);
         });
@@ -24,7 +25,7 @@ describe('domain trip', function() {
             var e1 = new Error('createTrip: must specify destination');
             expect(function() { Trip.createTrip(w1); }).toThrow(e1);
         });
-        xit('error if destination not waypoint type', function() {
+        it('error if destination not waypoint type', function() {
             var e1 = new Error('createTrip: destination must be Waypoint type');
             expect(function() { Trip.createTrip(w1, {}); }).toThrow(e1);
         });
@@ -81,10 +82,10 @@ describe('domain trip', function() {
             trip.setInnerWaypoints([ 'w1' ]);
             expect(trip.getWaypoints().length).toEqual(3);
         });
+        // probably need Waypoint.copy() for this
         xit('type preserved by getter', function() {
             trip.setInnerWaypoints([ Waypoint.createWaypoint('w', 1, 2)]);
             var waypoint = trip.getInnerWaypoints()[0];
-            //console.log(waypoint);
             expect(waypoint.constructor.name).toEqual('Waypoint');
         });
     });

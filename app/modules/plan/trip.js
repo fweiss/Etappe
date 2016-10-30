@@ -38,15 +38,15 @@ angular.module('plan')
                 if (! origin) {
                     throw new Error('createTrip: must specify origin');
                 }
-                //if (origin.constructor.name != 'Waypoint') {
-                //    throw new Error('createTrip: origin must be Waypoint type');
-                //}
+                if (origin.constructor.name != 'Waypoint') {
+                    throw new Error('createTrip: origin must be Waypoint type');
+                }
                 if (! destination) {
                     throw new Error('createTrip: must specify destination');
                 }
-                //if (destination.constructor.name != 'Waypoint') {
-                //    throw new Error('createTrip: destination must be Waypoint type');
-                //}
+                if (destination.constructor.name != 'Waypoint') {
+                    throw new Error('createTrip: destination must be Waypoint type');
+                }
                 return new Trip(name, origin, destination);
             }
         };
