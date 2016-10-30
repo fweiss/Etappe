@@ -30,24 +30,6 @@ describe('domain nexus', function() {
         it('should have empty stops', function() {
             expect(nexus.getStops().length).toBe(0);
         });
-        // leasve validation to waypoint unit test?
-        xdescribe('validation', function() {
-            it('should require name', function() {
-                expect(function() {
-                    NexusService.create();
-                }).toThrow(new Error('createWaypoint: name is required'));
-            });
-            it('should require lat', function() {
-                expect(function() {
-                    NexusService.create('abc');
-                }).toThrow(new Error('createWaypoint: lat is required'));
-            });
-            it('should require lon', function() {
-                expect(function() {
-                    NexusService.create('abc', 15);
-                }).toThrow(new Error('createWaypoint: lon is required'));
-            });
-        });
         describe('stops', function() {
             it('should add one', function() {
                 nexus.addStop({ name: 's1' });

@@ -40,15 +40,7 @@ angular.module('plan')
             findNearbyNexus: findNearbyNexus
         };
         function createNexus(name, lat, lon) {
-            //if (_.isUndefined(name)) {
-            //    throw new Error('Waypoint.create: name is required');
-            //}
-            //if (_.isUndefined(lat)) {
-            //    throw new Error('Waypoint.create: lat is required');
-            //}
-            //if (_.isUndefined(lon)) {
-            //    throw new Error('Waypoint.create: lon is required');
-            //}
+            // validation left up to Waypoint
             return new Nexus(Waypoint.createWaypoint(name, lat, lon));
         }
         function findNearbyNexus(lat, lon) {
