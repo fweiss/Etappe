@@ -17,18 +17,6 @@
                 <select id="carrierSelect" ng-model="carrierSelect" ng-options="carrier.name for carrier in carriers" ng-change="changeCarrier()">
                     <option value="">Choose a carrier</option>
                 </select>
-                <!--<select id="originStationSelect" ng-model="originStationSelect" ng-options="station.name for station in originStations" ng-change="changeOrigin()" ng-disabled="disableOrigin">-->
-                    <!--<option value="">Choose an origin</option>-->
-                <!--</select>-->
-                <!--<select id="destinationStationSelect" ng-model="destinationStationSelect" ng-options="station.name for station in destinationStations" ng-change="changeDestination()" ng-disabled="disableDestination">-->
-                    <!--<option value="">Choose a destination</option>-->
-                <!--</select>-->
-                <!--<select id="originNexusSelect" ng-model="originNexusSelect" ng-options="key for (key , value) in originNexus" ng-change="originNexusChanged()" ng-disabled="disableOrigin">-->
-                    <!--<option value="">Choose an origin</option>-->
-                <!--</select>-->
-                <!--<select id="destinationNexusSelect" ng-model="destinationNexusSelect" ng-options="key for (key , value) in destinationNexus" ng-change="destinationNexusChanged()" ng-disabled="disableDestination">-->
-                    <!--<option value="">Choose a destination</option>-->
-                <!--</select>-->
                 <select id="originNexusSelect" ng-model="originNexusSelect" ng-options="nexus as nexus.getName() for nexus in originNexus" ng-change="originNexusChanged()" ng-disabled="disableOrigin">
                     <option value="">Choose an origin</option>
                 </select>
@@ -72,7 +60,6 @@
                 <input type="text" ng-model="planRestoreName"/>
             </div>
             <div><button id="addSegment" ng-click="addSegment()">Add Segment</button></div>
-            <div><button ng-click="ridesRefresh()">Refresh</button></div>
             <canvas utt-rides width="1200" height="200"></canvas>
             <div>
                 <button id="showSavedTrips" ng-click="showSavedTrips()">Saved Trips</button>

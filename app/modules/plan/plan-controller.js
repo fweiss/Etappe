@@ -127,9 +127,6 @@ angular.module('plan')
         $scope.destinationNexusChanged = function() {
             changeNexus();
         }
-        $scope.ridesRefresh = function() {
-            changeNexus();
-        };
         $scope.ridesRefresh2 = function() {
             refreshRides($scope.itinerary.getSegments()[0], $scope.itinerary);
         }
