@@ -100,8 +100,9 @@ describe('etappe', function() {
             xit('should show available routes', function() {
                 expect(element(by.model('availableRoutes')).getText()).toBe('55 16th');
             });
-            it('should show available rides', function() {
-                expect(element(by.binding('rideList')).getText()).toBeGreaterThan(0);
+            xit('should show available rides', function() {
+                //expect(element(by.binding('rideList')).getText()).toBeGreaterThan(0);
+                expect(element(by.binding('itinerary')).getText()).toBeGreaterThan(0);
             });
             //describe('saving a plan', function() {
             //    //clear storage
