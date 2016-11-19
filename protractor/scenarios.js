@@ -101,8 +101,14 @@ describe('etappe', function() {
                 expect(element(by.model('availableRoutes')).getText()).toBe('55 16th');
             });
             xit('should show available rides', function() {
-                //expect(element(by.binding('rideList')).getText()).toBeGreaterThan(0);
-                expect(element(by.binding('itinerary')).getText()).toBeGreaterThan(0);
+                var headers = element.all(by.css('table#rides thead th')).map(function(ele) {
+                    return ele.getText();
+                });
+                expect(headers).toEqual([ 'segment', 'origin', 'destination', 'agency', 'route', 'vehicle', 'start', 'end' ]);
+                var row0 = element.all(by.css('table#rides tbody td')).map(function(ele) {
+                    return ele.getText();
+                });
+                expect(row0).toEqual([ 'A to B', 'A St and B Avenue', 'B Avenue and Z St', 'ag1', 'r2', 'v3', '12:00', '12:15' ]);
             });
             //describe('saving a plan', function() {
             //    //clear storage

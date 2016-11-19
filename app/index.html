@@ -67,6 +67,28 @@
                 </tr>
                 </tbody>
             </table>
+            <table id="rides">
+                <thead>
+                    <tr>
+                        <th>segment</th>
+                        <th>origin</th>
+                        <th>destination</th>
+                        <th>agency</th>
+                        <th>route</th>
+                        <th>vehicle</th>
+                        <th>start</th>
+                        <th>end</th>
+                    </tr>\
+                </thead>
+                <tbody ng-repeat="s in itinerary.getSegments()">
+                    <tr ng-repeat="r in s.getRides()">
+                        <td>{{r.origin}}</td>
+                        <td>{{r.routeId}}</td>
+                        <td>{{r.startTime}}</td>
+                        <td>{{r.endTime}}</td>
+                    </tr>
+                </tbody>
+            </table>
             <div class="debug">
                 <div ng-bind="trip"></div>
                 <div ng-bind="rideList"></div>
