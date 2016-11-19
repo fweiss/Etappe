@@ -4,7 +4,8 @@ describe('plan controller', function() {
     var scope;
     var Plan;
     var Trip;
-    var Waypoint;
+    var Nexus;
+    var Waypoint2;
     var alertSpy;
     var mockSfMuni;
     var $q;
@@ -37,7 +38,7 @@ describe('plan controller', function() {
         System = _system_;
         //Plan = plan;
         Trip = _trip_;
-        Waypoint = nexus;
+        Nexus = nexus;
         Waypoint2 = _waypoint_;
         Itinerary = itinerary;
         Stop = _stop_;
@@ -60,8 +61,8 @@ describe('plan controller', function() {
             //var waypointMap = { w1: Waypoint.create('w1', 21, 31), w2: Waypoint.create('w2', 22, 32)};
             scope.orginNexus = waypointMap;
             scope.destinationNexus = waypointMap;
-            scope.originNexusSelect = Waypoint.create('w1', 21, 31);
-            scope.destinationNexusSelect = Waypoint.create('w2', 22, 32);
+            scope.originNexusSelect = Nexus.create('w1', 21, 31);
+            scope.destinationNexusSelect = Nexus.create('w2', 22, 32);
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: { rides: [ {} ] } }));
             scope.ridesRefresh();
             //expect(mockSfMuni.getRidesForSegment).toHaveBeenCalledWith({ origin: 'w1', destination: 'w2', originStops: [ {route: 'A', stopTag: '3'} ], destinationStops: [ { route: 'A', stopTag: '5' }]});
@@ -81,7 +82,7 @@ describe('plan controller', function() {
             expect(segments.length).toBe(1);
             //expect(segments[0].rides.length).toBe(1);
         });
-        it('change carrier', function() {
+        it('change agency', function() {
             var stop = Stop.createStop('n', 'a', 'r', 's', 1, 2);
             mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ stop ] }));
             scope.changeCarrier();
@@ -91,8 +92,8 @@ describe('plan controller', function() {
         it('build trip from waypoints', function() {
             var w1 = Waypoint2.createWaypoint('w1', 21, 31);
             var w2 = Waypoint2.createWaypoint('w2', 22, 32);
-            scope.originNexusSelect = Waypoint.createFromWaypoint(w1);
-            scope.destinationNexusSelect = Waypoint.createFromWaypoint(w2);
+            scope.originNexusSelect = Nexus.createFromWaypoint(w1);
+            scope.destinationNexusSelect = Nexus.createFromWaypoint(w2);
             scope.createTripFromNexusSelect();
             expect(scope.trip).toBeTruthy();
             //expect(scope.itinerary).toBeTruthy();
@@ -165,14 +166,12 @@ describe('plan controller', function() {
     //        expect($scope.originNexuses.length).toBeGreaterThan(0);
     //    });
     });
-    describe('trip folder', function() {
+    describe('saved trips', function() {
         it('show list', function() {
             scope.showSavedTrips();
             expect(scope.savedTrips.length).toEqual(1);
         });
-        it('select trip', function() {
-            //System.mergeStop(Stop.createStop('s1', 'a', 'r', 'sid1', 1, 2 ));
-            //System.mergeStop(Stop.createStop('s2', 'a', 'r', 'sid1', 2, 3 ));
+        it('select one', function() {
             var s1 = Stop.createStop('s1', 'a', 'r', 'sid1', 1, 2 );
             var s2 = Stop.createStop('s2', 'a', 'r', 'sid1', 2, 3 );
             mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ s1, s2 ] }));
