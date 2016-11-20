@@ -36,7 +36,6 @@ describe('plan controller', function() {
     beforeEach(inject(function($rootScope, $injector, $controller, nexus, itinerary,  _waypoint_, _trip_, _$q_, _system_, _stop_) {
         scope = $rootScope.$new();
         System = _system_;
-        //Plan = plan;
         Trip = _trip_;
         Nexus = nexus;
         Waypoint2 = _waypoint_;
@@ -45,10 +44,8 @@ describe('plan controller', function() {
         $httpBackend = $injector.get('$httpBackend');
         $q = _$q_;
         mockSfMuni = jasmine.createSpyObj('mockSfMuni', [ 'getRidesForSegment', 'getAllStops' ]);
-        //$controller('PlanController', { $scope: scope, plan: plan, sfMuni: mockSfMuni });
         $controller('PlanController', { $scope: scope, sfMuni: mockSfMuni });
         requestHandler = $httpBackend.whenGET(new RegExp('.*'));
-//            .respond('<?xml version="1.0" encoding="utf-8"?><stations></stations>', { 'Content-type': 'text/xml'});
 
     }));
     it('should show segment builder', function() {
@@ -58,19 +55,12 @@ describe('plan controller', function() {
         // not clear why getRidesForSegment needs to be involved to just build a segment
         xit('should make one', function() {
             var waypointMap = { w1: { name: 'w1', stops: [] }, w2: { name: 'w2', stops: {} }};
-            //var waypointMap = { w1: Waypoint.create('w1', 21, 31), w2: Waypoint.create('w2', 22, 32)};
             scope.orginNexus = waypointMap;
             scope.destinationNexus = waypointMap;
             scope.originNexusSelect = Nexus.create('w1', 21, 31);
             scope.destinationNexusSelect = Nexus.create('w2', 22, 32);
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: { rides: [ {} ] } }));
             scope.ridesRefresh();
-            //expect(mockSfMuni.getRidesForSegment).toHaveBeenCalledWith({ origin: 'w1', destination: 'w2', originStops: [ {route: 'A', stopTag: '3'} ], destinationStops: [ { route: 'A', stopTag: '5' }]});
-            //expect(mockSfMuni.getRidesForSegment).toHaveBeenCalledWith({
-            //    originWaypoint: Waypoint.create('w1', 21, 31, [ {route: 'A', stopTag: '3'} ] ),
-            //    destinationWaypoint: Waypoint.create('w2', 22, 32, [ { route: 'A', stopTag: '5' } ]),
-            //    rides: [ ]
-            //});
             expect(mockSfMuni.getRidesForSegment.calls.mostRecent().args[0].originWaypoint.name).toBe('w1');
             expect(mockSfMuni.getRidesForSegment.calls.mostRecent().args[0].destinationWaypoint.name).toBe('w2');
             expect(mockSfMuni.getRidesForSegment.calls.mostRecent().args[0].rides.length).toBe(0);
@@ -80,7 +70,6 @@ describe('plan controller', function() {
 
             var segments = scope.plan.getSegments2();
             expect(segments.length).toBe(1);
-            //expect(segments[0].rides.length).toBe(1);
         });
         it('change agency', function() {
             var stop = Stop.createStop('n', 'a', 'r', 's', 1, 2);
@@ -96,16 +85,8 @@ describe('plan controller', function() {
             scope.destinationNexusSelect = Nexus.createFromWaypoint(w2);
             scope.createTripFromNexusSelect();
             expect(scope.trip).toBeTruthy();
-            //expect(scope.itinerary).toBeTruthy();
-            //expect(scope.itinerary.getTrip().getName()).toEqual('Trip1');
-            //expect(scope.itinerary.getSegments().length).toEqual(1);
         });
         it('should update itinerary on rides refresh', function() {
-            //var plan = Plan.createPlan();
-            //plan.addWaypoints([ Waypoint.create('w1', 21, 31), Waypoint.create('w2', 22, 32) ]);
-            //// add waypoints doesn't create segments
-            //plan.addSegment('w1', 'w2', []);
-            //scope.plan = plan;
 
             var trip = Trip.createTrip(Waypoint2.createWaypoint('w1', 21, 31), Waypoint2.createWaypoint('w2', 22, 32));
             scope.itinerary = Itinerary.createItinerary(trip);
@@ -118,14 +99,10 @@ describe('plan controller', function() {
             expect(scope.itinerary.getSegments()[0].getRides().length).toBe(1);
             expect(scope.itinerary.getSegments()[0].rides[0].startTime).toBe(1);
 
-            // legacy plan segment rides
-            //expect(scope.plan.getSegments()[0].rides[0].startTime).toEqual(1);
         });
     });
     describe('itinerary from trip', function() {
         it('segment', function() {
-            //System.mergeStop({ name: 's1', lat: 1, lon: 2 });
-            //System.mergeStop({ name: 's2', lat: 2, lon: 3 });
             System.mergeStop(Stop.createStop('s1', 'a', 'r', 'sid1', 1, 2 ));
             System.mergeStop(Stop.createStop('s2', 'a', 'r', 'sid1', 2, 3 ));
 
@@ -140,9 +117,6 @@ describe('plan controller', function() {
             expect(segment0.originNexus.getName()).toEqual('s1');
             expect(segment0.rides.length).toEqual(0);
 
-            // strangle
-            //scope.createPlanFromItinerary(scope.itinerary);
-            //expect(scope.plan.getSegments().length).toEqual(1);
         });
     });
     describe('nexus', function() {
@@ -156,15 +130,6 @@ describe('plan controller', function() {
             var nexus = []; // a fake
             mockPlan.fetchNexuses.and.returnValue($q.when([ nexus ]));
         }))
-    //    it('should fetch on selected agency', function() {
-    //        var $scope = {};
-    //        $controller('PlanController', { $scope: $scope, plan: mockPlan });
-    //        $scope.agency = 'sf-muni';
-    //        $scope.agencySelected();
-    //        //expect(mockPlan.fetchNexuses).toHaveBeenCalled();
-    //        $timeout.flush();
-    //        expect($scope.originNexuses.length).toBeGreaterThan(0);
-    //    });
     });
     describe('saved trips', function() {
         it('show list', function() {
