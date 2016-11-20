@@ -169,11 +169,11 @@ describe('sfmuni', function() {
         beforeEach(function() {
             now = new Date();
             epochMilliSeconds = now.getTime();
-            xmlOrigin = '<body><predictions><direction routeTag="55" routeTitle="foo">'
+            xmlOrigin = '<body><predictions routeTag="55" routeTitle="foo"><direction>'
                 + prediction(2356, 11, '6596789')
                 + prediction(4444, 22, '6596789')
                 + '</direction></predictions></body>';
-            xmlDestination = '<body><predictions><direction routeTag="55" routeTitle="foo">'
+            xmlDestination = '<body><predictions routeTag="55" routeTitle="foo"><direction>'
                 + prediction(2356, 22, '6596789')
                 + prediction(2357, 33, '6596789')
                 + '</direction></predictions></body>';
@@ -198,17 +198,18 @@ describe('sfmuni', function() {
                 var rides = response.data;
                 expect(rides.length).toEqual(1);
                 var ride0 = rides[0];
-                expect(ride0.startTime / round).toBeCloseTo(addMinutes(now, 11) / round, 0);
-                expect(ride0.endTime / round).toBeCloseTo(addMinutes(now, 22) / round, 0);
-                expect(ride0.agency).toBe('sf-muni');
-                expect(ride0.vehicle).toBe('2356');
+                expect(ride0.getAgency()).toBe('sf-muni');
+                expect(ride0.getRouteId()).toEqual('55');
+                expect(ride0.getVehicleId()).toBe('2356');
+                expect(ride0.getStartTime() / round).toBeCloseTo(addMinutes(now, 11) / round, 0);
+                expect(ride0.getEndTime() / round).toBeCloseTo(addMinutes(now, 22) / round, 0);
             });
             httpBackend.flush();
         });
         it('should get for multistops', function() {
             var now = new Date();
-            var predictionXml = '<body><predictions routeCode="N"><direction>' + prediction('4444', 0, '55555') + '</direction></predictions>'
-                + '<predictions routeCode="J"><direction><prediction></prediction></direction></predictions></body>';
+            var predictionXml = '<body><predictions routeTag="N"><direction>' + prediction('4444', 0, '55555') + '</direction></predictions>'
+                + '<predictions routeTag="J"><direction><prediction></prediction></direction></predictions></body>';
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C2355&stops=J%7C5067').respond(predictionXml);
             var stop1 = Stop.createStop('s1', 'a1', 'N', '12355', 1, 1);
             stop1.setStopTag('2355');
@@ -231,11 +232,11 @@ describe('sfmuni', function() {
         describe('rides', function() {
             it('should get rides between two stops and correctly match vehicles by time', function() {
                 epochMilliSeconds = now.getTime();
-                xmlOrigin = '<body><predictions><direction routeTag="55">'
+                xmlOrigin = '<body><predictions routeTag="55"><direction>'
                     + prediction(2356, 11, '6596789')
                     + prediction(2356, 44, '6596789')
                     + '</direction></predictions></body>';
-                xmlDestination = '<body><predictions><direction routeTag="55">'
+                xmlDestination = '<body><predictions routeTag="55"><direction>'
                     + prediction(2356, 22, '6596789')
                     + prediction(2356, 33, '6596790')
                     + '</direction></predictions></body>';
@@ -245,10 +246,11 @@ describe('sfmuni', function() {
                     var rides = response.data;
                     expect(rides.length).toEqual(1);
                     var ride0 = rides[0];
-                    expect(ride0.startTime / round).toBeCloseTo(addMinutes(now, 11) / round, 0);
-                    expect(ride0.endTime / round).toBeCloseTo(addMinutes(now, 22) / round, 0);
-                    expect(ride0.agency).toBe('sf-muni');
-                    expect(ride0.vehicle).toBe('2356');
+                    expect(ride0.constructor.name).toEqual('Ride');
+                    expect(ride0.getStartTime() / round).toBeCloseTo(addMinutes(now, 11) / round, 0);
+                    expect(ride0.getEndTime() / round).toBeCloseTo(addMinutes(now, 22) / round, 0);
+                    expect(ride0.getAgency()).toBe('sf-muni');
+                    expect(ride0.getVehicleId()).toBe('2356');
                 });
                 httpBackend.flush();
             });
@@ -261,8 +263,8 @@ describe('sfmuni', function() {
                 }).toThrow(new Error('segment does not specify any stops'));
             });
             it('should get a ride for multi stops', function() {
-                var originXml = '<body><predictions routeCode="N"><direction>' + prediction('4444', 0, '44444') + '</direction></predictions></body>';
-                var destinationXml = '<body><predictions routeCode="N"><direction>' + prediction('4444', 10, '44444') + '</direction></predictions></body>';
+                var originXml = '<body><predictions routeTag="N"><direction>' + prediction('4444', 0, '44444') + '</direction></predictions></body>';
+                var destinationXml = '<body><predictions routeTag="N"><direction>' + prediction('4444', 10, '44444') + '</direction></predictions></body>';
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C2222').respond(originXml);
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C3333').respond(destinationXml);
 

@@ -16,7 +16,7 @@ angular.module('sfmuni.config', [])
     .value('config', { baseUrl: 'http://webservices.nextbus.com/service/publicXMLFeed' });
 
 angular.module('agencies', [ 'sfmuni.config' ])
-    .service('sfMuni', [ 'config', '$http', '$q', 'stop', function(config, $http, $q, Stop) {
+    .service('sfMuni', [ 'config', '$http', '$q', 'stop', 'ride', function(config, $http, $q, Stop, Ride) {
         var $ = $ || angular.element;
         var parser = new DOMParser();
         const baseUrl = config.baseUrl;
@@ -78,7 +78,8 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 var stopList = _.map(stops, function (stop) {
                     return stop.getRouteId() + '|' + stop.getStopTag();
                 });
-                return buildResource('predictionsForMultiStops', multiPredictionsTransform)({stops: stopList});
+                // multiPredictionsTransform doesn't seem to be neeeded - the data is same as for stop
+                return buildResource('predictionsForMultiStops', predictionsTransform)({stops: stopList});
             },
             getRidesForSegment: function (segment) {
                 function invalid(stops) {
@@ -134,19 +135,21 @@ angular.module('agencies', [ 'sfmuni.config' ])
         }
         // expecting predictions < direction < prediction
         function predictionsTransform(root) {
-            var px = $(root).find('predictions');
-            var ddx = $(px).find('direction');
             var predictions = [];
-            angular.forEach(ddx, function(dx) {
-                var route = $(dx).attr('routeTag');
-                var ppx = $(ddx).find('prediction');
-                angular.forEach(ppx, function(px) {
-                    var prediction = {};
-                    prediction.vehicle = $(px).attr('vehicle');
-                    prediction.time = new Date($(px).attr('epochTime') * 1); // parseInt
-                    prediction.route = route;
-                    prediction.tripTag = $(px).attr('tripTag');
-                    predictions.push(prediction);
+            var ppsx = $(root).find('predictions');
+            angular.forEach(ppsx, function(psx) {
+                var route = $(psx).attr('routeTag');
+                var ddx = $(psx).find('direction');
+                angular.forEach(ddx, function(dx) {
+                    var ppx = $(ddx).find('prediction');
+                    angular.forEach(ppx, function(px) {
+                        var prediction = {};
+                        prediction.vehicle = $(px).attr('vehicle');
+                        prediction.time = new Date($(px).attr('epochTime') * 1); // parseInt
+                        prediction.route = route;
+                        prediction.tripTag = $(px).attr('tripTag');
+                        predictions.push(prediction);
+                    });
                 });
             });
             return predictions;
@@ -235,11 +238,13 @@ angular.module('agencies', [ 'sfmuni.config' ])
                     var originBeforeDestination = originPrediction.time < destinationPrediction.time;
                     var sameTripTag = originPrediction.tripTag === destinationPrediction.tripTag;
                     if (sameVehicle && originBeforeDestination && sameTripTag) {
-                        var ride = {};
-                        ride.agency = 'sf-muni';
-                        ride.vehicle = originPrediction.vehicle;
-                        ride.startTime = originPrediction.time;
-                        ride.endTime = destinationPrediction.time;
+                        //var ride = {};
+                        //ride.agency = 'sf-muni';
+                        //ride.vehicle = originPrediction.vehicle;
+                        //ride.startTime = originPrediction.time;
+                        //ride.endTime = destinationPrediction.time;
+
+                        var ride = Ride.createRide('sf-muni', originPrediction.route, originPrediction.vehicle, originPrediction.time,destinationPrediction.time );
                         rides.push(ride);
                     }
                 });

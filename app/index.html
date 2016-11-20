@@ -82,10 +82,14 @@
                 </thead>
                 <tbody ng-repeat="s in itinerary.getSegments()">
                     <tr ng-repeat="r in s.getRides()">
-                        <td>{{r.origin}}</td>
+                        <td>segment</td>
+                        <td>{{s.originNexus.getName()}}</td>
+                        <td>{{s.destinationNexus.getName()}}</td>
+                        <td>{{r.agency}}</td>
                         <td>{{r.routeId}}</td>
-                        <td>{{r.startTime}}</td>
-                        <td>{{r.endTime}}</td>
+                        <td>{{r.vehicleId}}</td>
+                        <td>{{r.startTime | date : 'h:mm a'}}</td>
+                        <td>{{r.endTime | date : 'h:mm a'}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -104,6 +108,7 @@
         <script src="etappe.js"></script>
         <script src="modules/plan/module.js"></script>
         <script src="modules/plan/trip.js"></script>
+        <script src="modules/plan/ride.js"></script>
         <script src="modules/plan/itinerary.js"></script>
         <script src="modules/plan/plan-controller.js"></script>
         <script src="modules/plan/plan.js"></script>

@@ -100,7 +100,7 @@ describe('etappe', function() {
             xit('should show available routes', function() {
                 expect(element(by.model('availableRoutes')).getText()).toBe('55 16th');
             });
-            xit('should show available rides', function() {
+            it('should show available rides', function() {
                 var headers = element.all(by.css('table#rides thead th')).map(function(ele) {
                     return ele.getText();
                 });
@@ -108,7 +108,7 @@ describe('etappe', function() {
                 var row0 = element.all(by.css('table#rides tbody td')).map(function(ele) {
                     return ele.getText();
                 });
-                expect(row0).toEqual([ 'A to B', 'A St and B Avenue', 'B Avenue and Z St', 'ag1', 'r2', 'v3', '12:00', '12:15' ]);
+                expect(row0).toEqual([ 'segment', '16th St and Mission', '16th St and Harrison', 'sf-muni', 'N', '3333', '4:00 PM', '4:00 PM' ]);
             });
             //describe('saving a plan', function() {
             //    //clear storage
