@@ -48,25 +48,6 @@
                     </ol>
                 </div>
             </div>
-            <table id="plan">
-                <thead>
-                <div ng-bind="currentPlan.name"></div>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>{{ originStationSelect.stopId }}</td>
-                    <td>{{ destinationStationSelect.stopId }}</td>
-                </tr>
-                <tr>
-                    <td>{{ originNexusSelect.stops }}</td>
-                    <td>{{ destinationNexusSelect.stops }}</td>
-                </tr>
-                <tr>
-                    <td ng-model="nexusStart">{{ nexusStart }}</td>
-                    <td ng-model="nexusEnd">{{ nexusEnd }}</td>
-                </tr>
-                </tbody>
-            </table>
             <table id="rides">
                 <thead>
                     <tr>
@@ -78,7 +59,7 @@
                         <th>vehicle</th>
                         <th>start</th>
                         <th>end</th>
-                    </tr>\
+                    </tr>
                 </thead>
                 <tbody ng-repeat="s in itinerary.getSegments()">
                     <tr ng-repeat="r in s.getRides()">
@@ -94,6 +75,25 @@
                 </tbody>
             </table>
             <div class="debug">
+                <table id="plan">
+                    <thead>
+                    <div ng-bind="currentPlan.name"></div>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ originStationSelect.stopId }}</td>
+                        <td>{{ destinationStationSelect.stopId }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ originNexusSelect.stops }}</td>
+                        <td>{{ destinationNexusSelect.stops }}</td>
+                    </tr>
+                    <tr>
+                        <td ng-model="nexusStart">{{ nexusStart }}</td>
+                        <td ng-model="nexusEnd">{{ nexusEnd }}</td>
+                    </tr>
+                    </tbody>
+                </table>
                 <div ng-bind="trip"></div>
                 <div ng-bind="rideList"></div>
                 <div ng-bind="routes"></div>

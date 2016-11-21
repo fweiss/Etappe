@@ -77,6 +77,13 @@ describe('plan canvas', function() {
             mockCanvasContext(canvasWidth, canvasHeight);
             tickLegendHeight = planConfig('tickLegendHeight');
         });
+        it('noop on empty span', function() {
+            var trip1 = Trip.createTrip(Waypoint.createWaypoint('w1', 1, 2), Waypoint.createWaypoint('w2', 1, 2));
+            var itineraryNoSpan = Itinerary.createItinerary(trip1);
+            scope.itinerary = itineraryNoSpan;
+            expect(function() { element.scope().$apply(); }).not.toThrow();
+            expect(mockContext.fillRect).not.toHaveBeenCalled();
+        });
         it('should draw background', function() {
             setItineraryAndApply(itinerary);
             expect(mockContext.fillRect).toHaveBeenCalledWith(0, tickLegendHeight, canvasWidth, canvasHeight);

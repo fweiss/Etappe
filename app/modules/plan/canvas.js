@@ -22,7 +22,9 @@ angular.module('plan')
                 chart.setWidth(width);
                 scope.$watch('itinerary.getSpan()', watchListener, true);
                 function watchListener(newValue, oldValue, scope) {
-                    drawElement(element, scope);
+                    if (newValue && newValue.spanStart && newValue.spanEnd) {
+                        drawElement(element, scope);
+                    }
                 }
             }
         };
