@@ -5,7 +5,7 @@ describe('plan controller', function() {
     var Plan;
     var Trip;
     var Nexus;
-    var Waypoint2;
+    var Waypoint;
     var alertSpy;
     var mockSfMuni;
     var $q;
@@ -25,7 +25,7 @@ describe('plan controller', function() {
         System = _system_;
         Trip = _trip_;
         Nexus = nexus;
-        Waypoint2 = _waypoint_;
+        Waypoint = _waypoint_;
         Itinerary = itinerary;
         Stop = _stop_;
         $httpBackend = $injector.get('$httpBackend');
@@ -66,8 +66,8 @@ describe('plan controller', function() {
             expect(scope.originNexus.length).toEqual(1);
         });
         it('build trip from waypoints', function() {
-            var w1 = Waypoint2.createWaypoint('w1', 21, 31);
-            var w2 = Waypoint2.createWaypoint('w2', 22, 32);
+            var w1 = Waypoint.createWaypoint('w1', 21, 31);
+            var w2 = Waypoint.createWaypoint('w2', 22, 32);
             scope.originNexusSelect = Nexus.createFromWaypoint(w1);
             scope.destinationNexusSelect = Nexus.createFromWaypoint(w2);
             scope.createTripFromNexusSelect();
@@ -75,7 +75,7 @@ describe('plan controller', function() {
         });
         it('should update itinerary on rides refresh', function() {
 
-            var trip = Trip.createTrip(Waypoint2.createWaypoint('w1', 21, 31), Waypoint2.createWaypoint('w2', 22, 32));
+            var trip = Trip.createTrip(Waypoint.createWaypoint('w1', 21, 31), Waypoint.createWaypoint('w2', 22, 32));
             scope.itinerary = Itinerary.createItinerary(trip);
             var ride = { startTime: 1, endTime: 2, agency: 'a', vehicle: 'v' }
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ ride ] }));
@@ -93,8 +93,8 @@ describe('plan controller', function() {
             System.mergeStop(Stop.createStop('s1', 'a', 'r', 'sid1', 1, 2 ));
             System.mergeStop(Stop.createStop('s2', 'a', 'r', 'sid1', 2, 3 ));
 
-            var w1 = Waypoint2.createWaypoint('w1', 1, 2);
-            var w2 = Waypoint2.createWaypoint('w2', 2, 3);
+            var w1 = Waypoint.createWaypoint('w1', 1, 2);
+            var w2 = Waypoint.createWaypoint('w2', 2, 3);
             var trip = Trip.createTrip(w1, w2);
 
             scope.createItineraryFromTrip(trip);
@@ -129,8 +129,8 @@ describe('plan controller', function() {
             mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ s1, s2 ] }));
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ {} ] } ));
 
-            var origin = Waypoint2.createWaypoint('w1', 1, 2);
-            var destination = Waypoint2.createWaypoint('w2', 2, 3);
+            var origin = Waypoint.createWaypoint('w1', 1, 2);
+            var destination = Waypoint.createWaypoint('w2', 2, 3);
             var trip = Trip.createTrip(origin, destination);
             scope.selectSavedTrip(trip);
             scope.$digest();

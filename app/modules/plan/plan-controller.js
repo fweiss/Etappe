@@ -71,15 +71,6 @@ angular.module('plan')
                 $scope.disableDestination = false;
             });
         };
-        $scope.xxxchangeCarrier = function() {
-            SfMuni.getAllNexus().then(function(response) {
-                $scope.originNexus = response.data;
-                $scope.destinationNexus = response.data;
-            });
-            $scope.destinationStations = [ { name: 'foo2'},{ name: 'bar2'}];
-            $scope.disableOrigin = false;
-            $scope.disableDestination = false;
-        };
         $scope.changeOrigin = function() {
             changePlan();
         };
