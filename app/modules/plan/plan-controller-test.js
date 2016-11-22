@@ -16,19 +16,6 @@ describe('plan controller', function() {
     beforeEach(module('plan'));
     beforeEach(function() {
         module(function($provide) {
-            $provide.service('xplanFolder', function() {
-                return {
-                   load: function() {
-                       return {
-                           getSegments: function() {
-                               return [
-                                   { origin: 'an origin nexus' }
-                               ];
-                           }
-                       }
-                   }
-                };
-            });
             alertSpy = jasmine.createSpy('alert');
             $provide.value('alert', alertSpy);
         });
