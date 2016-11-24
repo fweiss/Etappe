@@ -32,8 +32,5 @@ describe('domain waypoint', function() {
         it('has initial lon', function() {
             expect(waypoint.getLon()).toEqual(2);
         });
-        it('has no initial stops', function() {
-            expect(waypoint.getStops()).toEqual([]);
-        });
     });
 });

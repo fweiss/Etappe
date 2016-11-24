@@ -5,7 +5,6 @@ angular.module('plan')
             this.name = name;
             this.lat = lat;
             this.lon = lon;
-            this.stops = [];
         }
         Waypoint.prototype.getName = function() {
             return this.name;
@@ -15,9 +14,6 @@ angular.module('plan')
         };
         Waypoint.prototype.getLon = function() {
             return this.lon;
-        };
-        Waypoint.prototype.getStops = function() {
-            return this.stops;
         };
 
         return {
