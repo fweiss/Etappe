@@ -100,6 +100,10 @@ describe('etappe', function() {
             xit('should show available routes', function() {
                 expect(element(by.model('availableRoutes')).getText()).toBe('55 16th');
             });
+            it('should show trip', function() {
+                expect(element(by.css('#trip caption')).getText()).toEqual('Trip1');
+                expect(element(by.css('#trip td')).getText()).toEqual('16th St and Mission');
+            });
             it('should show available rides', function() {
                 var headers = element.all(by.css('table#rides thead th')).map(function(ele) {
                     return ele.getText();
@@ -230,7 +234,7 @@ describe('etappe', function() {
                 });
                 it('get nexuses', function() {
                     expect(element(by.id('errors')).getText()).toBe('');
-                    expect(element(by.binding('currentTrip')).getText()).toBe('Trip to Cliffs')
+                    expect(element(by.css('#trip caption')).getText()).toBe('Trip to Cliffs')
                 });
             });
 

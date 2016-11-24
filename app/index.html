@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="etappe.css"/>
     </head>
     <body>
-        <div id="trip" ng-controller="PlanController">
+        <div id="tripb" ng-controller="PlanController">
             <span id="errors">{{ error }}</span>
             <div class="segmentSelect" ng-include="template">
 
@@ -48,7 +48,16 @@
                     </ol>
                 </div>
             </div>
+            <table id="trip">
+                <caption>{{trip.name}}</caption>
+                <tbody>
+                    <tr ng-repeat="waypoint in trip.getWaypoints()">
+                        <td>{{waypoint.name}}</td>
+                    </tr>
+                </tbody>
+            </table>
             <table id="rides">
+                <caption>Itinerary</caption>
                 <thead>
                     <tr>
                         <th>segment</th>
@@ -94,7 +103,6 @@
                     </tr>
                     </tbody>
                 </table>
-                <div ng-bind="trip"></div>
                 <div ng-bind="rideList"></div>
                 <div ng-bind="routes"></div>
                 <div ng-bind="itinerary"></div>

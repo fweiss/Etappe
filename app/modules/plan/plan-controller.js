@@ -40,7 +40,7 @@ angular.module('plan')
             });
         };
         $scope.selectSavedTrip = function(trip) {
-            $scope.currentTrip = trip;
+            $scope.trip = trip;
             SfMuni.getAllStops().then(function(response) {
                 _.each(response.data, function(stop) {
                     System.mergeStop(stop);
@@ -95,7 +95,6 @@ angular.module('plan')
                     var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
                     $scope.itinerary.setSpan(now, then);
                 });
-
             }
         }
         function refreshRides(segment, itinerary) {
