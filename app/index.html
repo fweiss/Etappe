@@ -20,7 +20,7 @@
                     </tr>
                     </tbody>
                 </table>
-               <select id="nextWaypointSelect" ng-model="originNexusSelect" ng-options="nexus as nexus.getName() for nexus in originNexus" ng-change="nextWaypointChanged()" ng-disabled="disableOrigin">
+               <select id="nextWaypointSelect" ng-model="nextWaypointSelect" ng-options="nexus as nexus.getName() for nexus in originNexus" ng-change="nextWaypointChanged()" ng-disabled="disableOrigin">
                     <option value="">Choose a waypoint</option>
                 </select>
                 <button id="createTrip" ng-click="createTrip()">Create Trip</button>

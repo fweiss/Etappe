@@ -10,7 +10,7 @@ angular.module('plan')
         $scope.waypoints = [];
 
         $scope.nextWaypointChanged = function() {
-            var nexus = $scope.originNexusSelect;
+            var nexus = $scope.nextWaypointSelect;
             var waypoint = Waypoint.createWaypoint(nexus.getName(), nexus.getLat(), nexus.getLon());
             $scope.waypoints.push(waypoint);
         };
@@ -74,6 +74,7 @@ angular.module('plan')
                 Nexus.mergeStops(response.data);
                 var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
                 $scope.originNexus = nexuses;
+                $scope.destinationNexus = nexuses;
                 $scope.destinationNexus = nexuses;
                 $scope.disableOrigin = false;
                 $scope.disableDestination = false;

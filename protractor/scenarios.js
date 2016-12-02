@@ -58,7 +58,7 @@ describe('etappe', function() {
         expect(element(by.id('errors')).getText()).toEqual('');
     });
     describe('I can create a simple trip', function() {
-        fit('shows the trip', function() {
+        it('shows the trip', function() {
             //expect empty trip
             expect(element.all(by.css('#waypoints td')).getText()).toEqual([ ]);
             //expect carrier select
