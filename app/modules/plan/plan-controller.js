@@ -93,7 +93,7 @@ angular.module('plan')
             changeNexus();
         }
         $scope.ridesRefresh2 = function() {
-            refreshRides($scope.itinerary.getSegments()[0], $scope.itinerary);
+            refreshRides($scope.itinerary);
         }
         function changeNexus() {
             if ($scope.originNexusSelect && $scope.destinationNexusSelect) {
@@ -106,7 +106,8 @@ angular.module('plan')
                 });
             }
         }
-        function refreshRides(segment, itinerary) {
+        function refreshRides(itinerary) {
+            var segment = itinerary.getSegments()[0];
             SfMuni.getRidesForSegment(segment).then(function(response) {
                 var rides = response.data;
                 segment.rides = rides;
