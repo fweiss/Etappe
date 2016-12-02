@@ -22,7 +22,8 @@ angular.module('plan')
         };
         Trip.prototype.getInnerWaypoints = function() {
             // _.clone does not preserve type
-            return _.map(this.innerWaypoints, _.clone);
+            //return _.map(this.innerWaypoints, _.clone);
+            return this.innerWaypoints;
         };
         Trip.prototype.setInnerWaypoints = function(waypoints) {
             this.innerWaypoints = waypoints;
@@ -48,6 +49,27 @@ angular.module('plan')
                     throw new Error('createTrip: destination must be Waypoint type');
                 }
                 return new Trip(name, origin, destination);
+            },
+            createFromWaypoints: function(waypoints) {
+                if (!_.isArray(waypoints)) {
+                    throw new Error('createFromWaypoints: waypoints must be an Array');
+                }
+                if (waypoints.length < 2) {
+                    throw new Error('createFromWaypoints: waypoints must have at least 2');
+                }
+                _.each(waypoints, function(waypoint) {
+                    if (waypoint.constructor.name != 'Waypoint') {
+                        throw new Error('createFromWaypoints: waypoints must be type Waypoint');
+                    }
+                });
+                var trip = this.createTrip(waypoints[0], waypoints[waypoints.length - 1]);
+                var c = _.map(waypoints, function(waypoint) {
+                    return waypoint;
+                });
+                c.splice(0, 1);
+                c.splice(-1, 1);
+                trip.setInnerWaypoints(c);
+                return trip;
             }
         };
     }]);

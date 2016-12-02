@@ -2,11 +2,13 @@ describe('domain itinerary', function() {
     var Itinerary;
     var Trip;
     var Waypoint;
+    var Nexus
     beforeEach(module('plan'));
-    beforeEach(inject(function (_itinerary_, _trip_, _waypoint_) {
+    beforeEach(inject(function (_itinerary_, _trip_, _waypoint_, nexus) {
         Itinerary = _itinerary_;
         Trip = _trip_;
         Waypoint = _waypoint_;
+        Nexus = nexus;
     }));
     var trip;
     var w1;
@@ -64,6 +66,44 @@ describe('domain itinerary', function() {
         it('should have segment with empty rides', function() {
             var itinerary = Itinerary.createItinerary(trip);
             expect(itinerary.getSegments()[0].getRides().length).toBe(0);
+        });
+    });
+    describe('create segments from nexuses', function() {
+        describe('validation', function() {
+            it('error when no nexuses given', function() {
+                var e = new Error('createSegmentsFromNexuses: nexuses must be given');
+                expect(function() { Itinerary.createSegmentsFromNexuses(); }).toThrow(e);
+            });
+            it('error when nexuses not Arrayt', function() {
+                var e = new Error('createSegmentsFromNexuses: nexuses must be Array type');
+                expect(function() { Itinerary.createSegmentsFromNexuses('string'); }).toThrow(e);
+            });
+            it('error when nexuses less than 2', function() {
+                var e = new Error('createSegmentsFromNexuses: nexus count must be 2 or more')
+                expect(function() { Itinerary.createSegmentsFromNexuses([ {} ]); }).toThrow(e);
+            });
+            it('error when nexuses not Nexus type', function() {
+                var e = new Error('createSegmentsFromNexuses: nexuses must be Nexus type')
+                expect(function() { Itinerary.createSegmentsFromNexuses([ {}, {} ]); }).toThrow(e);
+            });
+        });
+        describe('values', function() {
+            var n1;
+            var n2;
+            var n3;
+            beforeEach(function() {
+                n1 = Nexus.createFromWaypoint(w1);
+                n2 = Nexus.createFromWaypoint(w2);
+                n3 = Nexus.createFromWaypoint(w3);
+            });
+            it('has one segment of type Segment', function() {
+                var segments = Itinerary.createSegmentsFromNexuses([ n1, n2 ]);
+                expect(segments[0].constructor.name).toEqual('Segment');
+            });
+            it('has two segment', function() {
+                var segments = Itinerary.createSegmentsFromNexuses([ n1, n2, n3 ]);
+                expect(segments.length).toEqual(2);
+            });
         });
     });
 });

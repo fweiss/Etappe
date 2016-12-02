@@ -39,6 +39,29 @@ angular.module('plan')
                 });
             }
             return new Itinerary(trip, segments);
+        },
+        createSegmentsFromNexuses: function(nexuses) {
+            if (_.isUndefined(nexuses)) {
+                throw new Error('createSegmentsFromNexuses: nexuses must be given');
+            }
+            if (!_.isArray(nexuses)) {
+                throw new Error('createSegmentsFromNexuses: nexuses must be Array type');
+            }
+            if (nexuses.length < 2) {
+                throw new Error('createSegmentsFromNexuses: nexus count must be 2 or more');
+            }
+            _.each(nexuses, function(nexus) {
+                if (nexus.constructor.name != 'Nexus') {
+                    throw new Error('createSegmentsFromNexuses: nexuses must be Nexus type');
+                }
+            });
+            var segments = [];
+            _.reduce(nexuses, function(origin, destination) {
+                var segment = Segment.createSegment(origin, destination);
+                segments.push(segment);
+                return destination;
+            });
+            return segments;
         }
     }
 }]);

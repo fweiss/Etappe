@@ -90,3 +90,6 @@ protractor tricks for running in jenkins
 selenium driver jar issue
 node ./node_modules/protractor/bin/webdriver-manager update
 
+## Links and References
+
+Really good article about the who, why, and how of testing: https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html

@@ -57,6 +57,30 @@ describe('etappe', function() {
         // in module.js, an exception handler gets any angular errors - supposeably
         expect(element(by.id('errors')).getText()).toEqual('');
     });
+    describe('I can create a simple trip', function() {
+        fit('shows the trip', function() {
+            //expect empty trip
+            expect(element.all(by.css('#waypoints td')).getText()).toEqual([ ]);
+            //expect carrier select
+            //expect waypoint prompt
+            element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
+            //epect waypoint list
+            // select first waypoint
+            element(by.cssContainingText('#nextWaypointSelect option', '16th St and Mission')).click();
+            // expect empty trip
+            // expect first waypoint
+            expect(element.all(by.css('#waypoints td')).getText()).toEqual([ '16th St and Mission' ]);
+            // expect carrier select
+            // expect waypoint options
+            // select waypoint
+            element(by.cssContainingText('#nextWaypointSelect option', '16th St and Harrison')).click();
+            // expect complete trip
+            expect(element.all(by.css('#waypoints td')).getText()).toEqual([ '16th St and Mission', '16th St and Harrison' ]);
+            // commit trip
+            element(by.css('#createTrip')).click();
+            expect(element.all(by.css('#trip td')).getText()).toEqual([ '16th St and Mission', '16th St and Harrison' ]);
+        });
+    });
     describe('trip builder', function() {
         it('should prompt to select carrier', function() {
             expect(element(by.model('carrierSelect')).$('option:checked').getText()).toEqual('Choose a carrier');

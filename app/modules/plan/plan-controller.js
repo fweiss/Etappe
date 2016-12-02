@@ -7,6 +7,19 @@ angular.module('plan')
     .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'segment', 'waypoint',
         function($scope, chart, SfMuni, alert, Nexus, Itinerary, Trip, System, TripFolder, Segment, Waypoint) {
 
+        $scope.waypoints = [];
+
+        $scope.nextWaypointChanged = function() {
+            var nexus = $scope.originNexusSelect;
+            var waypoint = Waypoint.createWaypoint(nexus.getName(), nexus.getLat(), nexus.getLon());
+            $scope.waypoints.push(waypoint);
+        };
+        $scope.createTrip = function() {
+            //$scope.trip = Trip.createTrip($scope.waypoints[0], $scope.waypoints[1]);
+            $scope.trip = Trip.createFromWaypoints($scope.waypoints);
+            $scope.createItineraryFromTrip($scope.trip);
+        };
+
         $scope.createTripFromNexusSelect = function() {
             var n1 = $scope.originNexusSelect;
             var n2 = $scope.destinationNexusSelect;
@@ -18,13 +31,8 @@ angular.module('plan')
             var nexuses = _.map(trip.getWaypoints(), function(waypoint) {
                 return System.findNexus(waypoint);
             });
-            var segments = [];
-            _.reduce(nexuses, function(origin, destination) {
-                var segment = Segment.createSegment(origin, destination);
-                segments.push(segment);
-            });
+            var segments = Itinerary.createSegmentsFromNexuses(nexuses);
             var itinerary = Itinerary.createItinerary(trip, segments);
-
             $scope.itinerary = itinerary;
         };
         $scope.showSavedTrips = function() {
