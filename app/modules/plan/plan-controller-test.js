@@ -12,6 +12,7 @@ describe('plan controller', function() {
     var Itinerary;
     var System;
     var Stop;
+    var Ride;
 
     beforeEach(module('plan'));
     beforeEach(function() {
@@ -20,7 +21,7 @@ describe('plan controller', function() {
             $provide.value('alert', alertSpy);
         });
     });
-    beforeEach(inject(function($rootScope, $injector, $controller, nexus, itinerary,  _waypoint_, _trip_, _$q_, _system_, _stop_) {
+    beforeEach(inject(function($rootScope, $injector, $controller, nexus, itinerary,  _waypoint_, _trip_, _$q_, _system_, _stop_, ride) {
         scope = $rootScope.$new();
         System = _system_;
         Trip = _trip_;
@@ -28,6 +29,7 @@ describe('plan controller', function() {
         Waypoint = _waypoint_;
         Itinerary = itinerary;
         Stop = _stop_;
+        Ride = ride;
         $httpBackend = $injector.get('$httpBackend');
         $q = _$q_;
         mockSfMuni = jasmine.createSpyObj('mockSfMuni', [ 'getRidesForSegment', 'getAllStops' ]);
@@ -137,6 +139,60 @@ describe('plan controller', function() {
             expect(scope.itinerary.getSegments().length).toBe(1);
             var segment = scope.itinerary.getSegments()[0];
             expect(segment.rides.length).toBe(1);
+        });
+    });
+
+    describe('refresh rides', function() {
+        var w1;
+        var w2;
+        var trip2;
+        var r1;
+        var r2;
+        var s1;
+        var n1;
+        var n2;
+        beforeEach(function() {
+            r1 = Ride.createRide('a1', 'r1', 'v1', new Date(1), new Date(2));
+            r2 = Ride.createRide('a1', 'r2', 'v2', new Date(2), new Date(3));
+            w1 = Waypoint.createWaypoint('w1', 1, 1);
+            w2 = Waypoint.createWaypoint('w2', 1, 2);
+            s1 = Stop.createStop('s1', 'a1', 'r1', 'id1', 1, 1);
+            s2 = Stop.createStop('s2', 'a1', 'r1', 'id1', 1, 2);
+            trip2 = Trip.createTrip(w1, w2);
+            //Nexus.mergeStop(s1);
+            //Nexus.mergeStop(s2);
+            n1 = Nexus.createFromWaypoint(w1);
+            n2 = Nexus.createFromWaypoint(w2);
+        });
+        it('for one segment', function() {
+            mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ r1 ] } ));
+            var nexuses = [ n1, n2 ];
+            var segments = Itinerary.createSegmentsFromNexuses(nexuses);
+            var itinerary = Itinerary.createItinerary(trip2, segments);
+            scope.itinerary = itinerary;
+            scope.ridesRefresh2();
+            scope.$digest();
+            expect(scope.itinerary.getSegments().length).toEqual(1);
+            var segment0 = scope.itinerary.getSegments()[0];
+            expect(segment0.getRides().length).toEqual(1);
+            expect(segment0.getRides()[0].getRouteId()).toEqual('r1');
+        });
+        it('for two segments', function() {
+            mockSfMuni.getRidesForSegment.and.callFake(function(segment) {
+                var originNexusName = segment.getOriginNexus().getName();
+                var rides = originNexusName == 'w1' ? [ r1 ] : [ r2 ];
+                return $q.when({ data: rides } );
+            });
+            var nexuses = [ n1, n2, n2 ];
+            var segments = Itinerary.createSegmentsFromNexuses(nexuses);
+            var itinerary = Itinerary.createItinerary(trip2, segments);
+            scope.itinerary = itinerary;
+            scope.ridesRefresh2();
+            scope.$digest();
+            expect(scope.itinerary.getSegments().length).toEqual(2);
+            var segment1 = scope.itinerary.getSegments()[1];
+            expect(segment1.getRides().length).toEqual(1);
+            expect(segment1.getRides()[0].getRouteId()).toEqual('r2');
         });
     });
 

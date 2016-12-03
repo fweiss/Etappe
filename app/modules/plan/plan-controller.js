@@ -4,8 +4,8 @@ angular.module('plan')
             $window.alert(message);
         }
     })
-    .controller('PlanController', [ '$scope', 'chart', 'sfMuni', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'segment', 'waypoint',
-        function($scope, chart, SfMuni, alert, Nexus, Itinerary, Trip, System, TripFolder, Segment, Waypoint) {
+    .controller('PlanController', [ '$scope', '$q', 'chart', 'sfMuni', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'segment', 'waypoint',
+        function($scope, $q, chart, SfMuni, alert, Nexus, Itinerary, Trip, System, TripFolder, Segment, Waypoint) {
 
         $scope.waypoints = [];
 
@@ -106,7 +106,8 @@ angular.module('plan')
                 });
             }
         }
-        function refreshRides(itinerary) {
+        // keep just to illustrate the transform to parallel
+        function refreshRidesx(itinerary) {
             var segment = itinerary.getSegments()[0];
             SfMuni.getRidesForSegment(segment).then(function(response) {
                 var rides = response.data;
@@ -116,12 +117,22 @@ angular.module('plan')
                 var now = new Date();
                 var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
                 itinerary.setSpan(now, then);
-                //var plan = Plan.createPlan(itinerary.getTrip().getName());
-                //plan.setSpan(now, then);
-                //plan.addSegment(segment.originNexus.getName(), segment.destinationNexus.getName(), rides);
-                //$scope.plan = plan;
 
                 $scope.rideList = rides.length;
             }, function(fail) { $scope.rideList = fail; });
+        }
+        function refreshRides(itinerary) {
+            var segments = itinerary.getSegments();
+            $q.all(_.map(segments, function(segment) {
+                var promise =  SfMuni.getRidesForSegment(segment);
+                promise.then(function(response) {
+                    segment.rides = response.data;
+                });
+                return promise;
+            })).then(function() {
+                var now = new Date();
+                var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+                itinerary.setSpan(now, then);
+            });
         }
 }]);
