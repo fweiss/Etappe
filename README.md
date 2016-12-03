@@ -90,3 +90,38 @@ protractor tricks for running in jenkins
 selenium driver jar issue
 node ./node_modules/protractor/bin/webdriver-manager update
 
+#### Install Karma plugin
+
+The IntelliJ Karma plugin makes Javascript testing really nice. First make sure you have the Karma plugin installed.
+If not, it's easy to do:
+
+Preferences > Plugins > Install Jetbrains plugin. Navigate to and select the Karma plugin. Click Install and restart.
+
+#### Create a Karma run configuration
+
+Enter name, config file (it finds it), browser (start with Chrome)
+
+Test environment
+
+run configrations for:
+
+- karma for unit testing
+- protractor (requires http server and mountebank)
+
+## IntelliJ run configurations
+
+details here
+karma, http server, mountebank, protractor
+
+###
+
+Http server, new run configuration, node, javascript=node_modules/http-server
+
+Then you can go to http://localhost:8080/app/index.html
+
+
+
+
+
+
+
