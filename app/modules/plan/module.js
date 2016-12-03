@@ -4,6 +4,14 @@ angular.module('plan.config', [])
             { name: 'Mission St', stops: [{"stopId":"15553","stopTag":"5553","route":"33"},{"stopId":"13338","stopTag":"3338","route":"33"}] },
             { name: 'Castro St', stops: [{"stopId":"13326","stopTag":"3326","route":"33"},{"stopId":"13325","stopTag":"3325","route":"33"}] }]
         }
+    ])
+    .value('initSavedTrips', [
+        // honestly, time to get rid of origin and destination
+        { id: 1, tripName: 'get Cliffs',
+            origin: { waypointName: '16th St & Mission St', lat: 37.7651399, lon: -122.4196 },
+            destination: { waypointName: 'Castro St', lat: 37.7608499, lon: -122.43484 },
+            waypoints: [ ]
+        }
     ]);
 
 angular.module('plan.canvas.config', [])

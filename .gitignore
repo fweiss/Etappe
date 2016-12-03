@@ -3,3 +3,4 @@ etappe.iml
 node_modules
 mb.log
 mb.pid
+coverage

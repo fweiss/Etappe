@@ -7,9 +7,11 @@ anchorTime
 anchorMode(origin,destination)
 
 plan < segment < ride
+route < direction < schedule
+plan[name, origin, destination]
+route[carrier, title, origin, destination]
+segment[route, origin, destination] WRONG because there can be many routes, but each segment can be distinct route?
 ride[route, vehicle, originTime, destinationTime, waitDuration?]
-segment[route, origin, destination] WRONG because there can be many routes
-route[carrier, title, schedules]
 nexus <> stop
 route < stop   WRONG because a stop can be on many routes
 stop <> route what routes at a  stop; what stops on a route
@@ -23,4 +25,6 @@ agency=carrier
 angularjs notes;
 
 http://toddmotto.com/opinionated-angular-js-styleguide-for-teams/
+
+
 

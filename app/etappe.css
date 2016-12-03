@@ -10,3 +10,9 @@ canvas {
 #savedPlans li.selected, #savedPlans li:hover {
     background-color: powderblue;
 }
+#carrierSelect {
+    width: 20%;
+}
+#originNexusSelect, #destinationNexusSelect {
+    width: 35%;
+}

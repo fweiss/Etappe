@@ -16,18 +16,48 @@ angular.module('sfmuni.config', [])
     .value('config', { baseUrl: 'http://webservices.nextbus.com/service/publicXMLFeed' });
 
 angular.module('agencies', [ 'sfmuni.config' ])
-    .service('sfMuni', function(config, $http, $q) {
+    .service('sfMuni', [ 'config', '$http', '$q', 'stop', 'ride', function(config, $http, $q, Stop, Ride) {
         var $ = $ || angular.element;
         var parser = new DOMParser();
         const baseUrl = config.baseUrl;
+
+        // route[tag] < stop[tag,title,stopId]
+        // route[tag] < direction[name] < stop[tag]
+        function transformStops(root) {
+            var stops = [];
+            var rrx = $(root).find('route');
+            angular.forEach(rrx, function(rx) {
+                var routeId = $(rx).attr('tag');
+                var ssx = $(rx).find('stop');
+                angular.forEach(ssx, function(sx) {
+                    // because angular.element.children('stop') won't work
+                    var title = $(sx).attr('title');
+                    if (title !== undefined) {
+                        var normalizedTitle = api.unPermuteStopTitle(title);
+                        var name = normalizedTitle;
+                        var agencyId = 'sfmuni';
+                        var stopId = $(sx).attr('stopId');
+                        var lat = parseFloat($(sx).attr('lat'));
+                        var lon = parseFloat($(sx).attr('lon'));
+                        var stop = Stop.createStop(name, agencyId, routeId, stopId, lat, lon);
+                        stop.setStopTag($(sx).attr('tag'))
+                        stops.push(stop);
+                    }
+                });
+            });
+            return stops;
+        }
+
         var api = {
             getStopsForRoute: function (route) {
                 return buildResource('routeConfig', parseStops)({r: route});
             },
             getAllStops: function () {
-                return buildResource('routeConfig', parseStops)({});
+                return buildResource('routeConfig', transformStops)({});
             },
-
+            getAllNexus: function () {
+                return buildResource('routeConfig', nexusTransform)({});
+            },
             getRides: function (originStop, destinationStop) {
                 var origin = api.getPredictionsForStopId(originStop);
                 var destination = api.getPredictionsForStopId(destinationStop);
@@ -44,25 +74,23 @@ angular.module('agencies', [ 'sfmuni.config' ])
             getPredictionsForStopId: function (stopId) {
                 return buildResource('predictions', predictionsTransform)({stopId: stopId});
             },
-            getAllNexus: function () {
-                return buildResource('routeConfig', nexusTransform)({});
-            },
             getPredictionsForMultiStops: function (stops) {
                 var stopList = _.map(stops, function (stop) {
-                    return stop.route + '|' + stop.stopTag;
+                    return stop.getRouteId() + '|' + stop.getStopTag();
                 });
-                return buildResource('predictionsForMultiStops', multiPredictionsTransform)({stops: stopList});
+                // multiPredictionsTransform doesn't seem to be neeeded - the data is same as for stop
+                return buildResource('predictionsForMultiStops', predictionsTransform)({stops: stopList});
             },
             getRidesForSegment: function (segment) {
                 function invalid(stops) {
                     return _.isUndefined(stops) || ! (_.isObject( stops) && _.isArray(stops) && stops.length > 0);
                 }
-                if (invalid(segment.originStops) || invalid(segment.destinationStops)) {
+                if (invalid(segment.getOriginNexus().getStops()) || invalid(segment.getDestinationNexus().getStops())) {
                     throw new Error('segment does not specify any stops');
                 }
                 var defer = $q.defer();
-                var origin = api.getPredictionsForMultiStops(segment.originStops);
-                var destination = api.getPredictionsForMultiStops(segment.destinationStops);
+                var origin = api.getPredictionsForMultiStops(segment.originNexus.getStops());
+                var destination = api.getPredictionsForMultiStops(segment.destinationNexus.getStops());
                 $q.all([origin, destination]).then(function (responses) {
                     var originPredictions = responses[0].data;
                     var destinationPredictions = responses[1].data;
@@ -107,19 +135,21 @@ angular.module('agencies', [ 'sfmuni.config' ])
         }
         // expecting predictions < direction < prediction
         function predictionsTransform(root) {
-            var px = $(root).find('predictions');
-            var ddx = $(px).find('direction');
             var predictions = [];
-            angular.forEach(ddx, function(dx) {
-                var route = $(dx).attr('routeTag');
-                var ppx = $(ddx).find('prediction');
-                angular.forEach(ppx, function(px) {
-                    var prediction = {};
-                    prediction.vehicle = $(px).attr('vehicle');
-                    prediction.time = new Date($(px).attr('epochTime') * 1); // parseInt
-                    prediction.route = route;
-                    prediction.tripTag = $(px).attr('tripTag');
-                    predictions.push(prediction);
+            var ppsx = $(root).find('predictions');
+            angular.forEach(ppsx, function(psx) {
+                var route = $(psx).attr('routeTag');
+                var ddx = $(psx).find('direction');
+                angular.forEach(ddx, function(dx) {
+                    var ppx = $(ddx).find('prediction');
+                    angular.forEach(ppx, function(px) {
+                        var prediction = {};
+                        prediction.vehicle = $(px).attr('vehicle');
+                        prediction.time = new Date($(px).attr('epochTime') * 1); // parseInt
+                        prediction.route = route;
+                        prediction.tripTag = $(px).attr('tripTag');
+                        predictions.push(prediction);
+                    });
                 });
             });
             return predictions;
@@ -186,10 +216,13 @@ angular.module('agencies', [ 'sfmuni.config' ])
                     if (title !== undefined) {
                         var normalizedTitle = api.unPermuteStopTitle(title);
                         var stops = getOrCreate(normalizedTitle);
-                        var stop = {};
-                        stop.stopId = $(sx).attr('stopId');
-                        stop.stopTag = $(sx).attr('tag');
-                        stop.route = route;
+                        //var stop = {};
+                        //stop.stopId = $(sx).attr('stopId');
+                        //stop.stopTag = $(sx).attr('tag');
+                        //stop.route = route;
+                        var stop = Stop.createStop(title, 'sf-muni', route, $(sx).attr('stopId'), $(sx).attr('lat'), $(sx).attr('lon'));
+                        //var stop = Stop.createStop('a', 'b', 'c', 'd', 1, 2);
+                        stop.setStopTag($(sx).attr('tag'));
                         stops.push(stop);
                     }
                 });
@@ -205,11 +238,13 @@ angular.module('agencies', [ 'sfmuni.config' ])
                     var originBeforeDestination = originPrediction.time < destinationPrediction.time;
                     var sameTripTag = originPrediction.tripTag === destinationPrediction.tripTag;
                     if (sameVehicle && originBeforeDestination && sameTripTag) {
-                        var ride = {};
-                        ride.agency = 'sf-muni';
-                        ride.vehicle = originPrediction.vehicle;
-                        ride.startTime = originPrediction.time;
-                        ride.endTime = destinationPrediction.time;
+                        //var ride = {};
+                        //ride.agency = 'sf-muni';
+                        //ride.vehicle = originPrediction.vehicle;
+                        //ride.startTime = originPrediction.time;
+                        //ride.endTime = destinationPrediction.time;
+
+                        var ride = Ride.createRide('sf-muni', originPrediction.route, originPrediction.vehicle, originPrediction.time,destinationPrediction.time );
                         rides.push(ride);
                     }
                 });
@@ -217,4 +252,4 @@ angular.module('agencies', [ 'sfmuni.config' ])
             return rides;
         }
        return api;
-    });
+    }]);

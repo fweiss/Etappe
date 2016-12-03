@@ -1,54 +1,61 @@
 angular.module('plan')
-    .service('nexus', function() {
-        function Nexus(name, lat, lon) {
-            this.name = name;
-            this.lat = lat;
-            this.lon = lon;
+    .service('nexus', [ 'waypoint', function(Waypoint) {
+        var nexuses = [];
+
+        function Nexus(waypoint) {
+            this.waypoint = waypoint;
             this.stops = [];
-            this.getName = function() {
-                return this.name
-            };
-            this.getLat = function() {
-                return this.lat;
-            };
-            this.getLon = function() {
-                return this.lon;
-            };
-            this.getStops = function() {
-                return this.stops;
-            };
         }
+        Nexus.prototype.getName = function() {
+            return this.waypoint.getName();
+        };
+        Nexus.prototype.getLat = function() {
+            return this.waypoint.getLat();
+        };
+        Nexus.prototype.getLon = function() {
+            return this.waypoint.getLon();
+        };
+        Nexus.prototype.addStop = function(stop) {
+            this.stops.push(stop);
+        };
+        Nexus.prototype.getStops = function() {
+            return this.stops;
+        };
+
         return {
-            nexuses: [],
-            create: function(name, lat, lon) {
-                if (_.isUndefined(name)) {
-                    throw new Error('Waypoint.create: name is required');
-                }
-                if (_.isUndefined(lat)) {
-                    throw new Error('Waypoint.create: lat is required');
-                }
-                if (_.isUndefined(lon)) {
-                    throw new Error('Waypoint.create: lon is required');
-                }
-                return new Nexus(name, lat, lon );
+            create: createNexus,
+            createFromWaypoint: function(waypoint) {
+                return new Nexus(waypoint);
             },
-            mergeStop: function(stop) {
-                var nearbyNexus = this.findNearbyNexus(stop.lat, stop.lon);
-                if (_.isUndefined(nearbyNexus)) {
-                    nearbyNexus = new Nexus(stop.name, stop.lat, stop.lon);
-                    this.nexuses.push(nearbyNexus);
-                }
-                nearbyNexus.stops.push(stop);
+            mergeStop: mergeStop,
+            mergeStops: function(stops) {
+                _.each(stops, function(stop) {
+                    mergeStop(stop);
+                });
+
             },
             getMergedNexuses: function() {
-                return this.nexuses;
+                return nexuses;
             },
-            findNearbyNexus: function(lat, lon) {
-                return _.find(this.nexuses, function(nexus) {
-                    var deltaLat = Math.abs(nexus.lat - lat);
-                    var deltaLon = Math.abs(nexus.lat - lat);
-                    return deltaLat < .001 && deltaLon < .001;
-                });
-            }
+            findNearbyNexus: findNearbyNexus
         };
-    });
+        function createNexus(name, lat, lon) {
+            // validation left up to Waypoint
+            return new Nexus(Waypoint.createWaypoint(name, lat, lon));
+        }
+        function findNearbyNexus(lat, lon) {
+            return _.find(nexuses, function(nexus) {
+                var deltaLat = Math.abs(nexus.getLat() - lat);
+                var deltaLon = Math.abs(nexus.getLon() - lon);
+                return deltaLat < .001 && deltaLon < .001;
+            });
+        }
+        function mergeStop(stop) {
+            var nearbyNexus = findNearbyNexus(stop.getLat(), stop.getLon());
+            if (_.isUndefined(nearbyNexus)) {
+                nearbyNexus = createNexus(stop.getName(), stop.getLat(), stop.getLon());
+                nexuses.push(nearbyNexus);
+            }
+            nearbyNexus.stops.push(stop);
+        }
+    }]);

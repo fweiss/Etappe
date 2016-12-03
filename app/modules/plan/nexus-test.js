@@ -1,13 +1,19 @@
-describe('nexus domain', function() {
+describe('domain nexus', function() {
     var NexusService;
+    var Waypoint;
+    var Stop;
     beforeEach(module('plan'));
-    beforeEach(inject(function(nexus) {
+    beforeEach(inject(function(nexus, waypoint, stop) {
         NexusService = nexus;
+        Waypoint = waypoint;
+        Stop = stop;
     }));
     describe('create', function() {
         var nexus;
         beforeEach(function() {
-            nexus = NexusService.create('abc', 15, -31);
+            //nexus = NexusService.create('abc', 15, -31);
+            var waypoint = Waypoint.createWaypoint('abc', 15, -31);
+            nexus = NexusService.createFromWaypoint(waypoint);
         });
         it('should have Nexus type', function() {
             expect(nexus.constructor.name).toBe('Nexus');
@@ -24,21 +30,10 @@ describe('nexus domain', function() {
         it('should have empty stops', function() {
             expect(nexus.getStops().length).toBe(0);
         });
-        describe('validation', function() {
-            it('should require name', function() {
-                expect(function() {
-                    NexusService.create();
-                }).toThrow(new Error('Waypoint.create: name is required'));
-            });
-            it('should require lat', function() {
-                expect(function() {
-                    NexusService.create('abc');
-                }).toThrow(new Error('Waypoint.create: lat is required'));
-            });
-            it('should require lon', function() {
-                expect(function() {
-                    NexusService.create('abc', 15);
-                }).toThrow(new Error('Waypoint.create: lon is required'));
+        describe('stops', function() {
+            it('should add one', function() {
+                nexus.addStop({ name: 's1' });
+                expect(nexus.getStops().length).toBe(1);
             });
         });
     });
@@ -54,8 +49,8 @@ describe('nexus domain', function() {
         describe('nearby stops', function() {
             var nexuses;
             beforeEach(function() {
-                NexusService.mergeStop({ agencyId: 'sd-muni', id: '7890', name: '16th St & Mission St', lat: 37.76502, lon: -122.41928 });
-                NexusService.mergeStop({ name: '16th St & Mission St', lat: 37.7651399, lon: -122.4196 });
+                NexusService.mergeStop(Stop.createStop('16th St & Mission St', 'sd-muni', 'K', '7890', 37.76502, -122.41928));
+                NexusService.mergeStop(Stop.createStop('16th St & Mission St', 'a', 'r', 's', 37.7651399, -122.4196));
                 nexuses = NexusService.getMergedNexuses();
             });
             it('should count 1 nexus', function() {
@@ -78,27 +73,53 @@ describe('nexus domain', function() {
                         stop = nexus.stops[0];
                     });
                     it('should have agency id', function() {
-                        expect(stop.agencyId).toBe('sd-muni');
+                        expect(stop.getAgencyId()).toBe('sd-muni');
                     });
                     it('should have stop id', function() {
-                        expect(stop.id).toBe('7890');
+                        expect(stop.getStopId()).toBe('7890');
                     });
                 });
             });
         });
-       describe('other stops', function() {
-           var nexuses;
-           beforeEach(function() {
-               NexusService.mergeStop({  name: '16th St & Mission St', lat: 37.76502, lon: -122.41928 });
-               NexusService.mergeStop({ name: '3rd St & Gene Friend Wy', lat: 37.7695599, lon: -122.3892999 });
-               nexuses = NexusService.getMergedNexuses();
-           });
-           it('should count 2 nexuses', function() {
-               expect(nexuses.length).toBe(2);
-           });
-           it('should count 1 stop in a nexus', function() {
-               expect(nexuses[1].stops.length).toBe(1);
-           });
-       });
+        describe('other stops', function() {
+            var nexuses;
+            beforeEach(function() {
+                NexusService.mergeStop(Stop.createStop('16th St & Mission St', 'a', 'r', 's1', 37.76502, -122.41928));
+                NexusService.mergeStop(Stop.createStop('3rd St & Gene Friend Wy', 'a', 'r', 's2', 37.7695599, -122.3892999));
+                nexuses = NexusService.getMergedNexuses();
+            });
+            it('should count 2 nexuses', function() {
+                expect(nexuses.length).toBe(2);
+            });
+            it('should count 1 stop in a nexus', function() {
+                expect(nexuses[1].stops.length).toBe(1);
+            });
+        });
+        describe('stops', function() {
+            var stop1;
+            var stop2;
+            var stop3;
+            beforeEach(function() {
+                stop1 = Stop.createStop('n', 'a', 'r', 's', 1, 1);
+                stop2 = Stop.createStop('n', 'a', 'r', 's', 1, 1);
+                stop3 = Stop.createStop('n', 'a', 'r', 's', 1, 2);
+            });
+            it('empty', function() {
+                NexusService.mergeStops([]);
+                expect(NexusService.getMergedNexuses()).toEqual([]);
+            });
+            it('single', function() {
+                NexusService.mergeStops([ stop1 ]);
+                expect(NexusService.getMergedNexuses().length).toEqual(1);
+            });
+            it('two nearby', function() {
+                NexusService.mergeStops([ stop1, stop2 ]);
+                expect(NexusService.getMergedNexuses().length).toEqual(1);
+            });
+            it('two not nearby', function() {
+                NexusService.mergeStops([ stop1, stop3 ]);
+                expect(NexusService.getMergedNexuses().length).toEqual(2);
+            });
+        });
     });
 });

@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="etappe.css"/>
     </head>
     <body>
-        <div id="trip" ng-controller="PlanController">
+        <div id="tripb" ng-controller="PlanController">
             <span id="errors">{{ error }}</span>
             <div class="segmentSelect" ng-include="template">
 
@@ -17,24 +17,78 @@
                 <select id="carrierSelect" ng-model="carrierSelect" ng-options="carrier.name for carrier in carriers" ng-change="changeCarrier()">
                     <option value="">Choose a carrier</option>
                 </select>
-                <!--<select id="originStationSelect" ng-model="originStationSelect" ng-options="station.name for station in originStations" ng-change="changeOrigin()" ng-disabled="disableOrigin">-->
-                    <!--<option value="">Choose an origin</option>-->
-                <!--</select>-->
-                <!--<select id="destinationStationSelect" ng-model="destinationStationSelect" ng-options="station.name for station in destinationStations" ng-change="changeDestination()" ng-disabled="disableDestination">-->
-                    <!--<option value="">Choose a destination</option>-->
-                <!--</select>-->
-                <select id="originNexusSelect" ng-model="originNexusSelect" ng-options="key for (key , value) in originNexus" ng-change="originNexusChanged()" ng-disabled="disableOrigin">
+                <select id="originNexusSelect" ng-model="originNexusSelect" ng-options="nexus as nexus.getName() for nexus in originNexus" ng-change="originNexusChanged()" ng-disabled="disableOrigin">
                     <option value="">Choose an origin</option>
                 </select>
-                <select id="destinationNexusSelect" ng-model="destinationNexusSelect" ng-options="key for (key , value) in destinationNexus" ng-change="destinationNexusChanged()" ng-disabled="disableDestination">
+                <select id="destinationNexusSelect" ng-model="destinationNexusSelect" ng-options="nexus as nexus.getName() for nexus in destinationNexus" ng-change="destinationNexusChanged()" ng-disabled="disableDestination">
                     <option value="">Choose a destination</option>
                 </select>
             </p>
-            <table id="plan">
-                <thead>
-                    <div ng-bind="currentPlan.name"></div>
-                </thead>
+            <div>
+                <button id="planSave" ng-click="planSave()">save</button>
+                <input type="text" ng-model="planSaveName"/>
+            </div>
+            <div><button ng-click="ridesRefresh2()">Refresh</button></div>
+            <div>
+                <button id="planRestore" ng-click="planRestore()">Restore</button>
+                <input type="text" ng-model="planRestoreName"/>
+            </div>
+            <div><button id="addSegment" ng-click="addSegment()">Add Segment</button></div>
+            <canvas utt-rides width="1200" height="200"></canvas>
+            <div>
+                <button id="showSavedTrips" ng-click="showSavedTrips()">Saved Trips</button>
+                <div id="savedTrips">
+                    <ol>
+                        <li ng-repeat="trip in savedTrips" ng-click="selectSavedTrip(trip)" ng-class="{ selected: trip.id === currentTrip.id, trip: true }">
+                            <span>{{ trip.getName() }}</span>
+                            <ol>
+                                <li ng-repeat="waypoint in trip.getWaypoints()" ng-class="{ waypoint: true }">{{ waypoint.name }}</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <table id="trip">
+                <caption>{{trip.name}}</caption>
                 <tbody>
+                    <tr ng-repeat="waypoint in trip.getWaypoints()">
+                        <td>{{waypoint.name}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="rides">
+                <caption>Itinerary</caption>
+                <thead>
+                    <tr>
+                        <th>segment</th>
+                        <th>origin</th>
+                        <th>destination</th>
+                        <th>agency</th>
+                        <th>route</th>
+                        <th>vehicle</th>
+                        <th>start</th>
+                        <th>end</th>
+                    </tr>
+                </thead>
+                <tbody ng-repeat="s in itinerary.getSegments()">
+                    <tr ng-repeat="r in s.getRides()">
+                        <td>segment</td>
+                        <td>{{s.originNexus.getName()}}</td>
+                        <td>{{s.destinationNexus.getName()}}</td>
+                        <td>{{r.agency}}</td>
+                        <td>{{r.routeId}}</td>
+                        <td>{{r.vehicleId}}</td>
+                        <td>{{r.startTime | date : 'h:mm a'}}</td>
+                        <td>{{r.endTime | date : 'h:mm a'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="debug">
+                <table id="plan">
+                    <thead>
+                    <div ng-bind="currentPlan.name"></div>
+                    </thead>
+                    <tbody>
                     <tr>
                         <td>{{ originStationSelect.stopId }}</td>
                         <td>{{ destinationStationSelect.stopId }}</td>
@@ -43,50 +97,34 @@
                         <td>{{ originNexusSelect.stops }}</td>
                         <td>{{ destinationNexusSelect.stops }}</td>
                     </tr>
-                <tr>
-                    <td ng-model="nexusStart">{{ nexusStart }}</td>
-                    <td ng-model="nexusEnd">{{ nexusEnd }}</td>
-                </tr>
-                </tbody>
-            </table>
-            <div ng-bind="rideList"></div>
-            <div ng-bind="routes"></div>
-            <div>
-                <button id="planSave" ng-click="planSave()">save</button>
-                <input type="text" ng-model="planSaveName"/>
+                    <tr>
+                        <td ng-model="nexusStart">{{ nexusStart }}</td>
+                        <td ng-model="nexusEnd">{{ nexusEnd }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div ng-bind="rideList"></div>
+                <div ng-bind="routes"></div>
+                <div ng-bind="itinerary"></div>
+                <div ng-bind="currentTrip.getName()"></div>
             </div>
-            <div><button ng-click="ridesRefresh()">Refresh</button></div>
-            <div>
-                <button id="planRestore" ng-click="planRestore()">Restore</button>
-                <input type="text" ng-model="planRestoreName"/>
-            </div>
-            <div><button id="addSegment" ng-click="addSegment()">Add Segment</button></div>
-            <div><button ng-click="ridesRefresh()">Refresh</button></div>
-            <canvas utt-rides width="1200" height="200"></canvas>
-            <div>
-                <button id="showSavedPlans" ng-click="showSavedPlans()">Saved Plans</button>
-                <div id="savedPlans">
-                    <ol>
-                        <li ng-repeat="plan in savedPlans" ng-click="selectSavedPlan(plan)" ng-class="{ selected: plan.id === currentPlan.id, plan: true }">
-                            <span>{{ plan.name }}</span>
-                            <ol>
-                                <li ng-repeat="waypoint in plan.waypoints" ng-class="{ waypoint: true }">{{ waypoint.name }}</li>
-                            </ol>
-                        </li>
-                    </ol>
-                </div>
-            </div>
-         </div>
+        </div>
         <script src="lib/underscore.js"></script>
         <script src="lib/angular.min.js"></script>
         <script src="lib/angular-resource.js"></script>
         <script src="lib/angular-route.min.js"></script>
         <script src="etappe.js"></script>
         <script src="modules/plan/module.js"></script>
+        <script src="modules/plan/trip.js"></script>
+        <script src="modules/plan/ride.js"></script>
+        <script src="modules/plan/itinerary.js"></script>
         <script src="modules/plan/plan-controller.js"></script>
-        <script src="modules/plan/plan.js"></script>
-        <script src="modules/plan/plan-folder.js"></script>
+        <script src="modules/plan/tripfolder.js"></script>
+        <script src="modules/plan/stop.js"></script>
+        <script src="modules/plan/waypoint.js"></script>
         <script src="modules/plan/nexus.js"></script>
+        <script src="modules/plan/segment.js"></script>
+        <script src="modules/plan/system.js"></script>
         <script src="modules/plan/scaling.js"></script>
         <script src="modules/plan/canvas.js"></script>
         <script src="modules/plan/date.js"></script>
