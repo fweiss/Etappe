@@ -25,6 +25,12 @@ angular.module('plan')
         return {
             create: createNexus,
             createFromWaypoint: function(waypoint) {
+                if (! waypoint) {
+                    throw new Error('createFromWaypoint: waypoint must be given');
+                }
+                if (waypoint.constructor.name != 'Waypoint') {
+                    throw new Error('createFromWaypoint: waypoint must be Waypoint type');
+                }
                 return new Nexus(waypoint);
             },
             mergeStop: mergeStop,

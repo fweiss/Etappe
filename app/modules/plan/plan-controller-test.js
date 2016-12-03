@@ -156,6 +156,7 @@ describe('plan controller', function() {
             r2 = Ride.createRide('a1', 'r2', 'v2', new Date(2), new Date(3));
             w1 = Waypoint.createWaypoint('w1', 1, 1);
             w2 = Waypoint.createWaypoint('w2', 1, 2);
+            w3 = Waypoint.createWaypoint('w3', 1, 3);
             s1 = Stop.createStop('s1', 'a1', 'r1', 'id1', 1, 1);
             s2 = Stop.createStop('s2', 'a1', 'r1', 'id1', 1, 2);
             trip2 = Trip.createTrip(w1, w2);
@@ -163,6 +164,7 @@ describe('plan controller', function() {
             //Nexus.mergeStop(s2);
             n1 = Nexus.createFromWaypoint(w1);
             n2 = Nexus.createFromWaypoint(w2);
+            n3 = Nexus.createFromWaypoint(w3);
         });
         it('for one segment', function() {
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ r1 ] } ));
@@ -183,7 +185,7 @@ describe('plan controller', function() {
                 var rides = originNexusName == 'w1' ? [ r1 ] : [ r2 ];
                 return $q.when({ data: rides } );
             });
-            var nexuses = [ n1, n2, n2 ];
+            var nexuses = [ n1, n2, n3 ];
             var segments = Itinerary.createSegmentsFromNexuses(nexuses);
             var itinerary = Itinerary.createItinerary(trip2, segments);
             scope.itinerary = itinerary;

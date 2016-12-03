@@ -41,6 +41,7 @@ angular.module('plan')
             return new Itinerary(trip, segments);
         },
         createSegmentsFromNexuses: function(nexuses) {
+            var method = 'createSegmentsFromNexuses: ';
             if (_.isUndefined(nexuses)) {
                 throw new Error('createSegmentsFromNexuses: nexuses must be given');
             }
@@ -57,6 +58,9 @@ angular.module('plan')
             });
             var segments = [];
             _.reduce(nexuses, function(origin, destination) {
+                if (origin.getLat() == destination.getLat() && origin.getLon() == destination.getLon()) {
+                    throw new Error(method + 'adjacent nexus must not be duplicate');
+                }
                 var segment = Segment.createSegment(origin, destination);
                 segments.push(segment);
                 return destination;

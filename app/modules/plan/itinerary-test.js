@@ -17,7 +17,7 @@ describe('domain itinerary', function() {
     beforeEach(function() {
         w1 = Waypoint.createWaypoint('w1', 21, 31);
         w2 = Waypoint.createWaypoint('w2', 22, 32);
-        w2 = Waypoint.createWaypoint('w3', 23, 33);
+        w3 = Waypoint.createWaypoint('w3', 23, 33);
         trip = Trip.createTrip(w1, w2);
     });
     describe('creation', function() {
@@ -69,12 +69,13 @@ describe('domain itinerary', function() {
         });
     });
     describe('create segments from nexuses', function() {
+        var method = 'createSegmentsFromNexuses: ';
         describe('validation', function() {
             it('error when no nexuses given', function() {
                 var e = new Error('createSegmentsFromNexuses: nexuses must be given');
                 expect(function() { Itinerary.createSegmentsFromNexuses(); }).toThrow(e);
             });
-            it('error when nexuses not Arrayt', function() {
+            it('error when nexuses not Array type', function() {
                 var e = new Error('createSegmentsFromNexuses: nexuses must be Array type');
                 expect(function() { Itinerary.createSegmentsFromNexuses('string'); }).toThrow(e);
             });
@@ -85,6 +86,12 @@ describe('domain itinerary', function() {
             it('error when nexuses not Nexus type', function() {
                 var e = new Error('createSegmentsFromNexuses: nexuses must be Nexus type')
                 expect(function() { Itinerary.createSegmentsFromNexuses([ {}, {} ]); }).toThrow(e);
+            });
+            it('error when duplicated adjacent', function() {
+                var n1 = Nexus.createFromWaypoint(w1);
+                var n2 = Nexus.createFromWaypoint(w2);
+                var e = new Error(method + 'adjacent nexus must not be duplicate');
+                expect(function() { Itinerary.createSegmentsFromNexuses([ n1, n2, n2 ]); }).toThrow(e);
             });
         });
         describe('values', function() {

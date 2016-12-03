@@ -36,6 +36,16 @@ describe('domain nexus', function() {
                 expect(nexus.getStops().length).toBe(1);
             });
         });
+        describe('from waypoint', function() {
+            it('error when no waypoint given', function() {
+                var e = new Error('createFromWaypoint: waypoint must be given');
+                expect(function() {NexusService.createFromWaypoint(); }).toThrow(e);
+            });
+            it('error when waypoint not Waypoint type', function() {
+                var e = new Error('createFromWaypoint: waypoint must be Waypoint type');
+                expect(function() {NexusService.createFromWaypoint( {} ); }).toThrow(e);
+            });
+        });
     });
     describe('merge', function() {
         // route 33 <stop tag="3292" title="16th St & Mission St" lat="37.76502" lon="-122.41928" stopId="13292"/>
