@@ -1,4 +1,4 @@
-describe('plan canvas', function() {
+fdescribe('plan canvas', function() {
     // N.B. Date constructor for ISO 8601 is always UTC, use RFC2822 instead
     //var spanStart = new Date('2013-02-22T13:00');
     var spanStart = new Date('22 Feb 2013 13:00');
@@ -156,6 +156,13 @@ describe('plan canvas', function() {
                 var tickLegendHeight = planConfig('tickLegendHeight');
                 expect(mockContext.fillText).toHaveBeenCalledWith('w1', 0, tickLegendHeight);
                 expect(mockContext.font).toBe('bold 12pt Calibri');
+            });
+        });
+        xdescribe('segments', function() {
+            it('should draw two fields', function() {
+                var segments = itinerary.getSegments();
+                setItineraryAndApply(itinerary);
+                expect(mockContext.fillRect.calls.count()).toEqual(2);
             });
         });
     });
