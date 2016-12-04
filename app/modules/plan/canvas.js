@@ -41,22 +41,10 @@ angular.module('plan')
                 var segment = itinerary.getSegments() && itinerary.getSegments()[0];
                 drawSegment(ctx, segment);
 
-                //var rides = (segment && segment.rides) || [];
-
-                // draw "field"
-                //ctx.fillStyle = '#7f7fff';
-                //ctx.fillRect(0, tickLegendHeight, width, height);
-
+                // problem: we really want the ticks over the background, but under the rides
                 drawTimeTickMajor(ctx, span.spanStart, span.spanEnd);
 
-                //_.each(rides, function(ride) {
-                //    drawRide(ctx, ride);
-                // });
-                //if (segment) {
-                //    ctx.font = 'bold 12pt Calibri';
-                //    ctx.fillText(segment.getOriginNexus().waypoint.name, 0, tickLegendHeight);
-                //}
-                //ctx.restore();
+                ctx.restore();
             }
         }
         function drawSegment(ctx, segment) {
@@ -73,7 +61,6 @@ angular.module('plan')
                 ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
                 ctx.fillText(segment.getOriginNexus().waypoint.name, 0, tickLegendHeight);
             }
-
         }
         function drawRide(ctx, ride) {
             var startTime = ride.startTime;
