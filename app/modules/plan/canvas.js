@@ -31,28 +31,49 @@ angular.module('plan')
         function drawElement(element, scope) {
             var itinerary = scope.itinerary;
             if (itinerary) {
-                var span = itinerary.getSpan();
-                var segment = itinerary.getSegments() && itinerary.getSegments()[0];
-                var rides = (segment && segment.rides) || [];
-
-                chart.setTimeSpan(span.spanStart, span.spanEnd);
-                clearCanvas(element[0]);
                 var ctx = element[0].getContext('2d');
                 ctx.save();
 
-                ctx.fillStyle = '#7f7fff';
-                ctx.fillRect(0, tickLegendHeight, width, height);
+                var span = itinerary.getSpan();
+                chart.setTimeSpan(span.spanStart, span.spanEnd);
+                clearCanvas(element[0]);
+
+                var segment = itinerary.getSegments() && itinerary.getSegments()[0];
+                drawSegment(ctx, segment);
+
+                //var rides = (segment && segment.rides) || [];
+
+                // draw "field"
+                //ctx.fillStyle = '#7f7fff';
+                //ctx.fillRect(0, tickLegendHeight, width, height);
+
                 drawTimeTickMajor(ctx, span.spanStart, span.spanEnd);
 
-                _.each(rides, function(ride) {
-                    drawRide(ctx, ride);
-                 });
-                if (segment) {
-                    ctx.font = 'bold 12pt Calibri';
-                    ctx.fillText(segment.getOriginNexus().waypoint.name, 0, tickLegendHeight);
-                }
-                ctx.restore();
+                //_.each(rides, function(ride) {
+                //    drawRide(ctx, ride);
+                // });
+                //if (segment) {
+                //    ctx.font = 'bold 12pt Calibri';
+                //    ctx.fillText(segment.getOriginNexus().waypoint.name, 0, tickLegendHeight);
+                //}
+                //ctx.restore();
             }
+        }
+        function drawSegment(ctx, segment) {
+            // draw "field"
+            ctx.fillStyle = '#7f7fff';
+            ctx.fillRect(0, tickLegendHeight, width, height);
+
+            var rides = (segment && segment.rides) || [];
+            _.each(rides, function(ride) {
+                drawRide(ctx, ride);
+            });
+            if (segment) {
+                ctx.font = 'bold 12pt Calibri';
+                ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
+                ctx.fillText(segment.getOriginNexus().waypoint.name, 0, tickLegendHeight);
+            }
+
         }
         function drawRide(ctx, ride) {
             var startTime = ride.startTime;
