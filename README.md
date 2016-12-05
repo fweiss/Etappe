@@ -1,4 +1,6 @@
-Etappe is a browser app for planning a metro transit trip using one or more 
+# Etappe
+
+Etappe is a browser app for planning a metro transit trip using one or more
 transit carriers. There are many strategies for creating an optimal trip. Some 
 of the optimization criteria are:
 
@@ -79,28 +81,39 @@ When manual testing exposes UX issues, they may or may not involve BDD or TDD. F
 the DOM or add CSS classes to DOM elements, should changes should first be added to BDD tests. However, changes to the CSS would be
 manually tested changes.
 
-### IntelliJ
 
-server run configuration (Node)
-mountebank required for protractor
-protractor
-karma unit tests
+## Links and References
+
+Really good article about the who, why, and how of testing: https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html
+
+## IntelliJ
+
+IntelliJ has plugins which make TDD with Karma and Protractor highly productive.
+
+Once you have installed the plugins you will setup the following run configurations:
+
+- karma unit tests
+- server run configuration (Node)
+- mountebank required for protractor
+- protractor
 
 protractor tricks for running in jenkins
 selenium driver jar issue
 node ./node_modules/protractor/bin/webdriver-manager update
 
-## Links and References
+### Running the toolchain
 
-Really good article about the who, why, and how of testing: https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html
-#### Install Karma plugin
+Launch each of the four tools and pin them in the Run window. This includes the web server and mountebank, which will
+be always running. Run the Karma unit test or the Protractor E2E tests by selecting the tab anbd clicking the run button.
+
+### Install Karma plugin
 
 The IntelliJ Karma plugin makes Javascript testing really nice. First make sure you have the Karma plugin installed.
 If not, it's easy to do:
 
 Preferences > Plugins > Install Jetbrains plugin. Navigate to and select the Karma plugin. Click Install and restart.
 
-#### Create a Karma run configuration
+### Create a Karma run configuration
 
 Enter name, config file (it finds it), browser (start with Chrome)
 
@@ -111,7 +124,7 @@ run configrations for:
 - karma for unit testing
 - protractor (requires http server and mountebank)
 
-## IntelliJ run configurations
+### IntelliJ run configurations
 
 details here
 karma, http server, mountebank, protractor
