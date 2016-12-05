@@ -38,10 +38,18 @@ angular.module('plan')
                 chart.setTimeSpan(span.spanStart, span.spanEnd);
                 clearCanvas(element[0]);
 
-                var segment = itinerary.getSegments() && itinerary.getSegments()[0];
-                drawSegment(ctx, segment);
+                var segments = itinerary.getSegments();
+                var offset = 0;
+                _.each(segments, function(segment) {
+                    ctx.save();
+                    ctx.translate(0, offset);
+                    offset += 200;
+                    drawSegment(ctx, segment);
+                    ctx.restore();
+                });
 
                 // problem: we really want the ticks over the background, but under the rides
+                ctx.translate(0, 0);
                 drawTimeTickMajor(ctx, span.spanStart, span.spanEnd);
 
                 ctx.restore();

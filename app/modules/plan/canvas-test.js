@@ -14,6 +14,7 @@ describe('plan canvas', function() {
     var Trip;
     var Waypoint;
     var Segment;
+    var Nexus;
 
     // mocks
     var element;
@@ -34,7 +35,7 @@ describe('plan canvas', function() {
         //element[0].height = height;
         compile(element)(scope);
 
-        mockContext = jasmine.createSpyObj('mockContext', [ 'save', 'restore', 'fillRect', 'beginPath', 'moveTo', 'lineTo', 'stroke', 'fillText' ]);
+        mockContext = jasmine.createSpyObj('mockContext', [ 'save', 'restore', 'fillRect', 'beginPath', 'moveTo', 'lineTo', 'stroke', 'fillText', 'translate' ]);
         element[0].getContext = function() {
             return mockContext;
         };
@@ -54,7 +55,7 @@ describe('plan canvas', function() {
 
     // start of Jasmine specs
     beforeEach(module('plan', 'plan.canvas.config'));
-    beforeEach(inject(function($rootScope, $compile, _planConfig_, itinerary, trip, waypoint, segment) {
+    beforeEach(inject(function($rootScope, $compile, _planConfig_, itinerary, trip, waypoint, segment, nexus) {
         scope = $rootScope;
         compile = $compile;
         planConfig = _planConfig_;
@@ -62,6 +63,7 @@ describe('plan canvas', function() {
         Trip = trip;
         Waypoint = waypoint;
         Segment = segment;
+        Nexus = nexus;
     }));
     beforeEach(function() {
         var trip = Trip.createTrip(Waypoint.createWaypoint('w1', 1, 2), Waypoint.createWaypoint('w2', 1, 2));
@@ -158,11 +160,37 @@ describe('plan canvas', function() {
                 expect(mockContext.font).toBe('bold 12pt Calibri');
             });
         });
-        xdescribe('segments', function() {
-            it('should draw two fields', function() {
-                var segments = itinerary.getSegments();
-                setItineraryAndApply(itinerary);
-                expect(mockContext.fillRect.calls.count()).toEqual(2);
+        describe('itnerary', function() {
+            var w1, w2, w3;
+            var trip;
+            var n1, n2, n3;
+            beforeEach(function() {
+                w1 = Waypoint.createWaypoint('n1', 1, 2);
+                w2 = Waypoint.createWaypoint('n2', 1, 3);
+                w3 = Waypoint.createWaypoint('n3', 1, 4);
+                n1 = Nexus.createFromWaypoint(w1);
+                n2 = Nexus.createFromWaypoint(w2);
+                n3 = Nexus.createFromWaypoint(w3);
+            });
+            describe('with 2 segments', function() {
+                beforeEach(function() {
+                    var trip = Trip.createFromWaypoints([w1, w2, w3]);
+                    var segments = Itinerary.createSegmentsFromNexuses([ n1, n2, n3 ]);
+                    var itinerary = Itinerary.createItinerary(trip, segments);
+                    itinerary.setSpan(new Date(1), new Date(2));
+                    setItineraryAndApply(itinerary);
+                });
+                it('should draw two fields', function() {
+                    expect(mockContext.fillRect.calls.count()).toEqual(2);
+                });
+                it('should draw offset fields', function() {
+                    expect(mockContext.translate).toHaveBeenCalledWith(0, 200);
+                    expect(mockContext.fillRect).toHaveBeenCalledWith(0, tickLegendHeight, canvasWidth, canvasHeight);
+                });
+                it('should translate for ticks', function() {
+                    //console.log(mockContext.translate.calls.mostRecent().args);
+                    expect(mockContext.translate.calls.mostRecent().args).toEqual([ 0, 0 ]);
+                });
             });
         });
     });
