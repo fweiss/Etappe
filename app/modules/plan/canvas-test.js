@@ -22,6 +22,11 @@ describe('plan canvas', function() {
 
     // fixtures
     var itinerary;
+    var config = {
+        tickLegendHeight: 20,
+        waypointLegendHeight: 20,
+        pathFieldHeight: 180
+    };
 
     // helper functions
     function addMinutes(date, minutes) {
@@ -54,7 +59,9 @@ describe('plan canvas', function() {
     }
 
     // start of Jasmine specs
-    beforeEach(module('plan', 'plan.canvas.config'));
+    beforeEach(module('plan', 'plan.canvas.config', function($provide) {
+        $provide.value('canvasConfig', config);
+    }));
     beforeEach(inject(function($rootScope, $compile, _planConfig_, itinerary, trip, waypoint, segment, nexus) {
         scope = $rootScope;
         compile = $compile;
@@ -88,7 +95,7 @@ describe('plan canvas', function() {
         });
         it('should draw background', function() {
             setItineraryAndApply(itinerary);
-            expect(mockContext.fillRect).toHaveBeenCalledWith(0, tickLegendHeight, canvasWidth, canvasHeight);
+            expect(mockContext.fillRect).toHaveBeenCalledWith(0, tickLegendHeight, canvasWidth, config.pathFieldHeight);
         });
         it('should draw a ride', function() {
             var segment = itinerary.getSegments()[0];
@@ -180,15 +187,18 @@ describe('plan canvas', function() {
                     itinerary.setSpan(new Date(1), new Date(2));
                     setItineraryAndApply(itinerary);
                 });
+                it('should have total height', function() {
+
+                });
                 it('should draw two fields', function() {
                     expect(mockContext.fillRect.calls.count()).toEqual(2);
                 });
                 it('should draw offset fields', function() {
                     expect(mockContext.translate).toHaveBeenCalledWith(0, 200);
-                    expect(mockContext.fillRect).toHaveBeenCalledWith(0, tickLegendHeight, canvasWidth, canvasHeight);
+                    expect(mockContext.fillRect).toHaveBeenCalledWith(0, tickLegendHeight, canvasWidth, config.pathFieldHeight);
                 });
                 it('should translate for ticks', function() {
-                    //console.log(mockContext.translate.calls.mostRecent().args);
+                    //console.log(mockContext.translate.calls.all()[0]);
                     expect(mockContext.translate.calls.mostRecent().args).toEqual([ 0, 0 ]);
                 });
             });

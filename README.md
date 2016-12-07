@@ -86,6 +86,8 @@ manually tested changes.
 
 Really good article about the who, why, and how of testing: https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html
 
+How to mock providers: http://www.syntaxsuccess.com/viewarticle/how-to-mock-providers-in-angular
+
 ## IntelliJ
 
 IntelliJ has plugins which make TDD with Karma and Protractor highly productive.

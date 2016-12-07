@@ -1,8 +1,9 @@
 'use strict';
 angular.module('plan')
-    .directive('uttRides', function(chart, planConfig, date) {
+    .directive('uttRides', function(chart, planConfig, date, canvasConfig) {
         //console.log('mmmmmmmm ' + tickLegendHeight);
         var tickLegendHeight = planConfig('tickLegendHeight');
+        var pathFieldHeight = canvasConfig.pathFieldHeight;
         var rideLine = { lineWidth: 6, strokeStyle: 'rgba(255, 255, 255, 1' };
         var timeTickMajor = { lineWidth: 1, strokeStyle: 'rgba(0, 0, 0, 0.5)' };
         var timeTickMinor = { lineWidth: 1, strokeStyle: 'rgba(0, 0, 0, 0.1)' };
@@ -58,7 +59,7 @@ angular.module('plan')
         function drawSegment(ctx, segment) {
             // draw "field"
             ctx.fillStyle = '#7f7fff';
-            ctx.fillRect(0, tickLegendHeight, width, height);
+            ctx.fillRect(0, tickLegendHeight, width, pathFieldHeight);
 
             var rides = (segment && segment.rides) || [];
             _.each(rides, function(ride) {
