@@ -19,15 +19,17 @@ fdescribe('itinerary chart', function() {
 
     // mocks
     var element;
-    var mockContext;
+    var mockContext, ctx;
 
     // fixtures
     var itinerary;
     var config = {
         tickLegendHeight: 20,
         waypointLegendHeight: 20,
+        waypointLegendFont: 'bold 12pt Calibri',
         pathFieldHeight: 180
     };
+    var w1, w2, w3;
 
     // helper functions
     function addMinutes(date, minutes) {
@@ -74,10 +76,18 @@ fdescribe('itinerary chart', function() {
         Nexus = nexus;
         Ride = ride;
     }));
+
     beforeEach(function() {
         var trip = Trip.createTrip(Waypoint.createWaypoint('w1', 1, 2), Waypoint.createWaypoint('w2', 1, 2));
         itinerary = Itinerary.createItinerary(trip);
         itinerary.setSpan(spanStart, spanEnd);
+
+        mockCanvasContext(canvasWidth, canvasHeight);
+        ctx = mockContext;
+        w1 = Waypoint.createWaypoint('w1', 1, 2);
+        w2 = Waypoint.createWaypoint('w2', 1, 3);
+        w3 = Waypoint.createWaypoint('w3', 1, 4);
+
     });
 
 
@@ -96,18 +106,26 @@ fdescribe('itinerary chart', function() {
         });
     });
     describe('waypoint legend', function() {
-
+        beforeEach(function() {
+            var itinerary = createItineraryForWaypoints([ w1, w2, w3 ]);
+            itinerary.setSpan(new Date(1), new Date(2));
+            setItineraryAndApply(itinerary);
+        });
+        it('draw first', function() {
+            expect(ctx.translate).toHaveBeenCalledWith(0, config.tickLegendHeight);
+            expect(ctx.fillText).toHaveBeenCalledWith('w1', 0, 0);
+            expect(ctx.font).toBe(config.waypointLegendFont);
+        });
+        it('draw second', function() {
+            expect(ctx.translate).toHaveBeenCalledWith(0, config.tickLegendHeight + config.waypointLegendHeight + config.pathFieldHeight);
+            expect(ctx.fillText).toHaveBeenCalledWith('w2', 0, 0);
+        });
+        it('draw third', function() {
+            expect(ctx.translate).toHaveBeenCalledWith(0, config.tickLegendHeight + 2 * (config.waypointLegendHeight + config.pathFieldHeight));
+            expect(ctx.fillText).toHaveBeenCalledWith('w3', 0, 0);
+        });
     });
     describe('rides', function() {
-        var ctx;
-        var w1, w2, w3;
-        beforeEach(function() {
-            mockCanvasContext(canvasWidth, canvasHeight);
-            ctx = mockContext;
-            w1 = Waypoint.createWaypoint('n1', 1, 2);
-            w2 = Waypoint.createWaypoint('n2', 1, 3);
-            w3 = Waypoint.createWaypoint('n3', 1, 4);
-        });
         describe('fields', function() {
             beforeEach(function() {
                 var itinerary = createItineraryForWaypoints([ w1, w2, w3 ]);
@@ -285,7 +303,7 @@ fdescribe('itinerary chart', function() {
             });
         });
     });
-    describe('1200 x 200', function() {
+    xdescribe('1200 x 200', function() {
         it('should have ticks for entire length', function() {
             mockCanvasContext(1200, 200);
             setItineraryAndApply(itinerary);

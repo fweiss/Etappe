@@ -58,8 +58,22 @@ angular.module('plan')
                 ctx.translate(0, 0);
                 drawTimeTickMajor(ctx, span.spanStart, span.spanEnd);
 
+                drawWaypointLegends(ctx, itinerary.getTrip().getWaypoints());
+
                 ctx.restore();
             }
+        }
+        function drawWaypointLegends(ctx, waypoints) {
+            var offset = canvasConfig.tickLegendHeight;
+            _.each(waypoints, function(waypoint) {
+                ctx.save();
+                ctx.translate(0, offset);
+                ctx.font = canvasConfig.waypointLegendFont;
+                ctx.textBaseline = 'top';
+                ctx.fillText(waypoint.getName(), 0, 0);
+                ctx.restore();
+                offset += canvasConfig.waypointLegendHeight + canvasConfig.pathFieldHeight;
+            });
         }
         function drawSegment(ctx, segment) {
             // draw "field"
@@ -70,12 +84,6 @@ angular.module('plan')
             _.each(rides, function(ride) {
                 drawRide(ctx, ride);
             });
-
-            if (segment) {
-                ctx.font = 'bold 12pt Calibri';
-                ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
-                ctx.fillText(segment.getOriginNexus().waypoint.name, 0, tickLegendHeight);
-            }
         }
         function drawRide(ctx, ride) {
             var startTime = ride.startTime;
