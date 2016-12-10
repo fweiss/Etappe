@@ -95,7 +95,12 @@ fdescribe('itinerary chart', function() {
 
 
     describe('canvas properties', function() {
-
+        it('noop on empty span', function() {
+            var itinerary = createItineraryForWaypoints([ w1, w2 ]);
+            scope.itinerary = itinerary;
+            expect(function() { element.scope().$apply(); }).not.toThrow();
+            expect(ctx.fillRect).not.toHaveBeenCalled();
+        });
     });
     describe('time ticks', function() {
         describe('lines', function() {
@@ -149,14 +154,26 @@ fdescribe('itinerary chart', function() {
                 var itinerary = createItineraryForWaypoints([ w1, w2, w3 ]);
                 // between minor ticks
                 itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 4));
-                var ride = new Ride.createRide('a', 'r', 'v', addMinutes(spanStart, 2), addMinutes(spanStart, 3));
-                itinerary.getSegments()[0].setRides([ ride ]);
+                var ride1 = new Ride.createRide('a', 'r', 'v', addMinutes(spanStart, 1), addMinutes(spanStart, 2));
+                var ride2 = new Ride.createRide('a', 'r', 'v', addMinutes(spanStart, 2), addMinutes(spanStart, 3));
+                var ride3 = new Ride.createRide('a', 'r', 'v', addMinutes(spanStart, 3), addMinutes(spanStart, 4));
+                itinerary.getSegments()[0].setRides([ ride1, ride2 ]);
+                itinerary.getSegments()[1].setRides([ ride3 ]);
                 setItineraryAndApply(itinerary);
             });
-            it('ride', function() {
+            it('first segment first ride', function() {
                 expect(ctx.translate).toHaveBeenCalledWith(0, config.tickLegendHeight + config.waypointLegendHeight);
+                expect(ctx.moveTo).toHaveBeenCalledWith(0, 0);
+                expect(ctx.lineTo).toHaveBeenCalledWith(200, config.pathFieldHeight);
+            });
+            it('first segment second ride', function() {
                 expect(ctx.moveTo).toHaveBeenCalledWith(200, 0);
                 expect(ctx.lineTo).toHaveBeenCalledWith(400, config.pathFieldHeight);
+            });
+            it('second segment first ride', function() {
+                expect(ctx.translate).toHaveBeenCalledWith(0, config.tickLegendHeight + 2 * config.waypointLegendHeight + config.pathFieldHeight);
+                expect(ctx.moveTo).toHaveBeenCalledWith(400, 0);
+                expect(ctx.lineTo).toHaveBeenCalledWith(600, config.pathFieldHeight);
             });
         });
     });
@@ -175,37 +192,37 @@ fdescribe('itinerary chart', function() {
             tickLegendHeight = planConfig('tickLegendHeight');
             canvasHeight = config.tickLegendHeight + 2 * config.waypointLegendHeight + 1 * config.pathFieldHeight;
         });
-        it('noop on empty span', function() {
-            var trip1 = Trip.createTrip(Waypoint.createWaypoint('w1', 1, 2), Waypoint.createWaypoint('w2', 1, 2));
-            var itineraryNoSpan = Itinerary.createItinerary(trip1);
-            scope.itinerary = itineraryNoSpan;
-            expect(function() { element.scope().$apply(); }).not.toThrow();
-            expect(mockContext.fillRect).not.toHaveBeenCalled();
-        });
-        it('should draw background', function() {
-            setItineraryAndApply(itinerary);
-            expect(mockContext.fillRect).toHaveBeenCalledWith(0, config.tickLegendHeight, canvasWidth, config.pathFieldHeight);
-        });
-        it('should draw a ride', function() {
-            var segment = itinerary.getSegments()[0];
-            segment.setRides([ { startTime: addMinutes(spanStart, 1), endTime: addMinutes(spanStart, 2) } ]);
-            setItineraryAndApply(itinerary);
-            expect(mockContext.moveTo).toHaveBeenCalledWith(10, config.tickLegendHeight);
-            expect(mockContext.lineTo).toHaveBeenCalledWith(20, canvasHeight);
-        });
-        it('should draw two rides', function() {
-            var rideStart0 = addMinutes(spanStart, 11);
-            var rideEnd0 = addMinutes(spanStart, 21);
-            var rideStart1 = addMinutes(spanStart, 31);
-            var rideEnd1 = addMinutes(spanStart, 43);
-            var rides = itinerary.getSegments()[0].getRides();
-            rides.push(createRide(rideStart0, rideEnd0));
-            rides.push(createRide(rideStart1, rideEnd1));
-            setItineraryAndApply(itinerary);
-            expect(mockContext.moveTo).toHaveBeenCalledWith(110, config.tickLegendHeight);
-            expect(mockContext.lineTo).toHaveBeenCalledWith(210, canvasHeight);
-            expect(mockContext.moveTo).toHaveBeenCalledWith(310, config.tickLegendHeight);
-        });
+        //it('noop on empty span', function() {
+        //    var trip1 = Trip.createTrip(Waypoint.createWaypoint('w1', 1, 2), Waypoint.createWaypoint('w2', 1, 2));
+        //    var itineraryNoSpan = Itinerary.createItinerary(trip1);
+        //    scope.itinerary = itineraryNoSpan;
+        //    expect(function() { element.scope().$apply(); }).not.toThrow();
+        //    expect(mockContext.fillRect).not.toHaveBeenCalled();
+        //});
+        //it('should draw background', function() {
+        //    setItineraryAndApply(itinerary);
+        //    expect(mockContext.fillRect).toHaveBeenCalledWith(0, config.tickLegendHeight, canvasWidth, config.pathFieldHeight);
+        //});
+        //it('should draw a ride', function() {
+        //    var segment = itinerary.getSegments()[0];
+        //    segment.setRides([ { startTime: addMinutes(spanStart, 1), endTime: addMinutes(spanStart, 2) } ]);
+        //    setItineraryAndApply(itinerary);
+        //    expect(mockContext.moveTo).toHaveBeenCalledWith(10, config.tickLegendHeight);
+        //    expect(mockContext.lineTo).toHaveBeenCalledWith(20, canvasHeight);
+        //});
+        //it('should draw two rides', function() {
+        //    var rideStart0 = addMinutes(spanStart, 11);
+        //    var rideEnd0 = addMinutes(spanStart, 21);
+        //    var rideStart1 = addMinutes(spanStart, 31);
+        //    var rideEnd1 = addMinutes(spanStart, 43);
+        //    var rides = itinerary.getSegments()[0].getRides();
+        //    rides.push(createRide(rideStart0, rideEnd0));
+        //    rides.push(createRide(rideStart1, rideEnd1));
+        //    setItineraryAndApply(itinerary);
+        //    expect(mockContext.moveTo).toHaveBeenCalledWith(110, config.tickLegendHeight);
+        //    expect(mockContext.lineTo).toHaveBeenCalledWith(210, canvasHeight);
+        //    expect(mockContext.moveTo).toHaveBeenCalledWith(310, config.tickLegendHeight);
+        //});
         describe('time ticks', function() {
             it('should draw a tick', function() {
                 itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
