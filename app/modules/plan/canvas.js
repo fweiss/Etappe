@@ -2,7 +2,8 @@
 angular.module('plan')
     .directive('uttRides', function(chart, planConfig, date, canvasConfig) {
         //console.log('mmmmmmmm ' + tickLegendHeight);
-        var tickLegendHeight = planConfig('tickLegendHeight');
+        //var tickLegendHeight = planConfig('tickLegendHeight');
+        var tickLegendHeight = canvasConfig.tickLegendHeight;
         var pathFieldHeight = canvasConfig.pathFieldHeight;
         var rideLine = { lineWidth: 6, strokeStyle: 'rgba(255, 255, 255, 1' };
         var timeTickMajor = { lineWidth: 1, strokeStyle: 'rgba(0, 0, 0, 0.5)' };
@@ -44,11 +45,11 @@ angular.module('plan')
                 chart.setTimeSpan(span.spanStart, span.spanEnd);
                 clearCanvas(element[0]);
 
-                var offset = 0;
+                var offset = canvasConfig.tickLegendHeight + canvasConfig.waypointLegendHeight;
                 _.each(segments, function(segment) {
                     ctx.save();
                     ctx.translate(0, offset);
-                    offset += 200;
+                    offset += canvasConfig.pathFieldHeight + canvasConfig.waypointLegendHeight;
                     drawSegment(ctx, segment);
                     ctx.restore();
                 });
@@ -63,12 +64,13 @@ angular.module('plan')
         function drawSegment(ctx, segment) {
             // draw "field"
             ctx.fillStyle = '#7f7fff';
-            ctx.fillRect(0, tickLegendHeight, width, pathFieldHeight);
+            ctx.fillRect(0, 0, width, pathFieldHeight);
 
             var rides = (segment && segment.rides) || [];
             _.each(rides, function(ride) {
                 drawRide(ctx, ride);
             });
+
             if (segment) {
                 ctx.font = 'bold 12pt Calibri';
                 ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
@@ -83,8 +85,8 @@ angular.module('plan')
             ctx.lineWidth = rideLine.lineWidth;
             ctx.lineCap = 'square';
             ctx.beginPath();
-            ctx.moveTo(chart.timeToX(startTime), tickLegendHeight);
-            ctx.lineTo(chart.timeToX(endTime), height);
+            ctx.moveTo(chart.timeToX(startTime), 0);
+            ctx.lineTo(chart.timeToX(endTime), canvasConfig.pathFieldHeight);
             ctx.stroke();
 
         }

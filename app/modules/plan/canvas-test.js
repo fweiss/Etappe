@@ -1,4 +1,4 @@
-describe('plan canvas', function() {
+fdescribe('itinerary chart', function() {
     // N.B. Date constructor for ISO 8601 is always UTC, use RFC2822 instead
     //var spanStart = new Date('2013-02-22T13:00');
     var spanStart = new Date('22 Feb 2013 13:00');
@@ -15,6 +15,7 @@ describe('plan canvas', function() {
     var Waypoint;
     var Segment;
     var Nexus;
+    var Ride;
 
     // mocks
     var element;
@@ -62,7 +63,7 @@ describe('plan canvas', function() {
     beforeEach(module('plan', 'plan.canvas.config', function($provide) {
         $provide.value('canvasConfig', config);
     }));
-    beforeEach(inject(function($rootScope, $compile, _planConfig_, itinerary, trip, waypoint, segment, nexus) {
+    beforeEach(inject(function($rootScope, $compile, _planConfig_, itinerary, trip, waypoint, segment, nexus, ride) {
         scope = $rootScope;
         compile = $compile;
         planConfig = _planConfig_;
@@ -71,13 +72,82 @@ describe('plan canvas', function() {
         Waypoint = waypoint;
         Segment = segment;
         Nexus = nexus;
+        Ride = ride;
     }));
     beforeEach(function() {
         var trip = Trip.createTrip(Waypoint.createWaypoint('w1', 1, 2), Waypoint.createWaypoint('w2', 1, 2));
         itinerary = Itinerary.createItinerary(trip);
         itinerary.setSpan(spanStart, spanEnd);
     });
-    describe('600 x 100', function() {
+
+
+
+
+
+    describe('canvas properties', function() {
+
+    });
+    describe('time ticks', function() {
+        describe('lines', function() {
+
+        });
+        describe('legend', function() {
+
+        });
+    });
+    describe('waypoint legend', function() {
+
+    });
+    describe('rides', function() {
+        var ctx;
+        var w1, w2, w3;
+        beforeEach(function() {
+            mockCanvasContext(canvasWidth, canvasHeight);
+            ctx = mockContext;
+            w1 = Waypoint.createWaypoint('n1', 1, 2);
+            w2 = Waypoint.createWaypoint('n2', 1, 3);
+            w3 = Waypoint.createWaypoint('n3', 1, 4);
+        });
+        describe('fields', function() {
+            beforeEach(function() {
+                var itinerary = createItineraryForWaypoints([ w1, w2, w3 ]);
+                itinerary.setSpan(new Date(1), new Date(2));
+                setItineraryAndApply(itinerary);
+            });
+            it('should draw two fields', function() {
+                expect(ctx.fillRect.calls.count()).toEqual(2);
+            });
+            it('should draw first offset field', function() {
+                expect(ctx.translate).toHaveBeenCalledWith(0, config.tickLegendHeight + config.waypointLegendHeight);
+                expect(ctx.fillRect).toHaveBeenCalledWith(0, 0, canvasWidth, config.pathFieldHeight);
+            });
+            it('should draw second offset field', function() {
+                expect(ctx.translate).toHaveBeenCalledWith(0, config.tickLegendHeight + 2 * config.waypointLegendHeight + config.pathFieldHeight);
+                expect(ctx.fillRect).toHaveBeenCalledWith(0, 0, canvasWidth, config.pathFieldHeight);
+            });
+        });
+        describe('paths', function() {
+            beforeEach(function() {
+                var itinerary = createItineraryForWaypoints([ w1, w2, w3 ]);
+                // between minor ticks
+                itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 4));
+                var ride = new Ride.createRide('a', 'r', 'v', addMinutes(spanStart, 2), addMinutes(spanStart, 3));
+                itinerary.getSegments()[0].setRides([ ride ]);
+                setItineraryAndApply(itinerary);
+            });
+            it('ride', function() {
+                expect(ctx.translate).toHaveBeenCalledWith(0, config.tickLegendHeight + config.waypointLegendHeight);
+                expect(ctx.moveTo).toHaveBeenCalledWith(200, 0);
+                expect(ctx.lineTo).toHaveBeenCalledWith(400, config.pathFieldHeight);
+            });
+        });
+    });
+
+
+
+
+
+    xdescribe('600 x 100', function() {
         // TODO error conditions
         //var itinerary;
         var tickLegendHeight;
@@ -96,13 +166,13 @@ describe('plan canvas', function() {
         });
         it('should draw background', function() {
             setItineraryAndApply(itinerary);
-            expect(mockContext.fillRect).toHaveBeenCalledWith(0, tickLegendHeight, canvasWidth, config.pathFieldHeight);
+            expect(mockContext.fillRect).toHaveBeenCalledWith(0, config.tickLegendHeight, canvasWidth, config.pathFieldHeight);
         });
         it('should draw a ride', function() {
             var segment = itinerary.getSegments()[0];
             segment.setRides([ { startTime: addMinutes(spanStart, 1), endTime: addMinutes(spanStart, 2) } ]);
             setItineraryAndApply(itinerary);
-            expect(mockContext.moveTo).toHaveBeenCalledWith(10, tickLegendHeight);
+            expect(mockContext.moveTo).toHaveBeenCalledWith(10, config.tickLegendHeight);
             expect(mockContext.lineTo).toHaveBeenCalledWith(20, canvasHeight);
         });
         it('should draw two rides', function() {
@@ -114,9 +184,9 @@ describe('plan canvas', function() {
             rides.push(createRide(rideStart0, rideEnd0));
             rides.push(createRide(rideStart1, rideEnd1));
             setItineraryAndApply(itinerary);
-            expect(mockContext.moveTo).toHaveBeenCalledWith(110, tickLegendHeight);
+            expect(mockContext.moveTo).toHaveBeenCalledWith(110, config.tickLegendHeight);
             expect(mockContext.lineTo).toHaveBeenCalledWith(210, canvasHeight);
-            expect(mockContext.moveTo).toHaveBeenCalledWith(310, tickLegendHeight);
+            expect(mockContext.moveTo).toHaveBeenCalledWith(310, config.tickLegendHeight);
         });
         describe('time ticks', function() {
             it('should draw a tick', function() {
@@ -164,19 +234,10 @@ describe('plan canvas', function() {
                 setItineraryAndApply(itinerary);
                 // FIXME actual position
                 var tickLegendHeight = planConfig('tickLegendHeight');
-                expect(mockContext.fillText).toHaveBeenCalledWith('w1', 0, tickLegendHeight);
+                expect(mockContext.fillText).toHaveBeenCalledWith('w1', 0, config.tickLegendHeight);
                 expect(mockContext.font).toBe('bold 12pt Calibri');
             });
         });
-        // create bare Itinerary fixture without span and rides
-        function createItineraryForWaypoints(waypoints) {
-            var trip = Trip.createFromWaypoints(waypoints);
-            var nexuses = _.map(waypoints, function(waypoint) {
-                return Nexus.createFromWaypoint(waypoint);
-            });
-            var segments = Itinerary.createSegmentsFromNexuses(nexuses);
-            return Itinerary.createItinerary(trip, segments);
-        }
         describe('itnerary', function() {
             var w1, w2, w3;
             var trip;
@@ -215,7 +276,7 @@ describe('plan canvas', function() {
                 });
                 it('should draw offset fields', function() {
                     expect(mockContext.translate).toHaveBeenCalledWith(0, 200);
-                    expect(mockContext.fillRect).toHaveBeenCalledWith(0, tickLegendHeight, canvasWidth, config.pathFieldHeight);
+                    expect(mockContext.fillRect).toHaveBeenCalledWith(0, config.tickLegendHeight, canvasWidth, config.pathFieldHeight);
                 });
                 it('should translate for ticks', function() {
                     //console.log(mockContext.translate.calls.all()[0]);
@@ -234,4 +295,15 @@ describe('plan canvas', function() {
             expect(mockContext.moveTo).toHaveBeenCalledWith(1100, 0);
         });
     });
+
+    // create bare Itinerary fixture without span and rides
+    function createItineraryForWaypoints(waypoints) {
+        var trip = Trip.createFromWaypoints(waypoints);
+        var nexuses = _.map(waypoints, function(waypoint) {
+            return Nexus.createFromWaypoint(waypoint);
+        });
+        var segments = Itinerary.createSegmentsFromNexuses(nexuses);
+        return Itinerary.createItinerary(trip, segments);
+    }
+
 });

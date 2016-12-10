@@ -28,7 +28,7 @@ angular.module('plan', [ 'plan.canvas.config', 'plan.config', 'agencies' ]);
 angular.module('plan').value('canvasConfig', {
     tickLegendHeight: 20,
     waypointLegendHeight: 20,
-    pathFieldHeight: 180
+    pathFieldHeight: 100
 });
 
 angular.module('plan')
