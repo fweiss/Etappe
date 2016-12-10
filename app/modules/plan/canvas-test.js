@@ -4,7 +4,7 @@ describe('plan canvas', function() {
     var spanStart = new Date('22 Feb 2013 13:00');
     var spanEnd = addMinutes(spanStart, 60);
     var canvasWidth = 600;
-    var canvasHeight = 100;
+    var canvasHeight;
 
     // captured injects
     var scope;
@@ -85,6 +85,7 @@ describe('plan canvas', function() {
         beforeEach(function() {
             mockCanvasContext(canvasWidth, canvasHeight);
             tickLegendHeight = planConfig('tickLegendHeight');
+            canvasHeight = config.tickLegendHeight + 2 * config.waypointLegendHeight + 1 * config.pathFieldHeight;
         });
         it('noop on empty span', function() {
             var trip1 = Trip.createTrip(Waypoint.createWaypoint('w1', 1, 2), Waypoint.createWaypoint('w2', 1, 2));
@@ -167,28 +168,47 @@ describe('plan canvas', function() {
                 expect(mockContext.font).toBe('bold 12pt Calibri');
             });
         });
+        // create bare Itinerary fixture without span and rides
+        function createItineraryForWaypoints(waypoints) {
+            var trip = Trip.createFromWaypoints(waypoints);
+            var nexuses = _.map(waypoints, function(waypoint) {
+                return Nexus.createFromWaypoint(waypoint);
+            });
+            var segments = Itinerary.createSegmentsFromNexuses(nexuses);
+            return Itinerary.createItinerary(trip, segments);
+        }
         describe('itnerary', function() {
             var w1, w2, w3;
             var trip;
-            var n1, n2, n3;
+            var canvasHeight;
             beforeEach(function() {
                 w1 = Waypoint.createWaypoint('n1', 1, 2);
                 w2 = Waypoint.createWaypoint('n2', 1, 3);
                 w3 = Waypoint.createWaypoint('n3', 1, 4);
-                n1 = Nexus.createFromWaypoint(w1);
-                n2 = Nexus.createFromWaypoint(w2);
-                n3 = Nexus.createFromWaypoint(w3);
+            });
+            describe('with 1 segment', function() {
+                beforeEach(function() {
+                    var itinerary = createItineraryForWaypoints([ w1, w2 ]);
+                    itinerary.setSpan(new Date(1), new Date(2));
+                    setItineraryAndApply(itinerary);
+                    canvasHeight = config.tickLegendHeight + 2 * config.waypointLegendHeight + 1 * config.pathFieldHeight;
+                });
+                it('should have total height', function() {
+                    expect(element[0].height).toEqual(canvasHeight);
+                });
             });
             describe('with 2 segments', function() {
                 beforeEach(function() {
-                    var trip = Trip.createFromWaypoints([w1, w2, w3]);
-                    var segments = Itinerary.createSegmentsFromNexuses([ n1, n2, n3 ]);
-                    var itinerary = Itinerary.createItinerary(trip, segments);
-                    itinerary.setSpan(new Date(1), new Date(2));
+                    var itinerary = createItineraryForWaypoints([w1, w2, w3]);
+                    itinerary.setSpan(spanStart, addMinutes(spanStart, 1));
                     setItineraryAndApply(itinerary);
+                    canvasHeight = config.tickLegendHeight + 3 * config.waypointLegendHeight + 2 * config.pathFieldHeight;
                 });
                 it('should have total height', function() {
-
+                    expect(element[0].height).toEqual(canvasHeight);
+                });
+                it('should draw ticks', function() {
+                    expect(mockContext.lineTo).toHaveBeenCalledWith(0, canvasHeight);
                 });
                 it('should draw two fields', function() {
                     expect(mockContext.fillRect.calls.count()).toEqual(2);

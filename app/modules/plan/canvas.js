@@ -9,6 +9,7 @@ angular.module('plan')
         var timeTickMinor = { lineWidth: 1, strokeStyle: 'rgba(0, 0, 0, 0.1)' };
         var width;
         var height;
+        var canvasHeight;
 
         var hourMillis = 60 * 60 * 1000;
         var minuteMillis = 60 * 1000;
@@ -35,11 +36,14 @@ angular.module('plan')
                 var ctx = element[0].getContext('2d');
                 ctx.save();
 
+                var segments = itinerary.getSegments();
+                canvasHeight = canvasConfig.tickLegendHeight + segments.length * canvasConfig.pathFieldHeight + (segments.length + 1) * canvasConfig.waypointLegendHeight;
+                element[0].height = canvasHeight;
+
                 var span = itinerary.getSpan();
                 chart.setTimeSpan(span.spanStart, span.spanEnd);
                 clearCanvas(element[0]);
 
-                var segments = itinerary.getSegments();
                 var offset = 0;
                 _.each(segments, function(segment) {
                     ctx.save();
@@ -117,7 +121,7 @@ angular.module('plan')
             function drawTick(x) {
                 ctx.beginPath();
                 ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
+                ctx.lineTo(x, canvasHeight);
                 ctx.stroke();
             }
         }
