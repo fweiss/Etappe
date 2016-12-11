@@ -104,8 +104,30 @@ fdescribe('itinerary chart', function() {
     });
     describe('time ticks', function() {
         describe('lines', function() {
-
-        });
+            var canvasHeight;
+            describe('for one segment', function() {
+                beforeEach(function() {
+                    var itinerary = createItineraryForWaypoints([ w1, w2 ]);
+                    itinerary.setSpan(spanStart, addMinutes(spanStart, 1));
+                    setItineraryAndApply(itinerary);
+                    canvasHeight = config.tickLegendHeight + 2 * config.waypointLegendHeight + config.pathFieldHeight;
+                });
+                it('draws major', function() {
+                    expect(ctx.lineTo).toHaveBeenCalledWith(0, canvasHeight);
+                });
+            });
+            describe('for two segments', function() {
+                beforeEach(function() {
+                    var itinerary = createItineraryForWaypoints([ w1, w2, w3 ]);
+                    itinerary.setSpan(spanStart, addMinutes(spanStart, 1));
+                    setItineraryAndApply(itinerary);
+                    canvasHeight = config.tickLegendHeight + 3 * config.waypointLegendHeight + 2 * config.pathFieldHeight;
+                });
+                it('draws major', function() {
+                    expect(ctx.lineTo).toHaveBeenCalledWith(0, canvasHeight);
+                });
+            });
+         });
         describe('legend', function() {
 
         });
