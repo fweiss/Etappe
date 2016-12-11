@@ -101,6 +101,22 @@ fdescribe('itinerary chart', function() {
             expect(function() { element.scope().$apply(); }).not.toThrow();
             expect(ctx.fillRect).not.toHaveBeenCalled();
         });
+     });
+    describe('canvas height', function() {
+        it('for one segment', function() {
+            var itinerary = createItineraryForWaypoints([ w1, w2 ]);
+            itinerary.setSpan(spanStart, addMinutes(spanStart, 1));
+            setItineraryAndApply(itinerary);
+            canvasHeight = config.tickLegendHeight + 2 * config.waypointLegendHeight + config.pathFieldHeight;
+            expect(element[0].height).toEqual(canvasHeight);
+        });
+        it('for two segments', function() {
+            var itinerary = createItineraryForWaypoints([ w1, w2, w3 ]);
+            itinerary.setSpan(spanStart, addMinutes(spanStart, 1));
+            setItineraryAndApply(itinerary);
+            canvasHeight = config.tickLegendHeight + 3 * config.waypointLegendHeight + 2 * config.pathFieldHeight;
+            expect(element[0].height).toEqual(canvasHeight);
+        });
     });
     describe('time ticks', function() {
         describe('lines', function() {
@@ -304,17 +320,17 @@ fdescribe('itinerary chart', function() {
                 w2 = Waypoint.createWaypoint('n2', 1, 3);
                 w3 = Waypoint.createWaypoint('n3', 1, 4);
             });
-            describe('with 1 segment', function() {
-                beforeEach(function() {
-                    var itinerary = createItineraryForWaypoints([ w1, w2 ]);
-                    itinerary.setSpan(new Date(1), new Date(2));
-                    setItineraryAndApply(itinerary);
-                    canvasHeight = config.tickLegendHeight + 2 * config.waypointLegendHeight + 1 * config.pathFieldHeight;
-                });
-                it('should have total height', function() {
-                    expect(element[0].height).toEqual(canvasHeight);
-                });
-            });
+            //describe('with 1 segment', function() {
+            //    beforeEach(function() {
+            //        var itinerary = createItineraryForWaypoints([ w1, w2 ]);
+            //        itinerary.setSpan(new Date(1), new Date(2));
+            //        setItineraryAndApply(itinerary);
+            //        canvasHeight = config.tickLegendHeight + 2 * config.waypointLegendHeight + 1 * config.pathFieldHeight;
+            //    });
+            //    it('should have total height', function() {
+            //        expect(element[0].height).toEqual(canvasHeight);
+            //    });
+            //});
             describe('with 2 segments', function() {
                 beforeEach(function() {
                     var itinerary = createItineraryForWaypoints([w1, w2, w3]);
