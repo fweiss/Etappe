@@ -119,17 +119,44 @@ fdescribe('itinerary chart', function() {
         });
     });
     describe('time ticks', function() {
+        var itinerary;
         describe('lines', function() {
             var canvasHeight;
             describe('for one segment', function() {
                 beforeEach(function() {
-                    var itinerary = createItineraryForWaypoints([ w1, w2 ]);
-                    itinerary.setSpan(spanStart, addMinutes(spanStart, 1));
-                    setItineraryAndApply(itinerary);
+                    itinerary = createItineraryForWaypoints([ w1, w2 ]);
                     canvasHeight = config.tickLegendHeight + 2 * config.waypointLegendHeight + config.pathFieldHeight;
                 });
                 it('draws major', function() {
+                    itinerary.setSpan(spanStart, addMinutes(spanStart, 1));
+                    setItineraryAndApply(itinerary);
                     expect(ctx.lineTo).toHaveBeenCalledWith(0, canvasHeight);
+                });
+                it('should draw a tick', function() {
+                    itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
+                    setItineraryAndApply(itinerary);
+                    // 5 minute span 600 px 4/5 of 600 = 480
+                    var x = 4 / 5 * 600;
+                    expect(ctx.beginPath).toHaveBeenCalled();
+                    expect(ctx.moveTo).toHaveBeenCalledWith(x, 0);
+                    expect(ctx.lineTo).toHaveBeenCalledWith(x, canvasHeight);
+                    expect(ctx.stroke).toHaveBeenCalled();
+                });
+                it('should draw all ticks for span', function() {
+                    itinerary.setSpan(spanStart, addMinutes(spanStart, 60));
+                    setItineraryAndApply(itinerary);
+                    expect(ctx.moveTo.calls.count()).toBe(12);
+                });
+                // can't spy on strokeStyle property
+                it('should draw minor tick', function() {
+                    itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
+                    setItineraryAndApply(itinerary);
+                    expect(ctx.strokeStyle).toBe('rgba(0, 0, 0, 0.1)');
+                });
+                it('should draw major tick', function() {
+                    itinerary.setSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
+                    setItineraryAndApply(itinerary);
+                    expect(ctx.strokeStyle).toBe('rgba(0, 0, 0, 0.5)');
                 });
             });
             describe('for two segments', function() {
@@ -220,7 +247,7 @@ fdescribe('itinerary chart', function() {
 
 
 
-    xdescribe('600 x 100', function() {
+    describe('600 x 100', function() {
         // TODO error conditions
         //var itinerary;
         var tickLegendHeight;
@@ -261,34 +288,34 @@ fdescribe('itinerary chart', function() {
         //    expect(mockContext.lineTo).toHaveBeenCalledWith(210, canvasHeight);
         //    expect(mockContext.moveTo).toHaveBeenCalledWith(310, config.tickLegendHeight);
         //});
-        describe('time ticks', function() {
-            it('should draw a tick', function() {
-                itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
-                setItineraryAndApply(itinerary);
-                // 5 minute span 600 px 4/5 of 600 = 480
-                var x = 4 / 5 * 600;
-                expect(mockContext.beginPath).toHaveBeenCalled();
-                expect(mockContext.moveTo).toHaveBeenCalledWith(x, 0);
-                expect(mockContext.lineTo).toHaveBeenCalledWith(x, canvasHeight);
-                expect(mockContext.stroke).toHaveBeenCalled();
-            });
-            it('should draw all ticks for span', function() {
-                itinerary.setSpan(spanStart, addMinutes(spanStart, 60));
-                setItineraryAndApply(itinerary);
-                expect(mockContext.moveTo.calls.count()).toBe(12);
-            });
-            // can't spy on strokeStyle property
-            it('should draw minor tick', function() {
-                itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
-                setItineraryAndApply(itinerary);
-                expect(mockContext.strokeStyle).toBe('rgba(0, 0, 0, 0.1)');
-            });
-            it('should draw major tick', function() {
-                itinerary.setSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
-                setItineraryAndApply(itinerary);
-                expect(mockContext.strokeStyle).toBe('rgba(0, 0, 0, 0.5)');
-            });
-        });
+        //describe('time ticks', function() {
+        //    it('should draw a tick', function() {
+        //        itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
+        //        setItineraryAndApply(itinerary);
+        //        // 5 minute span 600 px 4/5 of 600 = 480
+        //        var x = 4 / 5 * 600;
+        //        expect(mockContext.beginPath).toHaveBeenCalled();
+        //        expect(mockContext.moveTo).toHaveBeenCalledWith(x, 0);
+        //        expect(mockContext.lineTo).toHaveBeenCalledWith(x, canvasHeight);
+        //        expect(mockContext.stroke).toHaveBeenCalled();
+        //    });
+        //    it('should draw all ticks for span', function() {
+        //        itinerary.setSpan(spanStart, addMinutes(spanStart, 60));
+        //        setItineraryAndApply(itinerary);
+        //        expect(mockContext.moveTo.calls.count()).toBe(12);
+        //    });
+        //    // can't spy on strokeStyle property
+        //    it('should draw minor tick', function() {
+        //        itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
+        //        setItineraryAndApply(itinerary);
+        //        expect(mockContext.strokeStyle).toBe('rgba(0, 0, 0, 0.1)');
+        //    });
+        //    it('should draw major tick', function() {
+        //        itinerary.setSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
+        //        setItineraryAndApply(itinerary);
+        //        expect(mockContext.strokeStyle).toBe('rgba(0, 0, 0, 0.5)');
+        //    });
+        //});
         describe('tick labels', function() {
             it('should draw at 15 minute mark', function() {
                 itinerary.setSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
@@ -302,16 +329,16 @@ fdescribe('itinerary chart', function() {
             //    setItineraryAndApply(itinerary);
             //});
         });
-        describe('nexus', function() {
-            it('should draw top label', function() {
-                setItineraryAndApply(itinerary);
-                // FIXME actual position
-                var tickLegendHeight = planConfig('tickLegendHeight');
-                expect(mockContext.fillText).toHaveBeenCalledWith('w1', 0, config.tickLegendHeight);
-                expect(mockContext.font).toBe('bold 12pt Calibri');
-            });
-        });
-        describe('itnerary', function() {
+        //describe('nexus', function() {
+        //    it('should draw top label', function() {
+        //        setItineraryAndApply(itinerary);
+        //        // FIXME actual position
+        //        var tickLegendHeight = planConfig('tickLegendHeight');
+        //        expect(mockContext.fillText).toHaveBeenCalledWith('w1', 0, config.tickLegendHeight);
+        //        expect(mockContext.font).toBe('bold 12pt Calibri');
+        //    });
+        //});
+        xdescribe('itnerary', function() {
             var w1, w2, w3;
             var trip;
             var canvasHeight;
