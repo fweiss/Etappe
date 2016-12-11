@@ -172,7 +172,11 @@ fdescribe('itinerary chart', function() {
             });
          });
         describe('legend', function() {
-
+            it('should draw at 15 minute mark', function() {
+                itinerary.setSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
+                setItineraryAndApply(itinerary);
+                expect(ctx.fillText).toHaveBeenCalledWith('1:15 PM', 452, 10);
+            });
         });
     });
     describe('waypoint legend', function() {
@@ -316,7 +320,7 @@ fdescribe('itinerary chart', function() {
         //        expect(mockContext.strokeStyle).toBe('rgba(0, 0, 0, 0.5)');
         //    });
         //});
-        describe('tick labels', function() {
+        xdescribe('tick labels', function() {
             it('should draw at 15 minute mark', function() {
                 itinerary.setSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
                 setItineraryAndApply(itinerary);
