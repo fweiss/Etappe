@@ -48,14 +48,7 @@ describe('itinerary chart', function() {
             return mockContext;
         };
     }
-    function createRide(rideStart, rideEnd) {
-        return { startTime: rideStart, endTime: rideEnd };
-    }
 
-    function setPlanAndApply(plan) {
-        scope.plan = plan;
-        element.scope().$apply();
-    }
     function setItineraryAndApply(itinerary) {
         scope.itinerary = itinerary;
         element.scope().$apply();
@@ -78,16 +71,11 @@ describe('itinerary chart', function() {
     }));
 
     beforeEach(function() {
-        var trip = Trip.createTrip(Waypoint.createWaypoint('w1', 1, 2), Waypoint.createWaypoint('w2', 1, 2));
-        itinerary = Itinerary.createItinerary(trip);
-        itinerary.setSpan(spanStart, spanEnd);
-
         mockCanvasContext(canvasWidth, canvasHeight);
         ctx = mockContext;
         w1 = Waypoint.createWaypoint('w1', 1, 2);
         w2 = Waypoint.createWaypoint('w2', 1, 3);
         w3 = Waypoint.createWaypoint('w3', 1, 4);
-
     });
 
     describe('canvas properties', function() {
