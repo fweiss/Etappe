@@ -65,7 +65,7 @@ describe('plan controller', function() {
         it('change agency', function() {
             var stop = Stop.createStop('n', 'a', 'r', 's', 1, 2);
             mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ stop ] }));
-            scope.carrierSelect = { name: 'SFMUNI' };
+            scope.carrierSelect = { name: 'SFMUNI', api: mockSfMuni };
             scope.changeCarrier();
             scope.$digest();
             expect(scope.originNexus.length).toEqual(1);
@@ -73,7 +73,7 @@ describe('plan controller', function() {
         it('change agency bart', function() {
             var stop = Stop.createStop('n', 'a', 'r', 's', 1, 2);
             mockBart.getAllStops.and.returnValue($q.when({ data: [ stop ] }));
-            scope.carrierSelect = { name: 'BART' };
+            scope.carrierSelect = { name: 'BART', api: mockBart };
             scope.changeCarrier();
             scope.$digest();
             expect(scope.originNexus.length).toEqual(1);

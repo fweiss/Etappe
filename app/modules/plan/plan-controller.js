@@ -70,12 +70,8 @@ angular.module('plan')
         ];
         $scope.rides = null;
         $scope.changeCarrier = function() {
-            var carrier = $scope.carrierSelect.name;
-            var api = {
-                SFMUNI: SfMuni,
-                BART: Bart
-            };
-            api[carrier].getAllStops().then(function(response) {
+            var api = $scope.carrierSelect.api;
+            api.getAllStops().then(function(response) {
                 Nexus.mergeStops(response.data);
                 var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
                 $scope.originNexus = nexuses;
