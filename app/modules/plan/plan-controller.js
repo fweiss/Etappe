@@ -4,8 +4,8 @@ angular.module('plan')
             $window.alert(message);
         }
     })
-    .controller('PlanController', [ '$scope', '$q', 'chart', 'sfMuni', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'segment', 'waypoint',
-        function($scope, $q, chart, SfMuni, alert, Nexus, Itinerary, Trip, System, TripFolder, Segment, Waypoint) {
+    .controller('PlanController', [ '$scope', '$q', 'chart', 'sfMuni', 'bart', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'segment', 'waypoint',
+        function($scope, $q, chart, SfMuni, Bart, alert, Nexus, Itinerary, Trip, System, TripFolder, Segment, Waypoint) {
 
         $scope.waypoints = [];
 
@@ -65,12 +65,17 @@ angular.module('plan')
         $scope.disableOrigin = true;
         $scope.disableDestination = true;
         $scope.carriers = [
-            { name: 'BART' },
-            { name: 'SFMUNI' }
+            { name: 'BART', api: Bart },
+            { name: 'SFMUNI', api: SfMuni }
         ];
         $scope.rides = null;
         $scope.changeCarrier = function() {
-            SfMuni.getAllStops().then(function(response) {
+            var carrier = $scope.carrierSelect.name;
+            var api = {
+                SFMUNI: SfMuni,
+                BART: Bart
+            };
+            api[carrier].getAllStops().then(function(response) {
                 Nexus.mergeStops(response.data);
                 var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
                 $scope.originNexus = nexuses;

@@ -8,6 +8,7 @@ describe('plan controller', function() {
     var Waypoint;
     var alertSpy;
     var mockSfMuni;
+    var mockBart;
     var $q;
     var Itinerary;
     var System;
@@ -33,7 +34,8 @@ describe('plan controller', function() {
         $httpBackend = $injector.get('$httpBackend');
         $q = _$q_;
         mockSfMuni = jasmine.createSpyObj('mockSfMuni', [ 'getRidesForSegment', 'getAllStops' ]);
-        $controller('PlanController', { $scope: scope, sfMuni: mockSfMuni });
+        mockBart = jasmine.createSpyObj('mockBart', [ 'getRidesForSegment', 'getAllStops' ]);
+        $controller('PlanController', { $scope: scope, sfMuni: mockSfMuni, bart: mockBart });
         requestHandler = $httpBackend.whenGET(new RegExp('.*'));
 
     }));
@@ -63,6 +65,15 @@ describe('plan controller', function() {
         it('change agency', function() {
             var stop = Stop.createStop('n', 'a', 'r', 's', 1, 2);
             mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ stop ] }));
+            scope.carrierSelect = { name: 'SFMUNI' };
+            scope.changeCarrier();
+            scope.$digest();
+            expect(scope.originNexus.length).toEqual(1);
+        });
+        it('change agency bart', function() {
+            var stop = Stop.createStop('n', 'a', 'r', 's', 1, 2);
+            mockBart.getAllStops.and.returnValue($q.when({ data: [ stop ] }));
+            scope.carrierSelect = { name: 'BART' };
             scope.changeCarrier();
             scope.$digest();
             expect(scope.originNexus.length).toEqual(1);
