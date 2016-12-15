@@ -1,8 +1,7 @@
 angular.module('agencies')
-.service('bart', [ '$q', '$http', 'stop', function($q, $http, stop) {
-        var Stop = stop;
+.service('bart', [ '$q', '$http', 'stop', function($q, $http, Stop) {
     var $ = $ || angular.element;
-        var parser = new DOMParser();
+    var parser = new DOMParser();
     var baseUrl = 'http://api.bart.gov/api';
     return {
         getAllStops: function() {
