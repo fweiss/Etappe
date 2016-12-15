@@ -26,7 +26,9 @@ module.exports = function(config) {
             'app/lib/angular-mocks.js',
             'app/lib/underscore.js',
             'app/*.js',
-            'app/modules/feed/*.js',
+            'app/modules/feed/sfmuni.js',
+            'app/modules/feed/bart.js',
+            'app/modules/feed/bart-test.js',
             'app/modules/plan/module.js',
             'app/modules/plan/*.js'
         ],
