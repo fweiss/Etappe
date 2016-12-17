@@ -1,4 +1,4 @@
-describe('bart', function() {
+describe('feed bart', function() {
     var Bart;
     var Waypoint;
     var Nexus;
@@ -50,7 +50,7 @@ describe('bart', function() {
             + '<schedule><request>'
             + '<trip origin="RICH" destination="FRMT" origTimeMin="10:50 AM" origTimeDate="09/23/2016" destTimeMin="11:14 AM" destTimeDate="09/23/2016"></trip>'
             + '<trip origin="RICH" destination="FRMT" origTimeMin="10:57 AM" origTimeDate="09/23/2016" destTimeMin="11:22 AM" destTimeDate="09/23/2016"></trip>'
-            + '</request>'
+            + '</request></schedule>'
             + '</root>';
         httpBackend.whenGET('http://api.bart.gov/api/sched.aspx?a=4&cmd=depart&date=now&dest=FRMT&key=MW9S-E7SL-26DU-VV8V&orig=RICH').respond(xml);
         var n1 = Nexus.createFromWaypoint(w1);

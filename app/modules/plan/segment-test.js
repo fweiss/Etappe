@@ -1,4 +1,4 @@
-describe('segment', function() {
+describe('domain segment', function() {
     var Segment;
     var Nexus;
     beforeEach(module('plan'));

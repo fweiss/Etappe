@@ -1,7 +1,7 @@
 //      http://nathanleclaire.com/blog/2014/04/12/unit-testing-services-in-angularjs-for-fun-and-for-profit/
 "use strict";
 
-describe('sfmuni', function() {
+describe('feed sfmuni', function() {
     var baseUrl = 'http://webservices.nextbus.com/service/publicXMLFeed';
     var SfMuni;
     var httpBackend;
