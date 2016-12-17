@@ -92,7 +92,7 @@ describe('plan controller', function() {
             scope.itinerary = Itinerary.createItinerary(trip);
             var ride = { startTime: 1, endTime: 2, agency: 'a', vehicle: 'v' }
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ ride ] }));
-            scope.ridesRefresh2();
+            scope.ridesRefresh();
             scope.$digest();
             expect(scope.itinerary).toBeTruthy();
             expect(scope.itinerary.getSegments().length).toBe(1);
@@ -183,7 +183,7 @@ describe('plan controller', function() {
             var segments = Itinerary.createSegmentsFromNexuses(nexuses);
             var itinerary = Itinerary.createItinerary(trip2, segments);
             scope.itinerary = itinerary;
-            scope.ridesRefresh2();
+            scope.ridesRefresh();
             scope.$digest();
             expect(scope.itinerary.getSegments().length).toEqual(1);
             var segment0 = scope.itinerary.getSegments()[0];
@@ -200,7 +200,7 @@ describe('plan controller', function() {
             var segments = Itinerary.createSegmentsFromNexuses(nexuses);
             var itinerary = Itinerary.createItinerary(trip2, segments);
             scope.itinerary = itinerary;
-            scope.ridesRefresh2();
+            scope.ridesRefresh();
             scope.$digest();
             expect(scope.itinerary.getSegments().length).toEqual(2);
             var segment1 = scope.itinerary.getSegments()[1];

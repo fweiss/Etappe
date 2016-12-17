@@ -93,7 +93,7 @@ angular.module('plan')
         $scope.destinationNexusChanged = function() {
             changeNexus();
         }
-        $scope.ridesRefresh2 = function() {
+        $scope.ridesRefresh = function() {
             refreshRides($scope.itinerary);
         }
         function changeNexus() {

@@ -1,4 +1,4 @@
-fdescribe('bart', function() {
+describe('bart', function() {
     var Bart;
     var Waypoint;
     var Nexus;
