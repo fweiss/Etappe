@@ -60,7 +60,5 @@ angular.module('agencies')
             var args = { a: '4', date: 'now', orig: originStop.getStopId(), dest: destinationStop.getStopId() };
             return buildResource('sched', 'depart', transformScheduleToRides)(args)
         }
-     }
     }
-
-    ]);
+}]);
