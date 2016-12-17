@@ -25,7 +25,7 @@ angular.module('agencies')
                         var name = $(station).find('name').text();
                         var agency = 'bart';
                         var route = 'NA';
-                        var id = 'id';
+                        var id = $(station).find('abbr').text();
                         var lat = $(station).find('gtfs_latitude').text();
                         var lon = $(station).find('gtfs_longitude').text();
                         return Stop.createStop(name, agency, route, id, lat, lon);
@@ -36,6 +36,8 @@ angular.module('agencies')
             return $http(config);
         },
         getRidesForSegment: function(segment) {
+            var originStop = segment.getOriginNexus().getStops()[0];
+            var destinationStop = segment.getDestinationNexus().getStops()[0];
             var config = {
                 url: 'http://api.bart.gov/api/sched.aspx',
                 params: {
@@ -43,8 +45,8 @@ angular.module('agencies')
                     cmd: 'depart',
                     date: 'now',
                     key: 'MW9S-E7SL-26DU-VV8V',
-                    orig: 'RICH',
-                    dest: 'FRMT'
+                    orig: originStop.getStopId(),
+                    dest: destinationStop.getStopId()
                 },
                 transformResponse: function(response) {
                     var root = $(parser.parseFromString(response, 'text/xml'));
