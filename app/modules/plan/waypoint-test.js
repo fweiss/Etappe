@@ -4,22 +4,22 @@ describe('domain waypoint', function() {
     beforeEach(inject(function (waypoint) {
         Waypoint = waypoint;
     }));
-    describe('creation', function() {
-        describe('validation', function() {
-            it('error if name not given', function() {
+    describe('create', function() {
+        describe('validation error', function() {
+            it('when no name', function() {
                 var e1 = new Error('createWaypoint: must specify name');
                 expect(function() { Waypoint.createWaypoint(); }).toThrow(e1);
             });
-            it('error if lat not given', function() {
+            it('when no lat', function() {
                 var e1 = new Error('createWaypoint: must specify lat');
                 expect(function() { Waypoint.createWaypoint('waypoint'); }).toThrow(e1);
             });
-            it('error if lon not given', function() {
+            it('when no lon', function() {
                 var e1 = new Error('createWaypoint: must specify lon');
                 expect(function() { Waypoint.createWaypoint('waypoint', 2); }).toThrow(e1);
             });
         });
-        describe('values', function() {
+        describe('value', function() {
             var waypoint;
             beforeEach(function() {
                 waypoint = Waypoint.createWaypoint('w1', 1, 2);

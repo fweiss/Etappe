@@ -20,32 +20,34 @@ describe('domain itinerary', function() {
         w3 = Waypoint.createWaypoint('w3', 23, 33);
         trip = Trip.createTrip(w1, w2);
     });
-    describe('creation', function() {
-        describe('validation', function() {
+    describe('create', function() {
+        describe('validation error', function() {
             var e1 = new Error('createItinerary: trip is required');
             it('should require trip', function() {
                 expect(function() { Itinerary.createItinerary(); }).toThrow(e1);
             });
         });
-        it('should have trip', function() {
-            var itinerary = Itinerary.createItinerary(trip);
-            expect(itinerary.getTrip()).toBe(trip);
-        });
-        it('can create with segments', function() {
-            // FIXME use Segment
-            var segments = [ { originNexus: { name: 'n1' }, destinationNexus: {}, rides: [] }];
-            var itinerary = Itinerary.createItinerary(trip, segments);
-            expect(itinerary.getSegments()[0].originNexus.name).toEqual('n1');
-        });
-        xit('error when trip waypoints do not match segments', function() {
-            var e1 = new Error('createItinerary: segments to not match trip waypoints');
+        describe('value', function() {
+            it('should have trip', function() {
+                var itinerary = Itinerary.createItinerary(trip);
+                expect(itinerary.getTrip()).toBe(trip);
+            });
+            it('can create with segments', function() {
+                // FIXME use Segment
+                var segments = [ { originNexus: { name: 'n1' }, destinationNexus: {}, rides: [] }];
+                var itinerary = Itinerary.createItinerary(trip, segments);
+                expect(itinerary.getSegments()[0].originNexus.name).toEqual('n1');
+            });
+            xit('error when trip waypoints do not match segments', function() {
+                var e1 = new Error('createItinerary: segments to not match trip waypoints');
 
 
-        });
-        it('has empty span', function() {
-            var itinerary = Itinerary.createItinerary(trip);
-            expect(itinerary.getSpan().spanStart).toEqual(0);
-            expect(itinerary.getSpan().spanEnd).toEqual(0);
+            });
+            it('has empty span', function() {
+                var itinerary = Itinerary.createItinerary(trip);
+                expect(itinerary.getSpan().spanStart).toEqual(0);
+                expect(itinerary.getSpan().spanEnd).toEqual(0);
+            });
         });
     });
     describe('span', function() {
