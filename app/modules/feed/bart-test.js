@@ -1,13 +1,30 @@
 describe('bart', function() {
     var Bart;
+    var Waypoint;
+    var Nexus;
+    var Segment;
+    var Stop;
+
     var httpBackend;
     var baseUrl = 'http://api.bart.gov/api';
+
     beforeEach(module('agencies', 'plan'));
-    beforeEach(inject(function(bart, $httpBackend) {
+    beforeEach(inject(function(bart, $httpBackend, waypoint, segment, nexus, stop) {
         Bart = bart;
+        Waypoint = waypoint;
+        Segment = segment;
+        Nexus = nexus;
+        Stop = stop;
         httpBackend = $httpBackend;
     }));
-    it('get stops', function() {
+
+    beforeEach(function() {
+        //w1 = Waypoint.createWaypoint('RICH', 2.1, 3.1);
+        //w2 = Waypoint.createWaypoint('FRMT', 4.1, 5.1);
+        w1 = Waypoint.createWaypoint('Richmond', 2.1, 3.1);
+        w2 = Waypoint.createWaypoint('Fremont', 4.1, 5.1);
+    });
+    it('get all stops', function() {
         var xml = '<root><stations>'
             + '<station><name>sta1</name><gtfs_latitude>2.00</gtfs_latitude><gtfs_longitude>3.00</gtfs_longitude></station>'
             + '<station><name>sta2</name><gtfs_latitude>4.00</gtfs_latitude><gtfs_longitude>5.00</gtfs_longitude></station>'
@@ -21,6 +38,28 @@ describe('bart', function() {
             expect(stop.getAgencyId()).toEqual('bart');
             expect(stop.getLat()).toEqual(2.00);
             expect(stop.getLon()).toEqual(3.00);
+        });
+        httpBackend.flush();
+    });
+    fit('get rides for segment', function() {
+        var xml = '<root><origin>RICH</origin><destination>FRMT</destination>'
+            + '<schedule><request>'
+            + '<trip origin="RICH" destination="FRMT" origTimeMin="10:50 AM" origTimeDate="09/23/2016" destTimeMin="11:14 AM" destTimeDate="09/23/2016"></trip>'
+            + '<trip origin="RICH" destination="FRMT" origTimeMin="10:57 AM" origTimeDate="09/23/2016" destTimeMin="11:22 AM" destTimeDate="09/23/2016"></trip>'
+            + '</request>'
+            + '</root>';
+        httpBackend.whenGET('http://api.bart.gov/api/sched.aspx?a=4&cmd=depart&date=now&dest=FRMT&key=MW9S-E7SL-26DU-VV8V&orig=RICH').respond(xml);
+        var s1 = Stop.createStop('Richmond', 'bart', 'r1', 'RICH', 2, 3);
+        var s2 = Stop.createStop('Fremont', 'bart', 'r1', 'FRMT', 4, 5);
+        var n1 = Nexus.createFromWaypoint(w1);
+        var n2 = Nexus.createFromWaypoint(w2);
+        var segment = Segment.createSegment(n1, n2);
+        Bart.getRidesForSegment(segment).then(function(response) {
+            var rides = response.data;
+            expect(rides.length).toEqual(2);
+            var ride = rides[0];
+            expect(ride.getStartTime().getTime()).toEqual(new Date('09/23/2016 10:50 AM').getTime());
+            expect(ride.getEndTime().getTime()).toEqual(new Date('09/23/2016 11:14 AM').getTime());
         });
         httpBackend.flush();
     });
