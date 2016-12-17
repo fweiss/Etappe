@@ -48,14 +48,12 @@ describe('domain itinerary', function() {
                 expect(itinerary.getSpan().spanStart).toEqual(0);
                 expect(itinerary.getSpan().spanEnd).toEqual(0);
             });
-        });
-    });
-    describe('span', function() {
-        it('set span', function() {
-            var itinerary = Itinerary.createItinerary(trip);
-            itinerary.setSpan(1, 2);
-            expect(itinerary.getSpan().spanStart).toEqual(1);
-            expect(itinerary.getSpan().spanEnd).toEqual(2);
+            it('can set span', function() {
+                var itinerary = Itinerary.createItinerary(trip);
+                itinerary.setSpan(1, 2);
+                expect(itinerary.getSpan().spanStart).toEqual(1);
+                expect(itinerary.getSpan().spanEnd).toEqual(2);
+            });
         });
     });
     describe('segments', function() {
@@ -72,24 +70,24 @@ describe('domain itinerary', function() {
     });
     describe('create segments from nexuses', function() {
         var method = 'createSegmentsFromNexuses: ';
-        describe('validation', function() {
-            it('error when no nexuses given', function() {
+        describe('validation error', function() {
+            it('when no nexuses given', function() {
                 var e = new Error('createSegmentsFromNexuses: nexuses must be given');
                 expect(function() { Itinerary.createSegmentsFromNexuses(); }).toThrow(e);
             });
-            it('error when nexuses not Array type', function() {
+            it('when nexuses not Array type', function() {
                 var e = new Error('createSegmentsFromNexuses: nexuses must be Array type');
                 expect(function() { Itinerary.createSegmentsFromNexuses('string'); }).toThrow(e);
             });
-            it('error when nexuses less than 2', function() {
+            it('when nexuses less than 2', function() {
                 var e = new Error('createSegmentsFromNexuses: nexus count must be 2 or more')
                 expect(function() { Itinerary.createSegmentsFromNexuses([ {} ]); }).toThrow(e);
             });
-            it('error when nexuses not Nexus type', function() {
+            it('when nexuses not Nexus type', function() {
                 var e = new Error('createSegmentsFromNexuses: nexuses must be Nexus type')
                 expect(function() { Itinerary.createSegmentsFromNexuses([ {}, {} ]); }).toThrow(e);
             });
-            it('error when duplicated adjacent', function() {
+            it('when duplicated adjacent', function() {
                 var n1 = Nexus.createFromWaypoint(w1);
                 var n2 = Nexus.createFromWaypoint(w2);
                 var e = new Error(method + 'adjacent nexus must not be duplicate');
