@@ -5,6 +5,7 @@ angular.module('plan')
         this.originNexus = originNexus;
         this.destinationNexus = destinationNexus;
         this.rides = [];
+        this.agencies = [];
     }
     Segment.prototype.getOriginNexus = function() {
         return this.originNexus;
@@ -18,6 +19,12 @@ angular.module('plan')
     Segment.prototype.setRides = function(rides) {
         this.rides = rides;
     };
+    Segment.prototype.getAgencies = function() {
+        return this.agencies;
+    };
+    Segment.prototype.setAgencies = function(agencies) {
+        this.agencies = agencies;
+    }
 
     return {
         createSegment: function(originNexus, destinationNexus) {

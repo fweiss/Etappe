@@ -2,13 +2,15 @@ describe('domain itinerary', function() {
     var Itinerary;
     var Trip;
     var Waypoint;
-    var Nexus
+    var Nexus;
+    var Stop;
     beforeEach(module('plan'));
-    beforeEach(inject(function (_itinerary_, _trip_, _waypoint_, nexus) {
+    beforeEach(inject(function (_itinerary_, _trip_, _waypoint_, nexus, stop) {
         Itinerary = _itinerary_;
         Trip = _trip_;
         Waypoint = _waypoint_;
         Nexus = nexus;
+        Stop = stop;
     }));
     var trip;
     var w1;
@@ -28,8 +30,11 @@ describe('domain itinerary', function() {
             });
         });
         describe('value', function() {
-            it('should have trip', function() {
-                var itinerary = Itinerary.createItinerary(trip);
+            var itinerary;
+            beforeEach(function() {
+                itinerary = Itinerary.createItinerary(trip);
+            });
+            it('has trip', function() {
                 expect(itinerary.getTrip()).toBe(trip);
             });
             it('can create with segments', function() {
@@ -44,12 +49,10 @@ describe('domain itinerary', function() {
 
             });
             it('has empty span', function() {
-                var itinerary = Itinerary.createItinerary(trip);
                 expect(itinerary.getSpan().spanStart).toEqual(0);
                 expect(itinerary.getSpan().spanEnd).toEqual(0);
             });
             it('can set span', function() {
-                var itinerary = Itinerary.createItinerary(trip);
                 itinerary.setSpan(1, 2);
                 expect(itinerary.getSpan().spanStart).toEqual(1);
                 expect(itinerary.getSpan().spanEnd).toEqual(2);
@@ -110,6 +113,16 @@ describe('domain itinerary', function() {
             it('has two segment', function() {
                 var segments = Itinerary.createSegmentsFromNexuses([ n1, n2, n3 ]);
                 expect(segments.length).toEqual(2);
+            });
+            describe('agencies', function() {
+                it('are from matching stops', function() {
+                    n1.addStop(Stop.createStop('n1', 'a', 'r', 'i1', 1, 2));
+                    n2.addStop(Stop.createStop('n2', 'a', 'r', 'i2', 3, 4));
+                    var segments = Itinerary.createSegmentsFromNexuses([ n1, n2 ]);
+                    var segment = segments[0];
+                    expect(segment.getAgencies().length).toEqual(1);
+                    expect(segment.getAgencies()[0]).toEqual('a');
+                });
             });
         });
     });

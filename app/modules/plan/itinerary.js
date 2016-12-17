@@ -61,7 +61,15 @@ angular.module('plan')
                 if (origin.getLat() == destination.getLat() && origin.getLon() == destination.getLon()) {
                     throw new Error(method + 'adjacent nexus must not be duplicate');
                 }
+                var originStopAgencies = _.map(origin.getStops(), function(stop) {
+                    return stop.getAgencyId();
+                });
+                var destinationStopAgencies = _.map(destination.getStops(), function(stop) {
+                    return stop.getAgencyId();
+                });
+
                 var segment = Segment.createSegment(origin, destination);
+                segment.setAgencies(_.intersection(originStopAgencies,destinationStopAgencies ));
                 segments.push(segment);
                 return destination;
             });

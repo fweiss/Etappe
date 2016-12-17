@@ -49,6 +49,13 @@ describe('domain segment', function() {
             it('has empty rides', function() {
                 expect(segment.getRides()).toEqual([]);
             });
+            it('has empty agencies', function() {
+                expect(segment.getAgencies()).toEqual([]);
+            });
+            it('can set agangies', function() {
+                segment.setAgencies([ 'a' ]);
+                expect (segment.getAgencies()).toEqual([ 'a' ]);
+            });
             describe('rides', function() {
                 it('can set rides', function() {
                     segment.setRides([ 'ride' ]);
