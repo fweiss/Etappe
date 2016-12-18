@@ -125,9 +125,7 @@ angular.module('plan')
         function refreshRides(itinerary) {
             var segments = itinerary.getSegments();
             $q.all(_.map(segments, function(segment) {
-                var agencies = segment.getAgencies();
-                var theAgency = agencies[0].toUpperCase();
-                var agency = _.findWhere($scope.carriers, { name: theAgency});
+                var agency = findAgency(segment);
                 var promise =  agency.api.getRidesForSegment(segment);
                 promise.then(function(response) {
                     segment.rides = response.data;
@@ -138,5 +136,20 @@ angular.module('plan')
                 var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
                 itinerary.setSpan(now, then);
             });
+        }
+        // include fallback for segment without agencies or no registered agency
+        function findAgency(segment) {
+            var nullAgency = {
+                name: 'null',
+                api: {
+                    getRidesForSegment: function() {
+                        return $q.when({ data: []});
+                    }
+                }
+            };
+            var agencies = segment.getAgencies();
+            var theAgency = agencies.length ? agencies[0].toUpperCase() : '';
+            var agency = _.findWhere($scope.carriers, { name: theAgency});
+            return agency || nullAgency;
         }
 }]);

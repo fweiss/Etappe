@@ -86,7 +86,7 @@ describe('plan controller', function() {
             scope.createTripFromNexusSelect();
             expect(scope.trip).toBeTruthy();
         });
-        // test fixture lacks stops
+        // test fixture segments lacks stops
         xit('should update itinerary on rides refresh', function() {
 
             var trip = Trip.createTrip(Waypoint.createWaypoint('w1', 21, 31), Waypoint.createWaypoint('w2', 22, 32));
@@ -176,6 +176,14 @@ describe('plan controller', function() {
             n1 = Nexus.createFromWaypoint(w1);
             n2 = Nexus.createFromWaypoint(w2);
             n3 = Nexus.createFromWaypoint(w3);
+        });
+        it('no agancies', function() {
+            var nexuses = [ n1, n2 ];
+            // here no stops or no stops with matching agencies.
+            var segments = Itinerary.createSegmentsFromNexuses(nexuses);
+            scope.itinerary = Itinerary.createItinerary(trip2, segments);
+            scope.ridesRefresh();
+            scope.$digest();
         });
         it('for one segment', function() {
             mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ r1 ] } ));

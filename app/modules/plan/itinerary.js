@@ -30,6 +30,8 @@ angular.module('plan')
             if (_segments) {
                 segments = _segments;
             } else {
+                // maybe this branch should be deprecated, as it creates nexuses without stops.
+                // throw new Error('createItinerary: segments required');
                 _.reduce(_.union([ trip.getOrigin() ], trip.getInnerWaypoints(), [ trip.getDestination() ]), function(previousWaypoint, waypoint) {
                     var originNexus = Nexus.createFromWaypoint(previousWaypoint);
                     var destinationNexus = Nexus.createFromWaypoint(waypoint);
