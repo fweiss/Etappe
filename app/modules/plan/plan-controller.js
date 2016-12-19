@@ -126,11 +126,10 @@ angular.module('plan')
             var segments = itinerary.getSegments();
             $q.all(_.map(segments, function(segment) {
                 var agency = findAgency(segment);
-                var promise =  agency.api.getRidesForSegment(segment);
-                promise.then(function(response) {
+                return agency.api.getRidesForSegment(segment)
+                .then(function(response) {
                     segment.rides = response.data;
                 });
-                return promise;
             })).then(function() {
                 var now = new Date();
                 var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
