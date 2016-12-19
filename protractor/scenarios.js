@@ -126,7 +126,8 @@ describe('etappe', function() {
             });
             it('should show trip', function() {
                 expect(element(by.css('#trip caption')).getText()).toEqual('Trip1');
-                expect(element(by.css('#trip td')).getText()).toEqual('16th St and Mission');
+                expect(element.all(by.css('#trip td')).get(0).getText()).toEqual('16th St and Mission');
+                expect(element.all(by.css('#trip td')).get(1).getText()).toEqual('16th St and Harrison');
             });
             it('should show available rides', function() {
                 var headers = element.all(by.css('table#rides thead th')).map(function(ele) {
