@@ -1,14 +1,14 @@
 angular.module('plan')
     .service('ride', function() {
-        function Ride(agency, routeId, vehicleId, startTime, endTime) {
-            this.agency = agency;
+        function Ride(agencyId, routeId, vehicleId, startTime, endTime) {
+            this.agencyId = agencyId;
             this.routeId = routeId;
             this.vehicleId = vehicleId;
             this.startTime = startTime;
             this.endTime = endTime;
         }
-        Ride.prototype.getAgency = function() {
-            return this.agency;
+        Ride.prototype.getAgencyId = function() {
+            return this.agencyId;
         };
         Ride.prototype.getRouteId = function() {
             return this.routeId;
@@ -25,7 +25,7 @@ angular.module('plan')
         return {
             createRide: function(agency, routeId, vehicleId, startTime, endTime) {
                 if (!agency) {
-                    throw new Error('createRide: must specify agency');
+                    throw new Error('createRide: must specify agency id');
                 }
                 if (!routeId) {
                     throw new Error('createRide: must specify route id');

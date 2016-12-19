@@ -9,7 +9,7 @@ describe('domain ride', function() {
     describe('create', function() {
         describe('validation error', function() {
             it('when no agency', function() {
-                var e1 = new Error('createRide: must specify agency');
+                var e1 = new Error('createRide: must specify agency id');
                 expect(function() { Ride.createRide(); }).toThrow(e1);
             });
             it('when no route id', function() {
@@ -45,7 +45,7 @@ describe('domain ride', function() {
                 ride = Ride.createRide('a1', 'r2', 'v3', st, et)
             });
             it('has agency', function() {
-                expect(ride.getAgency()).toEqual('a1');
+                expect(ride.getAgencyId()).toEqual('a1');
             });
             it('has route id', function() {
                 expect(ride.getRouteId()).toEqual('r2');

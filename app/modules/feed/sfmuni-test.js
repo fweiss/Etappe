@@ -198,7 +198,7 @@ describe('feed sfmuni', function() {
                 var rides = response.data;
                 expect(rides.length).toEqual(1);
                 var ride0 = rides[0];
-                expect(ride0.getAgency()).toBe('sf-muni');
+                expect(ride0.getAgencyId()).toBe('sf-muni');
                 expect(ride0.getRouteId()).toEqual('55');
                 expect(ride0.getVehicleId()).toBe('2356');
                 expect(ride0.getStartTime() / round).toBeCloseTo(addMinutes(now, 11) / round, 0);
@@ -249,7 +249,7 @@ describe('feed sfmuni', function() {
                     expect(ride0.constructor.name).toEqual('Ride');
                     expect(ride0.getStartTime() / round).toBeCloseTo(addMinutes(now, 11) / round, 0);
                     expect(ride0.getEndTime() / round).toBeCloseTo(addMinutes(now, 22) / round, 0);
-                    expect(ride0.getAgency()).toBe('sf-muni');
+                    expect(ride0.getAgencyId()).toBe('sf-muni');
                     expect(ride0.getVehicleId()).toBe('2356');
                 });
                 httpBackend.flush();

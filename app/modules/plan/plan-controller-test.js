@@ -215,7 +215,7 @@ describe('plan controller', function() {
             expect(segment0.getRides().length).toEqual(1);
             expect(segment0.getRides()[0].getRouteId()).toEqual('r1');
         });
-        it('for two segments', function() {
+        it('for two sfmuni segments', function() {
             mockSfMuni.getRidesForSegment.and.callFake(function(segment) {
                 var originNexusName = segment.getOriginNexus().getName();
                 var rides = originNexusName == 'w1' ? [ r1 ] : [ r2 ];
@@ -234,6 +234,29 @@ describe('plan controller', function() {
             var segment1 = scope.itinerary.getSegments()[1];
             expect(segment1.getRides().length).toEqual(1);
             expect(segment1.getRides()[0].getRouteId()).toEqual('r2');
+        });
+        it('for a sfmuni and a bart segment', function() {
+            var r6 = Ride.createRide('sfmuni', 'r1', 'v1', new Date(1), new Date(2))
+            var r7 = Ride.createRide('bart', 'r2', 'v2', new Date(2), new Date(3))
+            mockSfMuni.getRidesForSegment.and.returnValue($q.when({ data: [ r6 ] } ));
+            mockBart.getRidesForSegment.and.returnValue($q.when({ data: [ r7 ] } ));
+            var nexuses = [ n1, n2, n3 ];
+            n1.addStop(Stop.createStop('s1', 'sfmuni', 'r1', 'id1', 1, 1));
+            n2.addStop(Stop.createStop('s2', 'sfmuni', 'r1', 'id1', 1, 1));
+            n2.addStop(Stop.createStop('s3', 'bart', 'r2', 'id1', 1, 1));
+            n3.addStop(Stop.createStop('s4', 'bart', 'r2', 'id1', 1, 1));
+            var segments = Itinerary.createSegmentsFromNexuses(nexuses);
+            var itinerary = Itinerary.createItinerary(trip2, segments);
+            scope.itinerary = itinerary;
+            scope.ridesRefresh();
+            scope.$digest();
+            expect(scope.itinerary.getSegments().length).toEqual(2);
+            expect(segments[0].getRides().length).toEqual(1);
+            expect(segments[0].getRides()[0].getRouteId()).toEqual('r1');
+            expect(segments[0].getRides()[0].getAgencyId()).toEqual('sfmuni');
+            expect(segments[1].getRides().length).toEqual(1);
+            expect(segments[1].getRides()[0].getRouteId()).toEqual('r2');
+            expect(segments[1].getRides()[0].getAgencyId()).toEqual('bart');
         });
     });
 
