@@ -7,12 +7,16 @@
     "type": "git",
     "url": "https://github.com/fweiss/etappe"
   },
+  "dependencies": {
+    "angular": "^1.6.0"
+  },
   "devDependencies": {
     "http-server": "^0.8.5",
     "jasmine-core": "^2.4.1",
     "jasmine-spec-reporter": "2.2.3",
     "karma": "^0.12.37",
-    "karma-chrome-launcher": "^2.0.0",
+    "phantomjs": "^1.9.19",
+    "karma-phantomjs-launcher": "^0.2.3",
     "karma-jasmine": "^0.3.5",
     "mountebank": "^1.4.2",
     "protractor": "^4.0.4",
@@ -29,6 +33,7 @@
     "mountebank": "node node_modules/mountebank/bin/mb"
   },
   "xdependencies": {
+    "karma-chrome-launcher": "^2.0.0",
     "karma-firefox-launcher": "^0.1.7",
     "karma-phantomjs-launcher": "^0.2.3",
     "karma-safari-launcher": "^0.1.1",
