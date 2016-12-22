@@ -258,8 +258,43 @@ describe('feed sfmuni', function() {
                 var originNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w1', 1, 2));
                 var destinationNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w2', 1, 3));
                 expect(function() {
-                    //SfMuni.getRidesForSegment({ originNexus: originNexus, destinationNexus: destinationNexus });
                     SfMuni.getRidesForSegment(Segment.createSegment(originNexus, destinationNexus));
+                }).toThrow(new Error('segment does not specify any stops'));
+            });
+            // needs $http.interrceptors
+            xit('should error for backend error', function() {
+                var xml = '<body copyright="All data copyright San Francisco Muni 2016.">'
+                    + '<Error shouldRetry="false">The stop \'NA|\' was invalid because it did not contain a route, optional dir, and stop tag</Error>'
+                + '</body>';
+                httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=r1%7C').respond(xml);
+                var originNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w1', 1, 2));
+                var destinationNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w2', 1, 3));
+                originNexus.addStop(Stop.createStop('s1', 'bart', 'r1', 'i1', 1, 1));
+                destinationNexus.addStop(Stop.createStop('s2', 'bart', 'r1', 'i2', 1, 1));
+                var segment = Segment.createSegment(originNexus, destinationNexus);
+                expect(function() {
+                    SfMuni.getRidesForSegment(segment);
+                }).toThrow(new Error('sfmuni api error'));
+                httpBackend.flush();
+            });
+            it('error for no sfmuni origin stops', function() {
+                var originNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w1', 1, 2));
+                var destinationNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w2', 1, 3));
+                var segment = Segment.createSegment(originNexus, destinationNexus);
+                segment.getOriginNexus().addStop(Stop.createStop('s1', 'bart', 'r1', 'i1', 1, 1));
+                segment.getDestinationNexus().addStop(Stop.createStop('s2', 'sfmuni', 'r1', 'i2', 1, 1));
+                expect(function() {
+                    SfMuni.getRidesForSegment(segment);
+                }).toThrow(new Error('segment does not specify any stops'));
+            });
+            it('error for no sfmuni destination stops', function() {
+                var originNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w1', 1, 2));
+                var destinationNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w2', 1, 3));
+                var segment = Segment.createSegment(originNexus, destinationNexus);
+                segment.getOriginNexus().addStop(Stop.createStop('s1', 'sfmuni', 'r1', 'i1', 1, 1));
+                segment.getDestinationNexus().addStop(Stop.createStop('s2', 'bart', 'r1', 'i2', 1, 1));
+                expect(function() {
+                    SfMuni.getRidesForSegment(segment);
                 }).toThrow(new Error('segment does not specify any stops'));
             });
             it('should get a ride for multi stops', function() {
@@ -269,11 +304,11 @@ describe('feed sfmuni', function() {
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C3333').respond(destinationXml);
 
                 var originNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w1', 1, 2));
-                var stop1 = Stop.createStop('s1', 'a1', 'N', '2222', 1, 1);
+                var stop1 = Stop.createStop('s1', 'sfmuni', 'N', '2222', 1, 1);
                 stop1.setStopTag('2222');
                 originNexus.addStop(stop1);
                 var destinationNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w2', 1, 3));
-                var stop2 = Stop.createStop('s2', 'a1', 'N', '3333', 1, 2);
+                var stop2 = Stop.createStop('s2', 'sfmuni', 'N', '3333', 1, 2);
                 stop2.setStopTag('3333');
                 destinationNexus.addStop(stop2);
                 //var segment = { originWaypoint: { name: 'w1', stops: [ { route: 'N', stopTag: '2222' }]}, destinationWaypoint: { name: 'w2', stops: [ { route: 'N', stopTag: '3333' }]}};
