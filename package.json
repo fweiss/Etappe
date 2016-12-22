@@ -16,7 +16,8 @@
     "karma-jasmine": "^0.3.5",
     "mountebank": "^1.4.2",
     "protractor": "^4.0.4",
-    "request": "^2.67.0"
+    "request": "^2.67.0",
+    "karma-coverage": "^1.1.1"
   },
   "scripts": {
     "prestart": "npm install http-server",
@@ -32,8 +33,5 @@
     "karma-phantomjs-launcher": "^0.2.3",
     "karma-safari-launcher": "^0.1.1",
     "phantomjs": "^1.9.19"
-  },
-  "dependencies": {
-    "karma-coverage": "^1.1.1"
   }
 }
