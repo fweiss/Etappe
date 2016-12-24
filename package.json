@@ -8,6 +8,7 @@
     "url": "https://github.com/fweiss/etappe"
   },
   "dependencies": {
+    "underscore": "1.7.0",
     "angular": "1.2.27"
   },
   "devDependencies": {
