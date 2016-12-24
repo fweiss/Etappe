@@ -22,7 +22,7 @@ module.exports = function(config) {
         ],
         files: [
             'node_modules/angular/angular.min.js',
-            'app/lib/angular-mocks.js',
+            'node_modules/angular-mocks/angular-mocks.js',
             'node_modules/underscore/underscore.js',
             'app/*.js',
             'app/modules/feed/sfmuni.js',
