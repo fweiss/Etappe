@@ -21,7 +21,7 @@ module.exports = function(config) {
             //'karma-safari-launcher'
         ],
         files: [
-            'app/lib/angular.min.js',
+            'node_modules/angular/angular.min.js',
             'app/lib/angular-resource.js',
             'app/lib/angular-mocks.js',
             'app/lib/underscore.js',
