@@ -22,7 +22,6 @@ module.exports = function(config) {
         ],
         files: [
             'node_modules/angular/angular.min.js',
-            'app/lib/angular-resource.js',
             'app/lib/angular-mocks.js',
             'app/lib/underscore.js',
             'app/*.js',
