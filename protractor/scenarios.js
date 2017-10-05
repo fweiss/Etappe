@@ -53,9 +53,17 @@ describe('etappe', function() {
         browser.executeScript('window.sessionStorage.clear();');
         browser.executeScript('window.localStorage.clear();');
     });
-    it('should load page without errors', function() {
-        // in module.js, an exception handler gets any angular errors - supposeably
-        expect(element(by.id('errors')).getText()).toEqual('');
+    describe('load page', function() {
+        it('without errors', function() {
+            // in module.js, an exception handler gets any angular errors - supposeably
+            expect(element(by.id('errors')).getText()).toEqual('');
+        });
+        it('shows trip builder', function() {
+            expect(element(by.id('tripBuilder')).isPresent()).toBe(true);
+        });
+        it('shows waypoint selector', function() {
+            expect(element(by.id('nextWaypointSelect')).isPresent()).toBe(true);
+        });
     });
     describe('I can create a simple sfmuni trip', function() {
         it('shows the trip', function() {
