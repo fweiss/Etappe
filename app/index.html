@@ -21,6 +21,12 @@
                     </tbody>
                 </table>
                 <div id="waypointSelector">
+                    <div class="agencySelector">
+                        <div class="field">
+                            <input type="checkbox" id="sfmuni" name="muni"/>
+                            <label for="sfmuni">SF MUNI</label>
+                        </div>
+                    </div>
                     <select id="nextWaypointSelect" ng-model="nextWaypointSelect" ng-options="nexus as nexus.getName() for nexus in originNexus" ng-change="nextWaypointChanged()" ng-disabled="disableOrigin">
                         <option value="">Choose a waypoint</option>
                     </select>

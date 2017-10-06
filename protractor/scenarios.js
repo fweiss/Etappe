@@ -64,6 +64,14 @@ describe('etappe', function() {
         it('shows waypoint selector', function() {
             expect(element(by.id('nextWaypointSelect')).isPresent()).toBe(true);
         });
+        it('shows waypoint agency options', function() {
+            expect(element(by.css('#waypointSelector .agencySelector')).isPresent()).toBe(true);
+        });
+    });
+    fdescribe('waypoint selector', function() {
+        it('shows sfmuni', function() {
+            expect(element(by.css('#waypointSelector .field label')).getText()).toEqual('SF MUNI');
+        });
     });
     describe('I can create a simple sfmuni trip', function() {
         it('shows the trip', function() {

@@ -16,3 +16,7 @@ canvas {
 #originNexusSelect, #destinationNexusSelect {
     width: 35%;
 }
+#waypointSelector {
+    padding: 10px;
+    border: 1px solid black;
+}
