@@ -77,28 +77,33 @@ describe('etappe', function() {
         //});
     });
     describe('I can create a simple sfmuni trip', function() {
-        it('shows the trip', function() {
-            //expect empty trip
+        it('shows empty list', function() {
             expect(element.all(by.css('#waypoints td')).getText()).toEqual([ ]);
-            //expect carrier select
-            //expect waypoint prompt
-            //element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
-            element(by.css('#waypointSelector .field input[value=SFMUNI]')).click();
-            //epect waypoint list
-            // select first waypoint
-            element(by.cssContainingText('#nextWaypointSelect option', '16th St and Mission')).click();
-            // expect empty trip
-            // expect first waypoint
-            expect(element.all(by.css('#waypoints td')).getText()).toEqual([ '16th St and Mission' ]);
-            // expect carrier select
-            // expect waypoint options
-            // select waypoint
-            element(by.cssContainingText('#nextWaypointSelect option', '16th St and Harrison')).click();
-            // expect complete trip
-            expect(element.all(by.css('#waypoints td')).getText()).toEqual([ '16th St and Mission', '16th St and Harrison' ]);
-            // commit trip
-            element(by.css('#createTrip')).click();
-            expect(element.all(by.css('#trip td')).getText()).toEqual([ '16th St and Mission', '16th St and Harrison' ]);
+        });
+        describe('select first waypoint', function() {
+            beforeEach(function() {
+                element(by.css('#waypointSelector .field input[value=SFMUNI]')).click();
+                element(by.cssContainingText('#nextWaypointSelect option', '16th St and Mission')).click();
+            });
+            it('is shown in list', function() {
+                expect(element.all(by.css('#waypoints td')).getText()).toEqual([ '16th St and Mission' ]);
+            });
+            describe('select second waypoint', function() {
+                beforeEach(function() {
+                    element(by.cssContainingText('#nextWaypointSelect option', '16th St and Harrison')).click();
+                });
+                it('both are shown in list', function() {
+                    expect(element.all(by.css('#waypoints td')).getText()).toEqual([ '16th St and Mission', '16th St and Harrison' ]);
+                });
+                describe('create trip', function() {
+                    beforeEach(function() {
+                        element(by.css('#createTrip')).click();
+                    });
+                    it('both shown in trip', function() {
+                        expect(element.all(by.css('#trip td')).getText()).toEqual([ '16th St and Mission', '16th St and Harrison' ]);
+                    })
+                });
+            });
         });
     });
     describe('trip builder', function() {
