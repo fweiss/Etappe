@@ -95,14 +95,14 @@ describe('etappe', function() {
                 it('both are shown in list', function() {
                     expect(element.all(by.css('#waypoints td')).getText()).toEqual([ '16th St and Mission', '16th St and Harrison' ]);
                 });
-                fdescribe('create trip', function() {
+                describe('create trip', function() {
                     beforeEach(function() {
                         element(by.css('#createTrip')).click();
                     });
                     it('both shown in trip', function() {
                         expect(element.all(by.css('#trip td')).getText()).toEqual([ '16th St and Mission', '16th St and Harrison' ]);
                     })
-                    it('should show available rides', function() {
+                    it('shows available rides', function() {
                         var headers = element.all(by.css('table#rides thead th')).map(function(ele) {
                             return ele.getText();
                         });
