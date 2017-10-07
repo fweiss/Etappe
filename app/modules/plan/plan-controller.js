@@ -18,6 +18,11 @@ angular.module('plan')
             //$scope.trip = Trip.createTrip($scope.waypoints[0], $scope.waypoints[1]);
             $scope.trip = Trip.createFromWaypoints($scope.waypoints);
             $scope.createItineraryFromTrip($scope.trip);
+            $scope.refreshItineraryRides(function() {
+                var now = new Date();
+                var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+                $scope.itinerary.setSpan(now, then);
+            });
         };
 
         $scope.createTripFromNexusSelect = function() {
