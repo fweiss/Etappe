@@ -20,10 +20,11 @@ describe('trip folder', function() {
                     inner ] };
             trip = TripFolder.deserialize(data);
         });
-        it('error on parsing', function() {
+        fit('error on parsing', function() {
             var bad = [];
-            var e1 = new Error('TripFolder: error deserializing data: TypeError: \'undefined\' is not an object (evaluating \'data.origin.waypointName\')');
-            expect(function() { TripFolder.deserialize(bad); }).toThrow(e1);
+            //var e1 = new Error('TripFolder: error deserializing data: TypeError: \'undefined\' is not an object (evaluating \'data.origin.waypointName\')');
+            //expect(function() { TripFolder.deserialize(bad); }).toThrow(e1);
+            expect(function() { TripFolder.deserialize(bad); }).toThrowError(Error, /TripFolder: error deserializing data/);
         });
         it('trip name', function() {
             expect(trip.getName()).toEqual('trip1');
