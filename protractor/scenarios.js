@@ -68,10 +68,13 @@ describe('etappe', function() {
             expect(element(by.css('#waypointSelector .agencySelector')).isPresent()).toBe(true);
         });
     });
-    fdescribe('waypoint selector', function() {
+    describe('waypoint selector', function() {
         it('shows sfmuni', function() {
-            expect(element(by.css('#waypointSelector .field label')).getText()).toEqual('SF MUNI');
+            expect(element(by.css('#waypointSelector .field label')).getText()).toEqual('BART');
         });
+        //it('populates sfmuni stops', function() {
+        //    element(by.css('#waypointSelector .field input[value=SFMUNI]')).click();
+        //});
     });
     describe('I can create a simple sfmuni trip', function() {
         it('shows the trip', function() {
@@ -79,7 +82,8 @@ describe('etappe', function() {
             expect(element.all(by.css('#waypoints td')).getText()).toEqual([ ]);
             //expect carrier select
             //expect waypoint prompt
-            element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
+            //element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
+            element(by.css('#waypointSelector .field input[value=SFMUNI]')).click();
             //epect waypoint list
             // select first waypoint
             element(by.cssContainingText('#nextWaypointSelect option', '16th St and Mission')).click();

@@ -65,10 +65,31 @@ angular.module('plan')
         $scope.disableOrigin = true;
         $scope.disableDestination = true;
         $scope.carriers = [
-            { name: 'BART', api: Bart },
-            { name: 'SFMUNI', api: SfMuni }
+            { name: 'BART', api: Bart, selected: false },
+            { name: 'SFMUNI', api: SfMuni, selected: false }
         ];
         $scope.rides = null;
+
+        $scope.selection = [];
+        $scope.selectedAgencies = function() {
+            return filterFilter($scope.carriers, { selected: true });
+        };
+        $scope.$watch('carriers|filter:{selected:true}', function (nv) {
+            $scope.selection = nv.map(function (agency) {
+                var api = agency.api;
+                api.getAllStops().then(function(response) {
+                    Nexus.mergeStops(response.data);
+                    var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
+                    $scope.originNexus = nexuses;
+                    $scope.destinationNexus = nexuses;
+                    $scope.destinationNexus = nexuses;
+                    $scope.disableOrigin = false;
+                    $scope.disableDestination = false;
+                });
+                return agency.name;
+            });
+        }, true);
+
         $scope.changeCarrier = function() {
             var api = $scope.carrierSelect.api;
             api.getAllStops().then(function(response) {

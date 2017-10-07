@@ -21,10 +21,10 @@
                     </tbody>
                 </table>
                 <div id="waypointSelector">
-                    <div class="agencySelector">
+                    <div class="agencySelector" ng-repeat="agency in carriers">
                         <div class="field">
-                            <input type="checkbox" id="sfmuni" name="muni"/>
-                            <label for="sfmuni">SF MUNI</label>
+                            <input type="checkbox" id="selectAgencies[]" name="selectAgencies[]" value="{{agency.name}}" ng-model="agency.selected"/>
+                            <label for="selectAgencies[]">{{agency.name}}</label>
                         </div>
                     </div>
                     <select id="nextWaypointSelect" ng-model="nextWaypointSelect" ng-options="nexus as nexus.getName() for nexus in originNexus" ng-change="nextWaypointChanged()" ng-disabled="disableOrigin">
