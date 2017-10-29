@@ -20,7 +20,7 @@ describe('trip folder', function() {
                     inner ] };
             trip = TripFolder.deserialize(data);
         });
-        fit('error on parsing', function() {
+        it('error on parsing', function() {
             var bad = [];
             //var e1 = new Error('TripFolder: error deserializing data: TypeError: \'undefined\' is not an object (evaluating \'data.origin.waypointName\')');
             //expect(function() { TripFolder.deserialize(bad); }).toThrow(e1);
