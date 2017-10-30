@@ -116,7 +116,9 @@ describe('etappe', function() {
             });
         });
     });
-    describe('trip builder', function() {
+
+    // old trip builder
+    xdescribe('trip builder', function() {
         it('should prompt to select carrier', function() {
             expect(element(by.model('carrierSelect')).$('option:checked').getText()).toEqual('Choose a carrier');
         });
@@ -138,7 +140,8 @@ describe('etappe', function() {
             expect(element(by.model('destinationNexusSelect')).all(by.tagName('option')).get(0).getText()).toBe('Choose a destination');
         });
 
-        describe('agency selected', function() {
+        // old trip builder
+        xdescribe('agency selected', function() {
             beforeEach(function() {
                 element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
             });
@@ -150,7 +153,8 @@ describe('etappe', function() {
             });
         });
 
-        describe('origin and destination selected', function() {
+        // old trip builder
+        xdescribe('origin and destination selected', function() {
             beforeEach(function() {
                 element(by.cssContainingText('#carrierSelect option', 'SFMUNI')).click();
                 element(by.cssContainingText('#originNexusSelect option', '16th St and Mission')).click();
