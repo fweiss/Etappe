@@ -33,20 +33,6 @@
                 </div>
                 <button id="createTrip" ng-click="createTrip()">Create Trip</button>
             </div>
-            <div style="display:none">
-                <p>Plan your trip:</p>
-                <p>
-                    <select id="xcarrierSelect" ng-model="xcarrierSelect" ng-options="carrier.name for carrier in carriers" ng-change="changeCarrier()">
-                        <option value="">Choose a carrier</option>
-                    </select>
-                    <select id="xoriginNexusSelect" ng-model="originNexusSelect" ng-options="nexus as nexus.getName() for nexus in originNexus" ng-change="originNexusChanged()" ng-disabled="disableOrigin">
-                        <option value="">Choose an origin</option>
-                    </select>
-                    <select id="xdestinationNexusSelect" ng-model="destinationNexusSelect" ng-options="nexus as nexus.getName() for nexus in destinationNexus" ng-change="destinationNexusChanged()" ng-disabled="disableDestination">
-                        <option value="">Choose a destination</option>
-                    </select>
-                </p>
-            </div>
             <div>
                 <button id="planSave" ng-click="planSave()">save</button>
                 <input type="text" ng-model="planSaveName"/>
@@ -56,7 +42,6 @@
                 <button id="planRestore" ng-click="planRestore()">Restore</button>
                 <input type="text" ng-model="planRestoreName"/>
             </div>
-            <div><button id="addSegment" ng-click="addSegment()">Add Segment</button></div>
             <canvas utt-rides width="1200" height="100"></canvas>
             <div>
                 <button id="showSavedTrips" ng-click="showSavedTrips()">Saved Trips</button>

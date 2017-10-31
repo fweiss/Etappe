@@ -165,15 +165,6 @@ describe('etappe', function() {
             expect(savedPlan).toEqual({ origin: '16th st and Mission'});
         });
     });
-    // before adding, should not show add button
-    describe('adding a segment', function() {
-        beforeEach(function() {
-
-        });
-        it('should show add button', function() {
-            expect(element(by.css('#addSegment')).isPresent()).toBeTruthy();
-        });
-    });
     //describe('saved plans', function() {
     //    beforeEach(function() {
     //        element(by.css('#showSavedPlans')).click();
