@@ -2,18 +2,15 @@
 <html ng-app="etappe">
     <head>
         <title>Etappe</title>
+        <link rel="stylesheet" href="reset-2.0.css"/>
         <link rel="stylesheet" href="etappe.css"/>
     </head>
     <body>
         <div id="tripb" ng-controller="PlanController">
             <span id="errors">{{ error }}</span>
-            <div class="segmentSelect" ng-include="template">
-
-            </div>
-
             <div id="tripBuilder">
                 <table id="waypoints">
-                    <caption>waypoints</caption>
+                    <caption>Add waypoints to create your trip</caption>
                     <tbody>
                     <tr ng-repeat="waypoint in waypoints">
                         <td>{{waypoint.name}}</td>

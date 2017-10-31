@@ -1,3 +1,6 @@
+body {
+    font-family: sans-serif;
+}
 canvas {
     border: 1px solid black;
     margin-top: 10px;
@@ -19,4 +22,7 @@ canvas {
 #waypointSelector {
     padding: 10px;
     border: 1px solid black;
+}
+#tripBuilder table {
+    width: 100%;
 }
