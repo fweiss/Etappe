@@ -69,7 +69,7 @@ describe('etappe', function() {
         });
     });
     describe('waypoint selector', function() {
-        it('shows sfmuni', function() {
+        it('shows agencies', function() {
             expect(element.all(by.css('#waypointSelector .field label')).getText()).toEqual([ 'BART', 'SFMUNI' ]);
         });
         //it('populates sfmuni stops', function() {
