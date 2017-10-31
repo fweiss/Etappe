@@ -61,13 +61,15 @@ describe('etappe', function() {
         it('shows trip builder', function() {
             expect(element(by.id('tripBuilder')).isPresent()).toBe(true);
         });
+    });
+    describe('trip builder', function() {
         it('shows waypoint selector', function() {
             expect(element(by.id('nextWaypointSelect')).isPresent()).toBe(true);
         });
         it('shows waypoint agency options', function() {
             expect(element(by.css('#waypointSelector .agencySelector')).isPresent()).toBe(true);
         });
-    });
+});
     describe('waypoint selector', function() {
         it('shows agencies', function() {
             expect(element.all(by.css('#waypointSelector .field label')).getText()).toEqual([ 'BART', 'SFMUNI' ]);
