@@ -69,14 +69,14 @@ describe('etappe', function() {
         it('shows waypoint agency options', function() {
             expect(element(by.css('#waypointSelector .agencySelector')).isPresent()).toBe(true);
         });
-});
-    describe('waypoint selector', function() {
-        it('shows agencies', function() {
-            expect(element.all(by.css('#waypointSelector .field label')).getText()).toEqual([ 'BART', 'SFMUNI' ]);
+        describe('waypoint selector', function() {
+            it('shows agencies', function() {
+                expect(element.all(by.css('#waypointSelector .field label')).getText()).toEqual([ 'BART', 'SFMUNI' ]);
+            });
+            //it('populates sfmuni stops', function() {
+            //    element(by.css('#waypointSelector .field input[value=SFMUNI]')).click();
+            //});
         });
-        //it('populates sfmuni stops', function() {
-        //    element(by.css('#waypointSelector .field input[value=SFMUNI]')).click();
-        //});
     });
     describe('I can create a simple sfmuni trip', function() {
         it('shows empty list', function() {
