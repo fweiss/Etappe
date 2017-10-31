@@ -7,6 +7,12 @@ canvas {
     box-shadow: 10px 10px 5px #888888;
     /*transform: rotate(-90deg);*/
 }
+table caption {
+    font-weight: bold;
+}
+table th, table td {
+    padding: 0.25em;
+}
 #savedPlans li.plan {
     cursor: pointer;
 }
