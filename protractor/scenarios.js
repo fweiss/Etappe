@@ -22,12 +22,12 @@ describe('etappe', function() {
 
         // using mountebank here
         browser.addMockModule('sfmuni.config', function() {
-            angular.module('sfmuni.config', {})
+            angular.module('sfmuni.config', [])
                 .value('config', { baseUrl: 'http://localhost:4545' });
         });
 
         browser.addMockModule('plan.config', function() {
-            angular.module('plan.config', {})
+            angular.module('plan.config', [])
                 .value('initSavedPlans', [
                     { id: 1, name: 'get Cliffs', waypoints: [
                         { name: 'Mission St', stops: [ { route: 'N', stopTag: '5555' } ] },
