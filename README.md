@@ -45,13 +45,21 @@ http://www.sflivebus.com/
 
 This project is developed using BDD and TDD. Protractor is used for BDD and Karma is used for TDD.
 
-### Required toolchain
+### Toolchain setup
+Node and npm are required for testing and building. You will need the latest versions. Current development uses:
 
-Node and npm are required for testing and running. The required dev dependencies are specified in the package.json file.
+* node v6.10.3
+* npm 3.10.10
 
-### Project setup
+The remaining toolchain is specified in the package.json file. Install by running:
 
-Run ``npm install`` to get and install the development tooling.
+``npm update``
+
+One more step required for protractor is to install the webdriver manager:
+
+``node ./node_modules/protractor/bin/webdriver-manager update``
+
+It is assumed you already have the latest web browsers installed. Most of the development has been with Chrome browser.
 
 ### BDD with Protractor and IntellIJ
 
@@ -101,7 +109,6 @@ Once you have installed the plugins you will setup the following run configurati
 
 protractor tricks for running in jenkins
 selenium driver jar issue
-node ./node_modules/protractor/bin/webdriver-manager update
 
 ### Running the toolchain
 
