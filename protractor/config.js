@@ -1,4 +1,4 @@
-var Jasmine2SpecReporter = require("jasmine-spec-reporter");
+var Jasmine2SpecReporter = require("jasmine-spec-reporter").SpecReporter;
 exports.config = {
     allScriptsTimeout: 11000,
 
