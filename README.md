@@ -42,14 +42,13 @@ http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf
 http://www.sflivebus.com/
 
 ## Developing
-
 This project is developed using BDD and TDD. Protractor is used for BDD and Karma is used for TDD.
 
 ### Toolchain setup
 Node and npm are required for testing and building. You will need the latest versions. Current development uses:
 
-* node v6.10.3
-* npm 3.10.10
+- node v6.10.3
+- npm 3.10.10
 
 The remaining toolchain is specified in the package.json file. Install by running:
 
@@ -62,7 +61,51 @@ One more step required for protractor is to install the webdriver manager:
 It is assumed you already have the latest web browsers installed. Most of the development has been with Chrome browser.
 
 ### IntelliJ setup
-Id you using IntelliJ, here are some additional setup steps for running the tests within the IDE.
+If you are using IntelliJ, here are some additional setup steps for running the tests within the IDE.
+
+#### Plugins
+IntelliJ has plugins which make TDD with Karma and Protractor highly productive.
+Install Karma plugin
+
+The IntelliJ Karma plugin makes Javascript testing really nice. First make sure you have the Karma plugin installed.
+If not, it's easy to do:
+
+Preferences > Plugins > Install Jetbrains plugin. Navigate to and select the Karma plugin. Click Install and restart.
+
+#### Run configurations
+Once you have installed the plugins setup the following run configurations:
+
+- karma unit tests
+- server run configuration (Node)
+- mountebank required for protractor
+- protractor
+
+protractor tricks for running in jenkins
+selenium driver jar issue
+
+#### Running the tests
+Launch each of the four tools and pin them in the Run window. This includes the web server and mountebank, which will
+be always running. Run the Karma unit test or the Protractor E2E tests by selecting the tab and clicking the run button.
+
+### Create a Karma run configuration
+Enter name, config file (it finds it), browser (start with Chrome)
+
+Test environment
+
+run configrations for:
+
+- karma for unit testing
+- protractor (requires http server and mountebank)
+
+### IntelliJ run configurations
+details here
+karma, http server, mountebank, protractor
+
+###
+
+Http server, new run configuration, node, javascript=node_modules/http-server
+
+Then you can go to http://localhost:8080/app/index.html
 
 ### BDD with Protractor and IntellIJ
 
@@ -83,69 +126,20 @@ when user stories demand new data models and services, or when an existing 'ad-h
 code. The BDD cycle time is of course slower than TDD. The TDD tests are taking less than a second, while the BDD tests
 in the Chrome browser are taking about 7 seconds.
 
-Manually testing should be done periodically to ensure the UX is reasonable. However, whenever JavaScript errors are encountered
-in manually testing, the error should immediately be exercised in Protractor. For example, there was an Angular injector
+Manual testing should be done periodically to ensure the UX is reasonable. However, whenever JavaScript errors are encountered
+in manual testing, the error should immediately be exercised in Protractor. For example, there was an Angular injector
 error due to a missing script tag. By adding an Angular exception handler, the Protractor run was made red. Then the
 missing script tag was added to index.html to make the test green.
 
-When manual testing exposes UX issues, they may or may not involve BDD or TDD. For example, if it's necessary to rearrange
-the DOM or add CSS classes to DOM elements, should changes should first be added to BDD tests. However, changes to the CSS would be
+When manual testing exposes UX issues, they may or may not involve BDD or TDD. For example, if it's necessary to modify
+the DOM or add CSS classes to DOM elements, the changes should first be added to BDD tests. When other changes are made
+to the DOM, use protractor for regression testing. However, changes to the CSS would be
 manually tested changes.
 
-
 ## Links and References
-
 Really good article about the who, why, and how of testing: https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html
 
 How to mock providers: http://www.syntaxsuccess.com/viewarticle/how-to-mock-providers-in-angular
-
-## IntelliJ
-
-IntelliJ has plugins which make TDD with Karma and Protractor highly productive.
-
-Once you have installed the plugins you will setup the following run configurations:
-
-- karma unit tests
-- server run configuration (Node)
-- mountebank required for protractor
-- protractor
-
-protractor tricks for running in jenkins
-selenium driver jar issue
-
-### Running the toolchain
-
-Launch each of the four tools and pin them in the Run window. This includes the web server and mountebank, which will
-be always running. Run the Karma unit test or the Protractor E2E tests by selecting the tab anbd clicking the run button.
-
-### Install Karma plugin
-
-The IntelliJ Karma plugin makes Javascript testing really nice. First make sure you have the Karma plugin installed.
-If not, it's easy to do:
-
-Preferences > Plugins > Install Jetbrains plugin. Navigate to and select the Karma plugin. Click Install and restart.
-
-### Create a Karma run configuration
-
-Enter name, config file (it finds it), browser (start with Chrome)
-
-Test environment
-
-run configrations for:
-
-- karma for unit testing
-- protractor (requires http server and mountebank)
-
-### IntelliJ run configurations
-
-details here
-karma, http server, mountebank, protractor
-
-###
-
-Http server, new run configuration, node, javascript=node_modules/http-server
-
-Then you can go to http://localhost:8080/app/index.html
 
 ## FAQ
 Here are some issues that may arise during development, testing, and usage.
