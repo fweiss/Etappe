@@ -1,6 +1,6 @@
 {
   "name": "etappe",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A transit trip planner",
   "license": "MIT",
   "repository": {
@@ -34,12 +34,5 @@
     "preprotractor": "node node_modules/protractor/bin/webdriver-manager update",
     "protractor": "node node_modules/protractor/bin/protractor",
     "mountebank": "node node_modules/mountebank/bin/mb"
-  },
-  "xdependencies": {
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-firefox-launcher": "^0.1.7",
-    "karma-phantomjs-launcher": "^0.2.3",
-    "karma-safari-launcher": "^0.1.1",
-    "phantomjs": "^1.9.19"
   }
 }
