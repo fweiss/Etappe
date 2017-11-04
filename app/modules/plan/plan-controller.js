@@ -96,18 +96,18 @@ angular.module('plan')
             });
         }, true);
 
-        $scope.changeCarrier = function() {
-            var api = $scope.carrierSelect.api;
-            api.getAllStops().then(function(response) {
-                Nexus.mergeStops(response.data);
-                var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
-                $scope.originNexus = nexuses;
-                $scope.destinationNexus = nexuses;
-                $scope.destinationNexus = nexuses;
-                $scope.disableOrigin = false;
-                $scope.disableDestination = false;
-            });
-        };
+        //$scope.changeCarrier = function() {
+        //    var api = $scope.carrierSelect.api;
+        //    api.getAllStops().then(function(response) {
+        //        Nexus.mergeStops(response.data);
+        //        var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
+        //        $scope.originNexus = nexuses;
+        //        $scope.destinationNexus = nexuses;
+        //        $scope.destinationNexus = nexuses;
+        //        $scope.disableOrigin = false;
+        //        $scope.disableDestination = false;
+        //    });
+        //};
         $scope.changeOrigin = function() {
             changePlan();
         };

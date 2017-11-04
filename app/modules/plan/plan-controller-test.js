@@ -62,22 +62,22 @@ describe('plan controller', function() {
             var segments = scope.plan.getSegments2();
             expect(segments.length).toBe(1);
         });
-        it('change agency', function() {
-            var stop = Stop.createStop('n', 'a', 'r', 's', 1, 2);
-            mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ stop ] }));
-            scope.carrierSelect = { name: 'SFMUNI', api: mockSfMuni };
-            scope.changeCarrier();
-            scope.$digest();
-            expect(scope.originNexus.length).toEqual(1);
-        });
-        it('change agency bart', function() {
-            var stop = Stop.createStop('n', 'a', 'r', 's', 1, 2);
-            mockBart.getAllStops.and.returnValue($q.when({ data: [ stop ] }));
-            scope.carrierSelect = { name: 'BART', api: mockBart };
-            scope.changeCarrier();
-            scope.$digest();
-            expect(scope.originNexus.length).toEqual(1);
-        });
+        //it('change agency', function() {
+        //    var stop = Stop.createStop('n', 'a', 'r', 's', 1, 2);
+        //    mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ stop ] }));
+        //    scope.carrierSelect = { name: 'SFMUNI', api: mockSfMuni };
+        //    scope.changeCarrier();
+        //    scope.$digest();
+        //    expect(scope.originNexus.length).toEqual(1);
+        //});
+        //it('change agency bart', function() {
+        //    var stop = Stop.createStop('n', 'a', 'r', 's', 1, 2);
+        //    mockBart.getAllStops.and.returnValue($q.when({ data: [ stop ] }));
+        //    scope.carrierSelect = { name: 'BART', api: mockBart };
+        //    scope.changeCarrier();
+        //    scope.$digest();
+        //    expect(scope.originNexus.length).toEqual(1);
+        //});
         it('build trip from waypoints', function() {
             var w1 = Waypoint.createWaypoint('w1', 21, 31);
             var w2 = Waypoint.createWaypoint('w2', 22, 32);
