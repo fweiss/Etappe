@@ -33,17 +33,17 @@
                 </div>
                 <button id="createTrip" ng-click="createTrip()">Create Trip</button>
             </div>
-            <div>
-                <button id="planSave" ng-click="planSave()">save</button>
-                <input type="text" ng-model="planSaveName"/>
-            </div>
             <div><button ng-click="ridesRefresh()">Refresh</button></div>
-            <div>
-                <button id="planRestore" ng-click="planRestore()">Restore</button>
-                <input type="text" ng-model="planRestoreName"/>
-            </div>
             <canvas utt-rides width="1200" height="100"></canvas>
             <div>
+                <div>
+                    <button id="planSave" ng-click="planSave()">save</button>
+                    <input type="text" ng-model="planSaveName"/>
+                </div>
+                <div>
+                    <button id="planRestore" ng-click="planRestore()">Restore</button>
+                    <input type="text" ng-model="planRestoreName"/>
+                </div>
                 <button id="showSavedTrips" ng-click="showSavedTrips()">Saved Trips</button>
                 <div id="savedTrips">
                     <ol>
