@@ -96,59 +96,9 @@ angular.module('plan')
             });
         }, true);
 
-        //$scope.changeCarrier = function() {
-        //    var api = $scope.carrierSelect.api;
-        //    api.getAllStops().then(function(response) {
-        //        Nexus.mergeStops(response.data);
-        //        var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
-        //        $scope.originNexus = nexuses;
-        //        $scope.destinationNexus = nexuses;
-        //        $scope.destinationNexus = nexuses;
-        //        $scope.disableOrigin = false;
-        //        $scope.disableDestination = false;
-        //    });
-        //};
-        //$scope.changeOrigin = function() {
-        //    changePlan();
-        //};
-        //$scope.changeDestination = function() {
-        //    changePlan();
-        //};
-        //$scope.originNexusChanged = function() {
-        //    changeNexus();
-        //}
-        //$scope.destinationNexusChanged = function() {
-        //    changeNexus();
-        //}
         $scope.ridesRefresh = function() {
             refreshRides($scope.itinerary);
         }
-        //function changeNexus() {
-        //    if ($scope.originNexusSelect && $scope.destinationNexusSelect) {
-        //        $scope.createTripFromNexusSelect();
-        //        $scope.createItineraryFromTrip($scope.trip);
-        //        $scope.refreshItineraryRides(function() {
-        //            var now = new Date();
-        //            var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-        //            $scope.itinerary.setSpan(now, then);
-        //        });
-        //    }
-        //}
-        // keep just to illustrate the transform to parallel
-        //function refreshRidesx(itinerary) {
-        //    var segment = itinerary.getSegments()[0];
-        //    SfMuni.getRidesForSegment(segment).then(function(response) {
-        //        var rides = response.data;
-        //        segment.rides = rides;
-        //        itinerary.getSegments()[0].rides = rides;
-        //
-        //        var now = new Date();
-        //        var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-        //        itinerary.setSpan(now, then);
-        //
-        //        $scope.rideList = rides.length;
-        //    }, function(fail) { $scope.rideList = fail; });
-        //}
         function refreshRides(itinerary) {
             var segments = itinerary.getSegments();
             $q.all(_.map(segments, function(segment) {
