@@ -108,47 +108,47 @@ angular.module('plan')
         //        $scope.disableDestination = false;
         //    });
         //};
-        $scope.changeOrigin = function() {
-            changePlan();
-        };
-        $scope.changeDestination = function() {
-            changePlan();
-        };
-        $scope.originNexusChanged = function() {
-            changeNexus();
-        }
-        $scope.destinationNexusChanged = function() {
-            changeNexus();
-        }
+        //$scope.changeOrigin = function() {
+        //    changePlan();
+        //};
+        //$scope.changeDestination = function() {
+        //    changePlan();
+        //};
+        //$scope.originNexusChanged = function() {
+        //    changeNexus();
+        //}
+        //$scope.destinationNexusChanged = function() {
+        //    changeNexus();
+        //}
         $scope.ridesRefresh = function() {
             refreshRides($scope.itinerary);
         }
-        function changeNexus() {
-            if ($scope.originNexusSelect && $scope.destinationNexusSelect) {
-                $scope.createTripFromNexusSelect();
-                $scope.createItineraryFromTrip($scope.trip);
-                $scope.refreshItineraryRides(function() {
-                    var now = new Date();
-                    var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-                    $scope.itinerary.setSpan(now, then);
-                });
-            }
-        }
+        //function changeNexus() {
+        //    if ($scope.originNexusSelect && $scope.destinationNexusSelect) {
+        //        $scope.createTripFromNexusSelect();
+        //        $scope.createItineraryFromTrip($scope.trip);
+        //        $scope.refreshItineraryRides(function() {
+        //            var now = new Date();
+        //            var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+        //            $scope.itinerary.setSpan(now, then);
+        //        });
+        //    }
+        //}
         // keep just to illustrate the transform to parallel
-        function refreshRidesx(itinerary) {
-            var segment = itinerary.getSegments()[0];
-            SfMuni.getRidesForSegment(segment).then(function(response) {
-                var rides = response.data;
-                segment.rides = rides;
-                itinerary.getSegments()[0].rides = rides;
-
-                var now = new Date();
-                var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-                itinerary.setSpan(now, then);
-
-                $scope.rideList = rides.length;
-            }, function(fail) { $scope.rideList = fail; });
-        }
+        //function refreshRidesx(itinerary) {
+        //    var segment = itinerary.getSegments()[0];
+        //    SfMuni.getRidesForSegment(segment).then(function(response) {
+        //        var rides = response.data;
+        //        segment.rides = rides;
+        //        itinerary.getSegments()[0].rides = rides;
+        //
+        //        var now = new Date();
+        //        var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+        //        itinerary.setSpan(now, then);
+        //
+        //        $scope.rideList = rides.length;
+        //    }, function(fail) { $scope.rideList = fail; });
+        //}
         function refreshRides(itinerary) {
             var segments = itinerary.getSegments();
             $q.all(_.map(segments, function(segment) {
