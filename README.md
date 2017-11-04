@@ -61,6 +61,9 @@ One more step required for protractor is to install the webdriver manager:
 
 It is assumed you already have the latest web browsers installed. Most of the development has been with Chrome browser.
 
+### IntelliJ setup
+Id you using IntelliJ, here are some additional setup steps for running the tests within the IDE.
+
 ### BDD with Protractor and IntellIJ
 
 The Protractor tests are not fully end-to-end because the data that would come from the transit servers varies over time.
@@ -144,9 +147,11 @@ Http server, new run configuration, node, javascript=node_modules/http-server
 
 Then you can go to http://localhost:8080/app/index.html
 
+## FAQ
+Here are some issues that may arise during development, testing, and usage.
 
+### Protractor: No Selenium web driver
+This is likely due to not installing the webdriver manager. Refer to the toolchain setup section for instructions.
 
-
-
-
-
+### Create trip: no rides are shown
+Currently the app does not validate that routes or rides exist between one chosen waypoint and the next.
