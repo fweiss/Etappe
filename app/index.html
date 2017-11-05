@@ -78,9 +78,9 @@
                         <th>end</th>
                     </tr>
                 </thead>
-                <tbody ng-repeat="s in itinerary.getSegments()">
+                <tbody ng-repeat="s in itinerary.getSegments()" ng-init="segmentIndex = $index">
                     <tr ng-repeat="r in s.getRides()">
-                        <td>segment</td>
+                        <td>{{segmentIndex+1}}</td>
                         <td>{{s.originNexus.getName()}}</td>
                         <td>{{s.destinationNexus.getName()}}</td>
                         <td>{{r.agencyId}}</td>
