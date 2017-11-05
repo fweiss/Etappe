@@ -8,6 +8,11 @@ angular.module('plan')
         function($scope, $q, chart, SfMuni, Bart, alert, Nexus, Itinerary, Trip, System, TripFolder, Segment, Waypoint) {
 
         $scope.waypoints = [];
+        $scope.carriers = [
+            { name: 'BART', api: Bart, selected: false },
+            { name: 'SFMUNI', api: SfMuni, selected: false }
+        ];
+        $scope.itinerary = null;
 
         $scope.nextWaypointChanged = function() {
             var nexus = $scope.nextWaypointSelect;
@@ -70,10 +75,6 @@ angular.module('plan')
         };
         //$scope.disableOrigin = true;
         //$scope.disableDestination = true;
-        $scope.carriers = [
-            { name: 'BART', api: Bart, selected: false },
-            { name: 'SFMUNI', api: SfMuni, selected: false }
-        ];
         $scope.rides = null;
 
         $scope.selection = [];
