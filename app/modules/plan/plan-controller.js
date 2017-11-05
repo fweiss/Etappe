@@ -26,13 +26,13 @@ angular.module('plan')
             $scope.ridesRefresh();
         };
 
-        $scope.createTripFromNexusSelect = function() {
-            var n1 = $scope.originNexusSelect;
-            var n2 = $scope.destinationNexusSelect;
-            var w1 = Waypoint.createWaypoint(n1.getName(), n1.getLat(), n1.getLon());
-            var w2 = Waypoint.createWaypoint(n2.getName(), n2.getLat(), n2.getLon());
-            $scope.trip = new Trip.createTrip(w1, w2);
-        };
+        //$scope.createTripFromNexusSelect = function() {
+        //    var n1 = $scope.originNexusSelect;
+        //    var n2 = $scope.destinationNexusSelect;
+        //    var w1 = Waypoint.createWaypoint(n1.getName(), n1.getLat(), n1.getLon());
+        //    var w2 = Waypoint.createWaypoint(n2.getName(), n2.getLat(), n2.getLon());
+        //    $scope.trip = new Trip.createTrip(w1, w2);
+        //};
         $scope.createItineraryFromTrip = function(trip) {
             var nexuses = _.map(trip.getWaypoints(), function(waypoint) {
                 return System.findNexus(waypoint);
@@ -68,8 +68,8 @@ angular.module('plan')
                 });
             });
         };
-        $scope.disableOrigin = true;
-        $scope.disableDestination = true;
+        //$scope.disableOrigin = true;
+        //$scope.disableDestination = true;
         $scope.carriers = [
             { name: 'BART', api: Bart, selected: false },
             { name: 'SFMUNI', api: SfMuni, selected: false }

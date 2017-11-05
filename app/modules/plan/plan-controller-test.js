@@ -62,14 +62,14 @@ describe('plan controller', function() {
             var segments = scope.plan.getSegments2();
             expect(segments.length).toBe(1);
         });
-        it('build trip from waypoints', function() {
-            var w1 = Waypoint.createWaypoint('w1', 21, 31);
-            var w2 = Waypoint.createWaypoint('w2', 22, 32);
-            scope.originNexusSelect = Nexus.createFromWaypoint(w1);
-            scope.destinationNexusSelect = Nexus.createFromWaypoint(w2);
-            scope.createTripFromNexusSelect();
-            expect(scope.trip).toBeTruthy();
-        });
+        //it('build trip from waypoints', function() {
+        //    var w1 = Waypoint.createWaypoint('w1', 21, 31);
+        //    var w2 = Waypoint.createWaypoint('w2', 22, 32);
+        //    scope.originNexusSelect = Nexus.createFromWaypoint(w1);
+        //    scope.destinationNexusSelect = Nexus.createFromWaypoint(w2);
+        //    scope.createTripFromNexusSelect();
+        //    expect(scope.trip).toBeTruthy();
+        //});
         // test fixture segments lacks stops
         xit('should update itinerary on rides refresh', function() {
 
