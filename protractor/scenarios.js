@@ -111,7 +111,7 @@ describe('etappe', function() {
                             var row0 = element.all(by.css('table#rides tbody td')).map(function(ele) {
                                 return ele.getText();
                             });
-                            expect(row0).toEqual([ 'segment', '16th St and Mission', '16th St and Harrison', 'sf-muni', 'N', '3333', '4:00 PM', '4:00 PM' ]);
+                            expect(row0).toEqual([ '1', '16th St and Mission', '16th St and Harrison', 'sf-muni', 'N', '3333', '4:00 PM', '4:00 PM' ]);
                         });
                     });
                 });
