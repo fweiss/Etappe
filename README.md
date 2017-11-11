@@ -60,6 +60,23 @@ One more step required for protractor is to install the webdriver manager:
 
 It is assumed you already have the latest web browsers installed. Most of the development has been with Chrome browser.
 
+### Running tests from command line
+The unit tests and integration tests can be run from from the command line.
+I tend to run the test in IntelliJ, because the workflow is easier in the IDE.
+
+The unit tests are run with Karma.
+There is a script in the ``package.json`` file to simplify this.
+Just run:
+
+``npm test``
+
+The karma configuration invokes the spec reporter, so you'll see a nice summary of the tests in the command output.
+
+Running the Protractor integration tests from the command line is a bit more complex.
+First, a web server and the Mountebank server have to be started and running.
+
+TBD
+
 ### IntelliJ setup
 If you are using IntelliJ, here are some additional setup steps for running the tests within the IDE.
 

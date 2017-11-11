@@ -17,7 +17,7 @@ module.exports = function(config) {
             'modules/plan/*.js'
         ],
 
-        autoWatch: true,
+        singleRun: true,
 
         frameworks: ['jasmine'],
 
@@ -31,9 +31,10 @@ module.exports = function(config) {
             'karma-chrome-launcher',
             'karma-junit-reporter',
             'karma-coverage',
-            'karma-jasmine'
+            'karma-jasmine',
+            'karma-spec-reporter'
         ],
-        reporters: [ 'coverage', 'junit' ],
+        reporters: [ 'coverage', 'junit', 'spec' ],
 
         junitReporter: {
             outputFile: 'test_out/unit.xml',
