@@ -330,25 +330,6 @@ describe('feed sfmuni', function() {
                 function whenGetPredictionsForMultiStops(stops) {
                     return httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=' + stops.replace('|', '%7C'));
                 }
-                function xpredictionsForRoute(route, predictions) {
-                    var root = angular.element('<root>');
-                    var body = angular.element('<body>');
-
-                    var ep = document.createElementNS('http://blabla/svg', 'predictions');
-                    var a = document.createAttribute('routeTag');
-                    a.value= 'R1';
-                    ep.setAttributeNode(a);
-                    var epredictions = angular.element(ep);
-
-                    var direction = angular.element('<direction>');
-                    root.append(body);
-                    body.append(epredictions);
-                    epredictions.append(direction);
-                    _.each(predictions, function(prediction) {
-                        direction.append(prediction);
-                    });
-                    return root.html();
-                }
 
                 function predictionsForRoute(route, predictions) {
                     var xb = new XB();
@@ -375,8 +356,10 @@ describe('feed sfmuni', function() {
                 s1.setStopTag('ST1');
                 var originNexus = Nexus.createFromWaypoint(w1);
                 originNexus.addStop(s1);
+                var s2 = Stop.createStop('stop1', 'sfmuni', 'R1', 'SID2222', 1, 2);
+                s2.setStopTag('ST2');
                 var destinationNexus = Nexus.createFromWaypoint(w1);
-                destinationNexus.addStop(s1);
+                destinationNexus.addStop(s2);
 
                 var segment = Segment.createSegment(originNexus, destinationNexus);
                 SfMuni.getRidesForSegment(segment).then(function(response) {
