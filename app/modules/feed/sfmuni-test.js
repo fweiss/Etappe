@@ -321,6 +321,70 @@ describe('feed sfmuni', function() {
 //                rootScope.$apply(); // is this only needed when there's no $httBackend calls?
                 httpBackend.flush();
             });
+            fit('should not be duplicate', function() {
+                // observed that the muni predictions are duplicated, route 37, but it's the prediction time off be seconds
+                function prediction(vehicle, offsetMinutes, tripTag) {
+                    //return '<prediction vehicle="' + vehicle + '" epochTime="' + (epochMilliSeconds + offsetMinutes * 60000) + '" tripTag="' + tripTag + '"></prediction>'
+                    return { vehicle: vehicle, epochTime: (epochMilliSeconds + offsetMinutes * 60000), tripTag: tripTag};
+                }
+                function whenGetPredictionsForMultiStops(stops) {
+                    return httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=' + stops.replace('|', '%7C'));
+                }
+                function xpredictionsForRoute(route, predictions) {
+                    var root = angular.element('<root>');
+                    var body = angular.element('<body>');
+
+                    var ep = document.createElementNS('http://blabla/svg', 'predictions');
+                    var a = document.createAttribute('routeTag');
+                    a.value= 'R1';
+                    ep.setAttributeNode(a);
+                    var epredictions = angular.element(ep);
+
+                    var direction = angular.element('<direction>');
+                    root.append(body);
+                    body.append(epredictions);
+                    epredictions.append(direction);
+                    _.each(predictions, function(prediction) {
+                        direction.append(prediction);
+                    });
+                    return root.html();
+                }
+
+                function predictionsForRoute(route, predictions) {
+                    var xb = new XB();
+                    var direction = xb.wrap('body')
+                        .wrap('predictions', { routeTag: 'R1'})
+                        .wrap('direction');
+                    _.each(predictions, function(prediction) {
+                        direction.wrap('prediction', prediction);
+                    });
+                    return xb.build();
+                }
+
+                var r1Predictions = [ prediction('4444', 0, '44444') ];
+                var p1 = predictionsForRoute('R1', r1Predictions);
+                whenGetPredictionsForMultiStops('R1|ST1').respond(p1);
+                var r2Predictions = [ prediction('4444', 10, '44444') ];
+                var p2 = predictionsForRoute('R1', r2Predictions);
+                whenGetPredictionsForMultiStops('R1|ST2').respond(p2);
+
+                var w1 = Waypoint.createWaypoint('w1', 1, 2);
+                var w2 = Waypoint.createWaypoint('w2', 1, 2);
+                // todo agencyid defined
+                var s1 = Stop.createStop('stop1', 'sfmuni', 'R1', 'SID2222', 1, 2);
+                s1.setStopTag('ST1');
+                var originNexus = Nexus.createFromWaypoint(w1);
+                originNexus.addStop(s1);
+                var destinationNexus = Nexus.createFromWaypoint(w1);
+                destinationNexus.addStop(s1);
+
+                var segment = Segment.createSegment(originNexus, destinationNexus);
+                SfMuni.getRidesForSegment(segment).then(function(response) {
+                    var rides = response.data;
+                    expect(rides.length).toBe(1);
+                });
+                httpBackend.flush();
+            });
         });
     });
     describe('utilities', function() {
