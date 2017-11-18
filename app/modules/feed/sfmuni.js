@@ -111,9 +111,9 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 var s2 = title.substring(p1 + sep.length);
                 return (s1 > s2) ? s2 + sep + s1 : title;
             },
-            duplicatenPredictionFilter: filter
+            duplicatenPredictionFilter: duplicate
         };
-        function filter(prediction, otherPrediction) {
+        function duplicate(prediction, otherPrediction) {
             const timeThreshold = 1 * 60 * 1000;
             var sameVehicle = prediction.vehicle === otherPrediction.vehicle;
             var timeDelta = Math.abs(prediction.time - otherPrediction.time);
@@ -131,7 +131,7 @@ angular.module('agencies', [ 'sfmuni.config' ])
             });
             var otherPrediction = { vehicle: '', time: 0 };
             return  _.filter(filtered, function(prediction) {
-                return ! filter(prediction, otherPrediction);
+                return ! duplicate(prediction, otherPrediction);
             });
         }
         function buildResource(command, transform) {
