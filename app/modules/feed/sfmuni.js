@@ -94,7 +94,7 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 var origin = api.getPredictionsForMultiStops(originStops);
                 var destination = api.getPredictionsForMultiStops(destinationStops);
                 $q.all([origin, destination]).then(function (responses) {
-                    var originPredictions = responses[0].data;
+                    var originPredictions = filterDuplicatePredictionTimes(responses[0].data);
                     var destinationPredictions = responses[1].data;
                     var rides = getRidesForSegmentPredictions(originPredictions, destinationPredictions);
                     defer.resolve({data: rides});
@@ -110,8 +110,30 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 var s1 = title.substring(0, p1);
                 var s2 = title.substring(p1 + sep.length);
                 return (s1 > s2) ? s2 + sep + s1 : title;
-            }
+            },
+            duplicatenPredictionFilter: filter
         };
+        function filter(prediction, otherPrediction) {
+            const timeThreshold = 1 * 60 * 1000;
+            var sameVehicle = prediction.vehicle === otherPrediction.vehicle;
+            var timeDelta = Math.abs(prediction.time - otherPrediction.time);
+            var duplicate = sameVehicle && timeDelta < timeThreshold;
+            if (! duplicate) {
+                _.extend(otherPrediction, prediction);
+            }
+            return duplicate;
+        }
+        function filterDuplicatePredictionTimes(unfiltered) {
+            const timeThreshold = 0 *1000;
+            var filtered = _.sortBy(unfiltered, function(prediction) {
+                // better to left pad the time
+                return prediction.vehicle + ':' + prediction.stopId + ':' + prediction.time.getTime();
+            });
+            var otherPrediction = { vehicle: '', time: 0 };
+            return  _.filter(filtered, function(prediction) {
+                return ! filter(prediction, otherPrediction);
+            });
+        }
         function buildResource(command, transform) {
             return function(params) {
                 params.command = command;

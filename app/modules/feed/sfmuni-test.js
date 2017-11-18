@@ -321,8 +321,8 @@ describe('feed sfmuni', function() {
 //                rootScope.$apply(); // is this only needed when there's no $httBackend calls?
                 httpBackend.flush();
             });
-            fit('should not be duplicate', function() {
-                // observed that the muni predictions are duplicated, route 37, but it's the prediction time off be seconds
+            it('should not be duplicate', function() {
+                // observed that the muni predictions are duplicated, route 37, but it's the prediction time off by seconds
                 function prediction(vehicle, offsetMinutes, tripTag) {
                     //return '<prediction vehicle="' + vehicle + '" epochTime="' + (epochMilliSeconds + offsetMinutes * 60000) + '" tripTag="' + tripTag + '"></prediction>'
                     return { vehicle: vehicle, epochTime: (epochMilliSeconds + offsetMinutes * 60000), tripTag: tripTag};
@@ -331,10 +331,10 @@ describe('feed sfmuni', function() {
                     return httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=' + stops.replace('|', '%7C'));
                 }
 
-                function predictionsForRoute(route, predictions) {
+                function predictionsForRoute(routeTag, predictions) {
                     var xb = new XB();
                     var direction = xb.wrap('body')
-                        .wrap('predictions', { routeTag: 'R1'})
+                        .wrap('predictions', { routeTag: routeTag})
                         .wrap('direction');
                     _.each(predictions, function(prediction) {
                         direction.wrap('prediction', prediction);
@@ -342,10 +342,10 @@ describe('feed sfmuni', function() {
                     return xb.build();
                 }
 
-                var r1Predictions = [ prediction('4444', 0, '44444') ];
+                var r1Predictions = [ prediction('4444', 0, '44444'), prediction('4444', 0.5, '44444') ];
                 var p1 = predictionsForRoute('R1', r1Predictions);
                 whenGetPredictionsForMultiStops('R1|ST1').respond(p1);
-                var r2Predictions = [ prediction('4444', 10, '44444') ];
+                var r2Predictions = [ prediction('4444', 10000, '44444') ];
                 var p2 = predictionsForRoute('R1', r2Predictions);
                 whenGetPredictionsForMultiStops('R1|ST2').respond(p2);
 
@@ -367,6 +367,40 @@ describe('feed sfmuni', function() {
                     expect(rides.length).toBe(1);
                 });
                 httpBackend.flush();
+            });
+        });
+        // yuck this is just to patch sfmuni duplicate predictions
+        describe('duplicate filter', function() {
+            var previousPrediction;
+            var nextPrediction;
+            beforeEach(function() {
+                previousPrediction = { vehicle: '', time: 0 };
+                nextPrediction = { vehicle: 'v1', time: 1 * 60 * 1000 };
+            });
+            it('does initial', function() {
+                var duplicate = SfMuni.duplicatenPredictionFilter(nextPrediction, previousPrediction);
+                expect(duplicate).toBeFalsy();
+                expect(previousPrediction.vehicle).toBe('v1');
+            });
+            it('distinct vehicle', function() {
+                previousPrediction.vehicle = 'v2';
+                var duplicate = SfMuni.duplicatenPredictionFilter(nextPrediction, previousPrediction);
+                expect(duplicate).toBeFalsy();
+                expect(previousPrediction.vehicle).toBe('v1');
+            });
+            it('distinct time', function() {
+                var previousPrediction = { vehicle: 'v1', time: 2 * 60 * 1000 };
+                var duplicate = SfMuni.duplicatenPredictionFilter(nextPrediction, previousPrediction);
+                expect(duplicate).toBeFalsy();
+                expect(previousPrediction.vehicle).toBe('v1');
+
+            });
+            it('merge time', function() {
+                var previousPrediction = { vehicle: 'v1', time: 0.5 * 60 * 1000 };
+                var duplicate = SfMuni.duplicatenPredictionFilter(nextPrediction, previousPrediction);
+                expect(duplicate).toBeTruthy();
+                expect(previousPrediction.vehicle).toBe('v1');
+
             });
         });
     });
