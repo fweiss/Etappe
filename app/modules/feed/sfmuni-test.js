@@ -230,6 +230,23 @@ describe('feed sfmuni', function() {
             httpBackend.flush();
         });
         describe('rides', function() {
+            var superSegment;
+            beforeEach(function() {
+                var w1 = Waypoint.createWaypoint('w1', 1, 2);
+                var w2 = Waypoint.createWaypoint('w2', 1, 2);
+                // todo agencyid defined
+                var s1 = Stop.createStop('stop1', 'sfmuni', 'R1', 'SID2222', 1, 2);
+                s1.setStopTag('ST1');
+                var originNexus = Nexus.createFromWaypoint(w1);
+                originNexus.addStop(s1);
+                var s2 = Stop.createStop('stop1', 'sfmuni', 'R1', 'SID2222', 1, 2);
+                s2.setStopTag('ST2');
+                var destinationNexus = Nexus.createFromWaypoint(w1);
+                destinationNexus.addStop(s2);
+
+                superSegment = Segment.createSegment(originNexus, destinationNexus);
+
+            });
             it('should get rides between two stops and correctly match vehicles by time', function() {
                 epochMilliSeconds = now.getTime();
                 xmlOrigin = '<body><predictions routeTag="55"><direction>'
@@ -349,20 +366,7 @@ describe('feed sfmuni', function() {
                 var p2 = predictionsForRoute('R1', r2Predictions);
                 whenGetPredictionsForMultiStops('R1|ST2').respond(p2);
 
-                var w1 = Waypoint.createWaypoint('w1', 1, 2);
-                var w2 = Waypoint.createWaypoint('w2', 1, 2);
-                // todo agencyid defined
-                var s1 = Stop.createStop('stop1', 'sfmuni', 'R1', 'SID2222', 1, 2);
-                s1.setStopTag('ST1');
-                var originNexus = Nexus.createFromWaypoint(w1);
-                originNexus.addStop(s1);
-                var s2 = Stop.createStop('stop1', 'sfmuni', 'R1', 'SID2222', 1, 2);
-                s2.setStopTag('ST2');
-                var destinationNexus = Nexus.createFromWaypoint(w1);
-                destinationNexus.addStop(s2);
-
-                var segment = Segment.createSegment(originNexus, destinationNexus);
-                SfMuni.getRidesForSegment(segment).then(function(response) {
+                SfMuni.getRidesForSegment(superSegment).then(function(response) {
                     var rides = response.data;
                     expect(rides.length).toBe(1);
                 });
