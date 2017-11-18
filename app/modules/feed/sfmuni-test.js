@@ -331,10 +331,12 @@ describe('feed sfmuni', function() {
                 }).toThrow(new Error('segment does not specify any stops'));
             });
             it('should get a ride for multi stops', function() {
-                var originXml = '<body><predictions routeTag="N"><direction>' + prediction('4444', 0, '44444') + '</direction></predictions></body>';
-                var destinationXml = '<body><predictions routeTag="N"><direction>' + prediction('4444', 10, '44444') + '</direction></predictions></body>';
-                httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C2222').respond(originXml);
-                httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=N%7C3333').respond(destinationXml);
+                whenGetPredictionsForMultiStops('N|2222').respond(predictionsForRoute('N', [
+                    { vehicle: '4444', tripTag: '44444', epochTime: offsetTimeMinutes(0) }
+                ]));
+                whenGetPredictionsForMultiStops('N|3333').respond(predictionsForRoute('N', [
+                    { vehicle: '4444', tripTag: '44444', epochTime: offsetTimeMinutes(10) }
+                ]));
 
                 var originNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w1', 1, 2));
                 var stop1 = Stop.createStop('s1', 'sfmuni', 'N', '2222', 1, 1);
@@ -346,12 +348,14 @@ describe('feed sfmuni', function() {
                 destinationNexus.addStop(stop2);
                 //var segment = { originWaypoint: { name: 'w1', stops: [ { route: 'N', stopTag: '2222' }]}, destinationWaypoint: { name: 'w2', stops: [ { route: 'N', stopTag: '3333' }]}};
                 var segment = Segment.createSegment(originNexus, destinationNexus);
+
                 SfMuni.getRidesForSegment(segment).then(function(response) {
                     var rides = response.data;
                     expect(rides.length).toBe(1);
                     // maybe need to test data here, but ought to unit test getRidesForSegmentPredictions()
                 });
 //                rootScope.$apply(); // is this only needed when there's no $httBackend calls?
+
                 httpBackend.flush();
             });
             it('should not be duplicate', function() {
