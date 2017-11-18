@@ -231,6 +231,22 @@ describe('feed sfmuni', function() {
         });
         describe('rides', function() {
             var superSegment;
+            function whenGetPredictionsForMultiStops(stops) {
+                return httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=' + stops.replace('|', '%7C'));
+            }
+            function predictionsForRoute(routeTag, predictions) {
+                var xb = new XB();
+                var direction = xb.wrap('body')
+                    .wrap('predictions', { routeTag: routeTag})
+                    .wrap('direction');
+                _.each(predictions, function(prediction) {
+                    direction.wrap('prediction', prediction);
+                });
+                return xb.build();
+            }
+            function offsetTimeMinutes(offsetMinutes) {
+                return (epochMilliSeconds + offsetMinutes * 60000);
+            }
             beforeEach(function() {
                 var w1 = Waypoint.createWaypoint('w1', 1, 2);
                 var w2 = Waypoint.createWaypoint('w2', 1, 2);
@@ -340,24 +356,6 @@ describe('feed sfmuni', function() {
             });
             it('should not be duplicate', function() {
                 // observed that the muni predictions are duplicated, route 37, but it's the prediction time off by seconds
-                function whenGetPredictionsForMultiStops(stops) {
-                    return httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=' + stops.replace('|', '%7C'));
-                }
-
-                function predictionsForRoute(routeTag, predictions) {
-                    var xb = new XB();
-                    var direction = xb.wrap('body')
-                        .wrap('predictions', { routeTag: routeTag})
-                        .wrap('direction');
-                    _.each(predictions, function(prediction) {
-                        direction.wrap('prediction', prediction);
-                    });
-                    return xb.build();
-                }
-
-                function offsetTimeMinutes(offsetMinutes) {
-                    return (epochMilliSeconds + offsetMinutes * 60000);
-                }
 
                 whenGetPredictionsForMultiStops('R1|ST1').respond(predictionsForRoute('R1', [
                     { vehicle: '4444', tripTag: '44444', epochTime: offsetTimeMinutes(0) },
@@ -371,6 +369,7 @@ describe('feed sfmuni', function() {
                     var rides = response.data;
                     expect(rides.length).toBe(1);
                 });
+
                 httpBackend.flush();
             });
         });
