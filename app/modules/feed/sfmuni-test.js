@@ -340,10 +340,6 @@ describe('feed sfmuni', function() {
             });
             it('should not be duplicate', function() {
                 // observed that the muni predictions are duplicated, route 37, but it's the prediction time off by seconds
-                function prediction(vehicle, offsetMinutes, tripTag) {
-                    //return '<prediction vehicle="' + vehicle + '" epochTime="' + (epochMilliSeconds + offsetMinutes * 60000) + '" tripTag="' + tripTag + '"></prediction>'
-                    return { vehicle: vehicle, epochTime: (epochMilliSeconds + offsetMinutes * 60000), tripTag: tripTag};
-                }
                 function whenGetPredictionsForMultiStops(stops) {
                     return httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictionsForMultiStops&stops=' + stops.replace('|', '%7C'));
                 }
@@ -359,12 +355,17 @@ describe('feed sfmuni', function() {
                     return xb.build();
                 }
 
-                var r1Predictions = [ prediction('4444', 0, '44444'), prediction('4444', 0.5, '44444') ];
-                var p1 = predictionsForRoute('R1', r1Predictions);
-                whenGetPredictionsForMultiStops('R1|ST1').respond(p1);
-                var r2Predictions = [ prediction('4444', 10000, '44444') ];
-                var p2 = predictionsForRoute('R1', r2Predictions);
-                whenGetPredictionsForMultiStops('R1|ST2').respond(p2);
+                function offsetTimeMinutes(offsetMinutes) {
+                    return (epochMilliSeconds + offsetMinutes * 60000);
+                }
+
+                whenGetPredictionsForMultiStops('R1|ST1').respond(predictionsForRoute('R1', [
+                    { vehicle: '4444', tripTag: '44444', epochTime: offsetTimeMinutes(0) },
+                    { vehicle: '4444', tripTag: '44444', epochTime: offsetTimeMinutes(0.5) }
+                ]));
+                whenGetPredictionsForMultiStops('R1|ST2').respond(predictionsForRoute('R1', [
+                    { vehicle: '4444', tripTag: '44444', epochTime: offsetTimeMinutes(10000) }
+                ]));
 
                 SfMuni.getRidesForSegment(superSegment).then(function(response) {
                     var rides = response.data;
