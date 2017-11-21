@@ -7,12 +7,8 @@
     "type": "git",
     "url": "https://github.com/fweiss/etappe"
   },
-  "dependencies": {
-    "angular": "1.6.6",
-    "http-server": "^0.10.0",
-    "underscore": "1.8.3"
-  },
   "devDependencies": {
+    "http-server": "^0.10.0",
     "angular-mocks": "1.6.6",
     "protractor": "^4.0.14",
     "mountebank": "^1.13.0",
@@ -25,6 +21,7 @@
     "jasmine-spec-reporter": "^4.2.1"
   },
   "scripts": {
+    "postinstall": "cd app && npm install",
     "prestart": "npm install http-server",
     "start": "http-server -a localhost -p 8080 -c-1",
     "pretest": "npm install karma-jasmine karma-spec-reporter karma-jasmine-html-reporter karma-chrome-launcher protractor",

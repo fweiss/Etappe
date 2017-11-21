@@ -25,8 +25,9 @@ task awsPublish() {
             passphrase: '',
             verbose: 'true'
         ) {
-            fileset(dir: 'src/main/webapp') {
+            fileset(dir: 'app') {
                 include(name: '**/*.*')
+                exclude(name: '**/*-test.*')
             }
         }
     }
