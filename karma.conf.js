@@ -2,20 +2,20 @@
 module.exports = function(config) {
     config.set({
 
-        basePath: './app',
+        basePath: '.',
 
         files: [
-            'modules/util/*.js',
-            '../node_modules/angular/angular.min.js',
-            '../node_modules/angular-mocks/angular-mocks.js',
-            '../node_modules/underscore/underscore.js',
-            '*.js',
-            'modules/feed/sfmuni.js',
-            'modules/feed/sfmuni-test.js',
-            'modules/feed/bart.js',
-            'modules/feed/bart-test.js',
-            'modules/plan/module.js',
-            'modules/plan/*.js'
+            'app/modules/util/*.js',
+            'app/node_modules/angular/angular.min.js',
+            'node_modules/angular-mocks/angular-mocks.js',
+            'app/node_modules/underscore/underscore.js',
+            'app/*.js',
+            'app/modules/feed/sfmuni.js',
+            'app/modules/feed/sfmuni-test.js',
+            'app/modules/feed/bart.js',
+            'app/modules/feed/bart-test.js',
+            'app/modules/plan/module.js',
+            'app/modules/plan/*.js'
         ],
 
         singleRun: true,
