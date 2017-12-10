@@ -4,8 +4,8 @@ angular.module('plan')
             $window.alert(message);
         }
     })
-    .controller('PlanController', [ '$scope', '$q', 'chart', 'sfMuni', 'bart', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'segment', 'waypoint',
-        function($scope, $q, chart, SfMuni, Bart, alert, Nexus, Itinerary, Trip, System, TripFolder, Segment, Waypoint) {
+    .controller('PlanController', [ '$scope', '$q', 'sfMuni', 'bart', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'waypoint',
+        function($scope, $q, SfMuni, Bart, alert, Nexus, Itinerary, Trip, System, TripFolder, Waypoint) {
 
         $scope.waypoints = [];
         $scope.carriers = [
