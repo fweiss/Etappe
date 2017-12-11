@@ -1,11 +1,15 @@
 angular.module('plan')
 .service('agency', function() {
 
-    function Agency(name) {
-        this.name = name
+    function Agency(name, api) {
+        this.name = name;
+        this.api = api;
     }
     Agency.prototype.getName = function() {
         return this.name;
+    };
+    Agency.prototype.getApi = function() {
+        return this.api;
     }
     return {
         createAgency: function(name, api) {
@@ -15,7 +19,7 @@ angular.module('plan')
             if (_.isUndefined(api)) {
                 throw new Error('createAgency: no api')
             }
-            return new Agency(name);
+            return new Agency(name, api);
         }
     }
 });

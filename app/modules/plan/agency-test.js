@@ -20,14 +20,19 @@ describe('domain agency', function() {
         });
         describe('value', function() {
             var agency;
+            var api;
             beforeEach(function() {
-                agency = Agency.createAgency('a1', {});
+                api = {};
+                agency = Agency.createAgency('a1', api);
             });
             it('is type Agency', function() {
                 expect(agency.constructor.name).toBe('Agency');
             });
             it('has name', function() {
                 expect(agency.getName()).toBe('a1');
+            });
+            it('has api', function() {
+                expect(agency.getApi()).toBe(api);
             });
         });
     });

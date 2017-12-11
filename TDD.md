@@ -231,6 +231,7 @@ not t5he fake input here, just trying to get back to green
 GREEN
 COMMIT
 but we just may have add code debt, dulicae in the test,m so let's be sanity
+REFACTOR
 for describe value, we can use a common fixture
 ```
             var agency;
@@ -241,6 +242,38 @@ for describe value, we can use a common fixture
 and we go back and use a common name
 GREEN
 COMMIT refactor remove duplicate code
+one cool thing is we can commit very safely (local) as we're keeping in GREEN
+but that was only te validator, let's get back to the value imp
+```
+            it('has api', function() {
+                expect(agency.getApi()).toBe({});
+            });
+```
+maybe {} is not brillinat, but it the simplest contract we can think of now
+RED - TypeError: agency.getApi is not a function
+so off the the getter, add a prototype, add params in the function and in createAgency
+```
+        describe('value', function() {
+            var agency;
+            var api;
+            beforeEach(function() {
+                api = {};
+                agency = Agency.createAgency('a1', api);
+            });
+            it('is type Agency', function() {
+                expect(agency.constructor.name).toBe('Agency');
+            });
+            it('has name', function() {
+                expect(agency.getName()).toBe('a1');
+            });
+            it('has api', function() {
+                expect(agency.getApi()).toBe(api);
+            });
+        });
+```
+we had to do a bit test refactoring to get the object compare to work
+GREEN
+COMMIT - add api to object
 
 
 
