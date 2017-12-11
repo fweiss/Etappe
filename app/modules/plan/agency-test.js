@@ -19,13 +19,15 @@ describe('domain agency', function() {
             });
         });
         describe('value', function() {
+            var agency;
+            beforeEach(function() {
+                agency = Agency.createAgency('a1', {});
+            });
             it('is type Agency', function() {
-                const agency = Agency.createAgency('a1', {});
                 expect(agency.constructor.name).toBe('Agency');
             });
             it('has name', function() {
-                const agency = Agency.createAgency('a2', {});
-                expect(agency.getName()).toBe('a2');
+                expect(agency.getName()).toBe('a1');
             });
         });
     });

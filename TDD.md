@@ -230,7 +230,17 @@ add the test
 not t5he fake input here, just trying to get back to green
 GREEN
 COMMIT
-but we just may have in
+but we just may have add code debt, dulicae in the test,m so let's be sanity
+for describe value, we can use a common fixture
+```
+            var agency;
+            beforeEach(function() {
+                agency = Agency.createAgency('a1', {});
+            });
+``
+and we go back and use a common name
+GREEN
+COMMIT refactor remove duplicate code
 
 
 
