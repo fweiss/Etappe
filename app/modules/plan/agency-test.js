@@ -19,7 +19,11 @@ describe('domain agency', function() {
             it('is type Agency', function() {
                 const agency = Agency.createAgency('a1');
                 expect(agency.constructor.name).toBe('Agency');
-            })
+            });
+            it('has name', function() {
+                const agency = Agency.createAgency('a2');
+                expect(agency.getName()).toBe('a2');
+            });
         });
     });
 });

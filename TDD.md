@@ -132,6 +132,45 @@ diwcuss the pattern
 again, just the slimest code to get gree
 GREEN
 COMMIT
+but we really don't have a name yet, so lets add that the the value section
+so let's add
+```
+            it('has name', function() {
+                const agency = Agency.createAgency('a2');
+                expect(agency.getName()).toBe('a2');
+            });
+
+```
+note that we used a differnt name, just in case the name was fake in the imple
+RED - TypeError: agency.getName is not a function
+OK, let's roll up our sleves and add the getter.
+Note how we don't add a getter until we have a getter test thazt's red
+```
+    Agency.prototype.getName = function() {
+        return this.name;
+    }
+
+```
+of course this is not enaoughm but we did get the previosu erro tresolved
+so more sleeves
+```
+    function Agency(name) {
+        this.name = name
+    }
+```
+and also in the constructore, add the parm:
+```
+       createAgency: function(name) {
+            if (_.isEmpty(name)) {
+                throw new Error('createAgency: no agency name')
+            }
+            return new Agency(name);
+        }
+
+```
+GREEN
+COMMIT - we added the name getter, yeash!
+
 
 
 
