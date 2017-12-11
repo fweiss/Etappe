@@ -87,6 +87,52 @@ we could commit at this point, as we have 1) a green 2) a slice of usefull behav
 The message can also describe why we're adding agency
 Important, don not refactor before the commit. The commit give s way to revert back to green if the refactor get tangled.
 
+we should turn back to what are we trying to do.
+the minimum is to have a name we can display in the UI and a api property for the backend.
+lets' start with the name in the consrtuctor
+```
+        describe('value', function() {
+            it('is type Agency', function() {
+                const agency = Agency.createAgency('a1');
+                expect(agency.constructor.name).toBe('Agency');
+            })
+        });
+
+```
+RED - Error: createAgency: no agency name
+well, even though we passed a name, the implementation is just faking an exception to meet our first expectation
+so lets mod the createAgency method to meet the new expect and the old one too
+we  use ths simplist and us underscare to help
+```
+        createAgency: function(name) {
+            if (_.isEmpty(name)) {
+                throw new Error('createAgency: no agency name')
+            }
+        }
+```
+RED - TypeError: Cannot read property 'constructor' of undefined
+well, our createAgency is stiull pretty naive, so lets add a bit
+diwcuss the pattern
+``'
+.service('agency', function() {
+
+    function Agency() {
+    }
+
+    return {
+        createAgency: function(name) {
+            if (_.isEmpty(name)) {
+                throw new Error('createAgency: no agency name')
+            }
+            return new Agency();
+        }
+    }
+});
+```
+again, just the slimest code to get gree
+GREEN
+COMMIT
+
 
 
 Refactor: extract common exception helper

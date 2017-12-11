@@ -15,5 +15,11 @@ describe('domain agency', function() {
                 expect(function() { Agency.createAgency(); }).toThrow(expectedException('no agency name'));
             });
         });
+        describe('value', function() {
+            it('is type Agency', function() {
+                const agency = Agency.createAgency('a1');
+                expect(agency.constructor.name).toBe('Agency');
+            })
+        });
     });
 });
