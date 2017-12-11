@@ -170,6 +170,68 @@ and also in the constructore, add the parm:
 ```
 GREEN
 COMMIT - we added the name getter, yeash!
+lets review the test case so far:
+```
+describe('domain agency', function() {
+    var Agency;
+
+    beforeEach(module('plan'));
+    beforeEach(inject(function(agency) {
+        Agency = agency;
+    }));
+
+    describe('create', function() {
+        describe('validation error', function() {
+            function expectedException(message) {
+                return new Error('createAgency: ' + message);
+            }
+            it('when no name', function() {
+                expect(function() { Agency.createAgency(); }).toThrow(expectedException('no agency name'));
+            });
+        });
+        describe('value', function() {
+            it('is type Agency', function() {
+                const agency = Agency.createAgency('a1');
+                expect(agency.constructor.name).toBe('Agency');
+            });
+            it('has name', function() {
+                const agency = Agency.createAgency('a2');
+                expect(agency.getName()).toBe('a2');
+            });
+        });
+    });
+});
+
+```
+we have three feature implemented. each is valuable towards the goal. each has been TDD so code coverage is 100%
+maybe you'd like to check it this point?
+hmm, not workingm, screen shot would be nice
+we also need the api so let's first add a validator
+```
+          it('when no api', function() {
+                expect(function() { Agency.createAgency('a3'); }).toThrow(expectedException('no api'));
+            });
+
+```
+again real simple
+RED - Expected function to throw an exception.
+add the test
+```
+            if (_.isUndefined(api)) {
+                throw new Error('createAgency: no api')
+            }
+ ```
+ RED - Error: createAgency: no api
+ this is in two places, in describe 'value'
+ let's add the extra constructor param, in two places
+ ```
+                 const agency = Agency.createAgency('a1', {});
+```
+not t5he fake input here, just trying to get back to green
+GREEN
+COMMIT
+but we just may have in
+
 
 
 
