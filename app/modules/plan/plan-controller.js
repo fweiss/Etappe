@@ -12,6 +12,7 @@ angular.module('plan')
             { name: 'BART', api: Bart },
             { name: 'SFMUNI', api: SfMuni }
         ];
+        $scope.originNexus = [];
         $scope.itinerary = null;
         $scope.xxxselection = [];
         $scope.xxxselectedAgencies = function() {
