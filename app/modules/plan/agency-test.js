@@ -1,4 +1,4 @@
-fdescribe('domain agency', function() {
+describe('domain agency', function() {
     var Agency;
 
     beforeEach(module('plan'));
