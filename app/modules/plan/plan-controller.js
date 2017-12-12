@@ -9,10 +9,29 @@ angular.module('plan')
 
         $scope.waypoints = [];
         $scope.carriers = [
-            { name: 'BART', api: Bart, selected: false },
-            { name: 'SFMUNI', api: SfMuni, selected: false }
+            { name: 'BART', api: Bart },
+            { name: 'SFMUNI', api: SfMuni }
         ];
         $scope.itinerary = null;
+        $scope.selection = [];
+        $scope.selectedAgencies = function() {
+            return filterFilter($scope.carriers, { selected: true });
+        };
+        $scope.$watch('carriers|filter:{selected:true}', function (nv) {
+            $scope.selection = nv.map(function (agency) {
+                var api = agency.api;
+                api.getAllStops().then(function(response) {
+                    Nexus.mergeStops(response.data);
+                    var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
+                    $scope.originNexus = nexuses;
+                    $scope.destinationNexus = nexuses;
+                    $scope.destinationNexus = nexuses;
+                    $scope.disableOrigin = false;
+                    $scope.disableDestination = false;
+                });
+                return agency.name;
+            });
+        }, true);
 
         $scope.nextWaypointChanged = function() {
             var nexus = $scope.nextWaypointSelect;
@@ -76,26 +95,6 @@ angular.module('plan')
         //$scope.disableOrigin = true;
         //$scope.disableDestination = true;
         $scope.rides = null;
-
-        $scope.selection = [];
-        $scope.selectedAgencies = function() {
-            return filterFilter($scope.carriers, { selected: true });
-        };
-        $scope.$watch('carriers|filter:{selected:true}', function (nv) {
-            $scope.selection = nv.map(function (agency) {
-                var api = agency.api;
-                api.getAllStops().then(function(response) {
-                    Nexus.mergeStops(response.data);
-                    var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
-                    $scope.originNexus = nexuses;
-                    $scope.destinationNexus = nexuses;
-                    $scope.destinationNexus = nexuses;
-                    $scope.disableOrigin = false;
-                    $scope.disableDestination = false;
-                });
-                return agency.name;
-            });
-        }, true);
 
         $scope.ridesRefresh = function() {
             refreshRides($scope.itinerary);
