@@ -13,25 +13,45 @@ angular.module('plan')
             { name: 'SFMUNI', api: SfMuni }
         ];
         $scope.itinerary = null;
-        $scope.selection = [];
-        $scope.selectedAgencies = function() {
+        $scope.xxxselection = [];
+        $scope.xxxselectedAgencies = function() {
             return filterFilter($scope.carriers, { selected: true });
         };
-        $scope.$watch('carriers|filter:{selected:true}', function (nv) {
-            $scope.selection = nv.map(function (agency) {
-                var api = agency.api;
-                api.getAllStops().then(function(response) {
-                    Nexus.mergeStops(response.data);
-                    var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
-                    $scope.originNexus = nexuses;
-                    $scope.destinationNexus = nexuses;
-                    $scope.destinationNexus = nexuses;
-                    $scope.disableOrigin = false;
-                    $scope.disableDestination = false;
-                });
-                return agency.name;
+        //$scope.$watch('carriers|filter:{selected:true}', function (nv) {
+        //    $scope.xxxselection = nv.map(function (agency) {
+        //        var api = agency.api;
+        //        api.getAllStops().then(function(response) {
+        //            Nexus.mergeStops(response.data);
+        //            var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
+        //            $scope.originNexus = nexuses;
+        //            $scope.destinationNexus = nexuses;
+        //            $scope.destinationNexus = nexuses;
+        //            $scope.disableOrigin = false;
+        //            $scope.disableDestination = false;
+        //        });
+        //        return agency.name;
+        //    });
+        //}, true);
+        $scope.$watch('carriers|filter:{selected:true}', function (agencies) {
+            _.each(agencies, function(agency) {
+                updateNexusForAgency(agency);
             });
         }, true);
+
+        function updateNexusForAgency(agency) {
+            var api = agency.api;
+            api.getAllStops().then(function(response) {
+                Nexus.mergeStops(response.data);
+                var nexuses = _.sortBy(Nexus.getMergedNexuses(), function (nexus) {
+                    return nexus.getName();
+                });
+                $scope.originNexus = nexuses;
+                //$scope.destinationNexus = nexuses;
+                //$scope.destinationNexus = nexuses;
+                //$scope.disableOrigin = false;
+                //$scope.disableDestination = false;
+            });
+        };
 
         $scope.nextWaypointChanged = function() {
             var nexus = $scope.nextWaypointSelect;
