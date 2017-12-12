@@ -1,4 +1,4 @@
-describe('domain agency', function() {
+fdescribe('domain agency', function() {
     var Agency;
 
     beforeEach(module('plan'));
@@ -34,6 +34,14 @@ describe('domain agency', function() {
             it('has api', function() {
                 expect(agency.getApi()).toBe(api);
             });
+        });
+    });
+    describe('gets', function() {
+        // eventually move to config?
+        it('agencies', function() {
+            const agencies = Agency.getAll();
+            expect(agencies.length).toBe(2);
+            expect(agencies[0].name).toBe('BART');
         });
     });
 });

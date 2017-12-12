@@ -1,5 +1,5 @@
 angular.module('plan')
-.service('agency', function() {
+.service('agency', [ 'sfMuni', 'bart', function(SfMuni, Bart) {
 
     function Agency(name, api) {
         this.name = name;
@@ -10,7 +10,7 @@ angular.module('plan')
     };
     Agency.prototype.getApi = function() {
         return this.api;
-    }
+    };
     return {
         createAgency: function(name, api) {
             if (_.isEmpty(name)) {
@@ -20,6 +20,12 @@ angular.module('plan')
                 throw new Error('createAgency: no api')
             }
             return new Agency(name, api);
+        },
+        getAll: function() {
+            return [
+                this.createAgency('BART', Bart),
+                this.createAgency('SFMUNI', SfMuni)
+            ];
         }
     }
-});
+}]);

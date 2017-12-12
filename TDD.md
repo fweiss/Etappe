@@ -274,6 +274,48 @@ so off the the getter, add a prototype, add params in the function and in create
 we had to do a bit test refactoring to get the object compare to work
 GREEN
 COMMIT - add api to object
+we can review the service and see it's quite succinct.
+the test has five assertion. think about them are they essential?
+- needs a name
+- needs an api
+- is type Agency
+- has name
+- has api
+also note how the spec report describes this exactly!
+stats LOC
+service: 25
+test: 39
+next we want to add a collection function
+it will be provided by a configuration to the service
+```
+```
+RED - TypeError: Agency.getAll is not a function
+ok, so write the getter and return a fake value
+```
+        getAll: function() {
+            return [ new Agency('a4, {}') ];
+        }
+```
+GREEN
+note how if we left off the parms, an erro would be thrown
+well, actual             return [ new Agency('a4, {}') ];
+ is incorrect. lets; try the create methos
+ ```
+             return [ this.createAgency('a4, {}') ];
+
+ ```
+ RED - Error: createAgency: no api
+ ok, lets; fix that
+ ```            return [ this.createAgency('a4', {}) ];
+```
+GREEN
+time to commit? ech, we haven't reall gotten sometwher
+```
+            expect(agencies[0].name).toBe('remarkable');
+```
+we're chainin expects here - jusdgement call
+RED - Expected 'a4' to be 'remarkable'
+so now we want to create an injectibe config fixture
 
 
 
