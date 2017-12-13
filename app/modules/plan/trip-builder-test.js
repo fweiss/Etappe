@@ -30,18 +30,30 @@ describe('trip builder', function() {
     describe('for one agency', function() {
         var s1;
         beforeEach(function() {
-            s1 = Stop.createStop('n', 'a', 'r', 's', 1, 2);
-            mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ s1 ] }));
+            s1 = Stop.createStop('n1', 'a', 'r1', 's1', 1, 2);
+            s2 = Stop.createStop('n1', 'a', 'r1', 's1', 1, 3);
+            mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ s1, s2 ] }));
 
             // 1 = sfmuni
             scope.carriers[1].selected = true;
             scope.$digest();
         });
         it('has waypoints', function() {
-            expect(scope.originNexus.length).toBe(1);
+            expect(scope.originNexus.length).toBe(2);
         });
         describe('select waypoint', function() {
-
+            it('one waypoint', function() {
+                scope.nextWaypointSelect = s1;
+                scope.nextWaypointChanged();
+                expect(scope.waypoints.length).toBe(1);
+            });
+            it('two waypoint', function() {
+                scope.nextWaypointSelect = s1;
+                scope.nextWaypointChanged();
+                scope.nextWaypointSelect = s2;
+                scope.nextWaypointChanged();
+                expect(scope.waypoints.length).toBe(2);
+            });
         });
     });
     describe('add one waypoint', function() {
