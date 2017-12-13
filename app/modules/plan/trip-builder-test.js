@@ -28,8 +28,10 @@ describe('trip builder', function() {
         it('can extend', function() {});
     });
     describe('for one agency', function() {
+        var s1;
         beforeEach(function() {
-            mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ Stop.createStop('n', 'a', 'r', 's', 1, 2) ] }));
+            s1 = Stop.createStop('n', 'a', 'r', 's', 1, 2);
+            mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ s1 ] }));
 
             // 1 = sfmuni
             scope.carriers[1].selected = true;
@@ -37,6 +39,9 @@ describe('trip builder', function() {
         });
         it('has waypoints', function() {
             expect(scope.originNexus.length).toBe(1);
+        });
+        describe('select waypoint', function() {
+
         });
     });
     describe('add one waypoint', function() {
