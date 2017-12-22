@@ -25,7 +25,7 @@ describe('domain itinerary', function() {
     describe('create', function() {
         describe('validation error', function() {
             var e1 = new Error('createItinerary: trip is required');
-            it('should require trip', function() {
+            it('when no trip given', function() {
                 expect(function() { Itinerary.createItinerary(); }).toThrow(e1);
             });
         });
