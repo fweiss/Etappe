@@ -14,25 +14,6 @@ angular.module('plan')
         ];
         $scope.originNexus = [];
         $scope.itinerary = null;
-        $scope.xxxselection = [];
-        $scope.xxxselectedAgencies = function() {
-            return filterFilter($scope.carriers, { selected: true });
-        };
-        //$scope.$watch('carriers|filter:{selected:true}', function (nv) {
-        //    $scope.xxxselection = nv.map(function (agency) {
-        //        var api = agency.api;
-        //        api.getAllStops().then(function(response) {
-        //            Nexus.mergeStops(response.data);
-        //            var nexuses = _.sortBy(Nexus.getMergedNexuses(), function(nexus) { return nexus.getName(); });
-        //            $scope.originNexus = nexuses;
-        //            $scope.destinationNexus = nexuses;
-        //            $scope.destinationNexus = nexuses;
-        //            $scope.disableOrigin = false;
-        //            $scope.disableDestination = false;
-        //        });
-        //        return agency.name;
-        //    });
-        //}, true);
         $scope.$watch('carriers|filter:{selected:true}', function (agencies) {
             _.each(agencies, function(agency) {
                 updateNexusForAgency(agency);
@@ -47,12 +28,8 @@ angular.module('plan')
                     return nexus.getName();
                 });
                 $scope.originNexus = nexuses;
-                //$scope.destinationNexus = nexuses;
-                //$scope.destinationNexus = nexuses;
-                //$scope.disableOrigin = false;
-                //$scope.disableDestination = false;
             });
-        };
+        }
 
         $scope.nextWaypointChanged = function() {
             var nexus = $scope.nextWaypointSelect;
@@ -60,24 +37,10 @@ angular.module('plan')
             $scope.waypoints.push(waypoint);
         };
         $scope.createTrip = function() {
-            //$scope.trip = Trip.createTrip($scope.waypoints[0], $scope.waypoints[1]);
             $scope.trip = Trip.createFromWaypoints($scope.waypoints);
             $scope.createItineraryFromTrip($scope.trip);
-            //$scope.refreshItineraryRides(function() {
-            //    var now = new Date();
-            //    var then = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-            //    $scope.itinerary.setSpan(now, then);
-            //});
             $scope.ridesRefresh();
         };
-
-        //$scope.createTripFromNexusSelect = function() {
-        //    var n1 = $scope.originNexusSelect;
-        //    var n2 = $scope.destinationNexusSelect;
-        //    var w1 = Waypoint.createWaypoint(n1.getName(), n1.getLat(), n1.getLon());
-        //    var w2 = Waypoint.createWaypoint(n2.getName(), n2.getLat(), n2.getLon());
-        //    $scope.trip = new Trip.createTrip(w1, w2);
-        //};
         $scope.createItineraryFromTrip = function(trip) {
             var nexuses = _.map(trip.getWaypoints(), function(waypoint) {
                 return System.findNexus(waypoint);
@@ -113,13 +76,11 @@ angular.module('plan')
                 });
             });
         };
-        //$scope.disableOrigin = true;
-        //$scope.disableDestination = true;
         $scope.rides = null;
 
         $scope.ridesRefresh = function() {
             refreshRides($scope.itinerary);
-        }
+        };
         function refreshRides(itinerary) {
             var segments = itinerary.getSegments();
             $q.all(_.map(segments, function(segment) {
