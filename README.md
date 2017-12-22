@@ -94,7 +94,6 @@ If you are using IntelliJ, here are some additional setup steps for running the 
 
 #### Plugins
 IntelliJ has plugins which make TDD with Karma and Protractor highly productive.
-Install Karma plugin
 
 The IntelliJ Karma plugin makes Javascript testing really nice. First make sure you have the Karma plugin installed.
 If not, it's easy to do:
