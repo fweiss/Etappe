@@ -91,7 +91,13 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="debug">
+            <div class="view-toggle">
+                <label-for ref="show-debug">
+                    <span>Show Debug</span>
+                    <input type="checkbox" ng-model="showDebug"/>
+                </label-for>
+            </div>
+            <div class="debug" ng-show="showDebug">
                 <table id="plan">
                     <thead>
                     <div ng-bind="currentPlan.name"></div>
