@@ -4,14 +4,11 @@ angular.module('plan')
             $window.alert(message);
         }
     })
-    .controller('PlanController', [ '$scope', '$q', 'sfMuni', 'bart', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'waypoint',
-        function($scope, $q, SfMuni, Bart, alert, Nexus, Itinerary, Trip, System, TripFolder, Waypoint) {
+    .controller('PlanController', [ '$scope', '$q', 'sfMuni', 'alert', 'nexus', 'itinerary', 'trip', 'system', 'tripfolder', 'waypoint', 'agency',
+        function($scope, $q, SfMuni, alert, Nexus, Itinerary, Trip, System, TripFolder, Waypoint, Agency) {
 
         $scope.waypoints = [];
-        $scope.carriers = [
-            { name: 'BART', api: Bart },
-            { name: 'SFMUNI', api: SfMuni }
-        ];
+        $scope.carriers = Agency.getAll()
         $scope.originNexus = [];
         $scope.itinerary = null;
         $scope.$watch('carriers|filter:{selected:true}', function (agencies) {
