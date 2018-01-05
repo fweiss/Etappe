@@ -5,11 +5,12 @@ describe('trip builder', function() {
     var Stop;
     var $q;
     beforeEach(module('plan'));
-    beforeEach(inject(function($rootScope, $controller, _$q_, _stop_) {
+    beforeEach(inject(function($rootScope, $controller, _$q_, _stop_, agency) {
         $q = _$q_;
         Stop = _stop_;
         mockSfMuni = jasmine.createSpyObj('mockSfMuni', [ 'getAllStops' ]);
         scope = $rootScope.$new();
+        this.Agency = agency
         $controller('PlanController', { $scope: scope, sfMuni: mockSfMuni });
     }));
     describe('initial', function() {
@@ -34,8 +35,8 @@ describe('trip builder', function() {
             s2 = Stop.createStop('n1', 'a', 'r1', 's1', 1, 3);
             mockSfMuni.getAllStops.and.returnValue($q.when({ data: [ s1, s2 ] }));
 
-            // 1 = sfmuni
-            scope.carriers[1].selected = true;
+            scope.carriers = [ this.Agency.createAgency('SFMUNI', mockSfMuni )]
+            scope.carriers[0].selected = true;
             scope.$digest();
         });
         it('has waypoints', function() {

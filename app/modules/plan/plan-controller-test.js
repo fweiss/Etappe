@@ -9,6 +9,7 @@ describe('plan controller', function() {
     var alertSpy;
     var mockSfMuni;
     var mockBart;
+    var mockAgency;
     var $q;
     var Itinerary;
     var System;
@@ -22,7 +23,7 @@ describe('plan controller', function() {
             $provide.value('alert', alertSpy);
         });
     });
-    beforeEach(inject(function($rootScope, $injector, $controller, nexus, itinerary,  _waypoint_, _trip_, _$q_, _system_, _stop_, ride) {
+    beforeEach(inject(function($rootScope, $injector, $controller, nexus, itinerary,  _waypoint_, _trip_, _$q_, _system_, _stop_, ride, _agency_) {
         scope = $rootScope.$new();
         System = _system_;
         Trip = _trip_;
@@ -33,9 +34,14 @@ describe('plan controller', function() {
         Ride = ride;
         $httpBackend = $injector.get('$httpBackend');
         $q = _$q_;
+
         mockSfMuni = jasmine.createSpyObj('mockSfMuni', [ 'getRidesForSegment', 'getAllStops' ]);
         mockBart = jasmine.createSpyObj('mockBart', [ 'getRidesForSegment', 'getAllStops' ]);
-        $controller('PlanController', { $scope: scope, sfMuni: mockSfMuni, bart: mockBart });
+        mockAgency = jasmine.createSpyObj('mockAgency', [ 'getAll' ]);
+
+        mockAgency.getAll.and.returnValue([{ name: 'SFMUNI', api: mockSfMuni }, { name: 'BART', api: mockBart } ]);
+
+        $controller('PlanController', { $scope: scope, sfMuni: mockSfMuni, bart: mockBart, agency: mockAgency });
         requestHandler = $httpBackend.whenGET(new RegExp('.*'));
 
     }));
