@@ -8,10 +8,10 @@ angular.module('plan')
         function($scope, $q, SfMuni, alert, Nexus, Itinerary, Trip, System, TripFolder, Waypoint, Agency) {
 
         $scope.waypoints = [];
-        $scope.carriers = Agency.getAll()
+        $scope.agencies = Agency.getAll()
         $scope.originNexus = [];
         $scope.itinerary = null;
-        $scope.$watch('carriers|filter:{selected:true}', function (agencies) {
+        $scope.$watch('agencies|filter:{selected:true}', function (agencies) {
             _.each(agencies, function(agency) {
                 updateNexusForAgency(agency);
             });
@@ -104,7 +104,7 @@ angular.module('plan')
             };
             var agencies = segment.getAgencies();
             var theAgency = agencies.length ? agencies[0].toUpperCase() : '';
-            var agency = _.findWhere($scope.carriers, { name: theAgency});
+            var agency = _.findWhere($scope.agencies, { name: theAgency});
             return agency || nullAgency;
         }
 }]);

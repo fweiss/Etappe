@@ -1,7 +1,7 @@
 # Etappe
 
 Etappe is a browser app for planning a metro transit trip using one or more
-transit carriers. There are many strategies for creating an optimal trip. Some 
+transit agencies. There are many strategies for creating an optimal trip. Some 
 of the optimization criteria are:
 
 * departure time
@@ -9,11 +9,11 @@ of the optimization criteria are:
 * number of layovers (transfers)
 * trip duration
 * layover duration
-* transit carriers (allow/deny)
+* transit agencies (allow/deny)
 * fare cost
 * ...and so on
 
-Many transit carriers (agencies) publish route information and real-time
+Many transit agencies (agencies) publish route information and real-time
 schedules via web service interfaces (APIs). Although there is a standard
 protocol, it does not appear to provide the real time data this application
 requires.
