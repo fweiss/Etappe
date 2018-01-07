@@ -29,5 +29,8 @@ describe('etappe', function() {
                 expect(element(by.css('#savedTrips li.waypoint')).getText()).toEqual('16th St & Mission St')
             })
         })
+        describe('save', function() {
+
+        })
     })
 })

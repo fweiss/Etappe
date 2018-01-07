@@ -35,27 +35,6 @@
             </div>
             <div><button ng-click="ridesRefresh()">Refresh</button></div>
             <canvas utt-rides width="1200" height="100"></canvas>
-            <div>
-                <button id="showSavedTrips" ng-click="showSavedTrips()">Saved Trips</button>
-                <div id="savedTrips">
-                    <ol>
-                        <li ng-repeat="trip in savedTrips" ng-click="selectSavedTrip(trip)" ng-class="{ selected: trip.id === currentTrip.id, trip: true }">
-                            <span>{{ trip.getName() }}</span>
-                            <ol>
-                                <li ng-repeat="waypoint in trip.getWaypoints()" ng-class="{ waypoint: true }">{{ waypoint.name }}</li>
-                            </ol>
-                        </li>
-                    </ol>
-                </div>
-                <div>
-                    <button id="planSave" ng-click="planSave()">save</button>
-                    <input type="text" ng-model="planSaveName"/>
-                </div>
-                <div>
-                    <button id="planRestore" ng-click="planRestore()">Restore</button>
-                    <input type="text" ng-model="planRestoreName"/>
-                </div>
-            </div>
             <table id="trip">
                 <caption>{{trip.name}}</caption>
                 <tbody>
@@ -91,6 +70,23 @@
                     </tr>
                 </tbody>
             </table>
+            <div>
+                <button id="showSavedTrips" ng-click="showSavedTrips()">Saved Trips</button>
+                <div id="savedTrips">
+                    <ol>
+                        <li ng-repeat="trip in savedTrips" ng-click="selectSavedTrip(trip)" ng-class="{ selected: trip.id === currentTrip.id, trip: true }">
+                            <span>{{ trip.getName() }}</span>
+                            <ol>
+                                <li ng-repeat="waypoint in trip.getWaypoints()" ng-class="{ waypoint: true }">{{ waypoint.name }}</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </div>
+                <div>
+                    <button id="planSave" ng-click="planSave()">save</button>
+                    <input type="text" ng-model="planSaveName"/>
+                </div>
+            </div>
             <div class="view-toggle">
                 <label-for ref="show-debug">
                     <span>Show Debug</span>
