@@ -8,6 +8,7 @@ angular.module('plan')
         function($scope, $q, SfMuni, alert, Nexus, Itinerary, Trip, System, TripFolder, Waypoint, Agency) {
 
         $scope.waypoints = [];
+        $scope.trip = null
         $scope.agencies = Agency.getAll()
         $scope.originNexus = [];
         $scope.itinerary = null;

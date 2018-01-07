@@ -30,6 +30,9 @@ describe('etappe', function() {
             })
         })
         describe('save', function() {
+            it('disabled without trip', function() {
+                expect(element(by.id('saveTrip')).isEnabled()).toBe(false)
+            })
 
         })
     })
