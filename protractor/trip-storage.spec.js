@@ -29,11 +29,21 @@ describe('etappe', function() {
                 expect(element(by.css('#savedTrips li.waypoint')).getText()).toEqual('16th St & Mission St')
             })
         })
-        describe('save', function() {
+        xdescribe('save', function() {
             it('disabled without trip', function() {
                 expect(element(by.id('saveTrip')).isEnabled()).toBe(false)
             })
-
+            describe('a trip', function() {
+                beforeEach(function() {
+                    element(by.css('#waypointSelector .field input[value=SFMUNI]')).click();
+                    element(by.cssContainingText('#nextWaypointSelect option', '16th St and Mission')).click();
+                    element(by.cssContainingText('#nextWaypointSelect option', '16th St and Harrison')).click();
+                    element(by.css('#createTrip')).click();
+                })
+                it('enabled', function() {
+                    expect(element(by.id('saveTrip')).isEnabled()).toBe(true)
+                })
+            })
         })
     })
 })
