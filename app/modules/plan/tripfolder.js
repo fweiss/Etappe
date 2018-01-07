@@ -1,5 +1,6 @@
 angular.module('plan')
-    .service('tripfolder', [ 'trip', 'waypoint', 'initSavedTrips', function(Trip, Waypoint, initSavedTrips) {
+    .service('tripfolder', [ 'trip', 'waypoint', 'initSavedTrips', '$window', function(Trip, Waypoint, initSavedTrips, $window) {
+        // window.localStorage.setItem("savedTrips", [ { id: 1, tripName: "saved trip 1" } ])
         function deserialize(data) {
             try {
                 var origin = Waypoint.createWaypoint(data.origin.waypointName, data.origin.lat, data.origin.lon);
@@ -19,9 +20,15 @@ angular.module('plan')
 
         return {
             deserialize: deserialize,
-            list: function() {
+            xlist: function() {
                 var sTrips = initSavedTrips;
                 return _.map(sTrips, function(sTrip) {
+                    return deserialize(sTrip);
+                });
+            },
+            list: function() {
+                var sTrips = window.localStorage.getItem('savedTrips');
+                return _.map(JSON.parse(sTrips), function(sTrip) {
                     return deserialize(sTrip);
                 });
             }
