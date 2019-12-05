@@ -18,7 +18,7 @@
     "karma-junit-reporter": "^1.2.0",
     "karma-spec-reporter": "0.0.31",
     "mountebank": "^1.13.0",
-    "protractor": "^4.0.14",
+    "protractor": "^5.4.2",
     "request": "^2.67.0"
   },
   "scripts": {
