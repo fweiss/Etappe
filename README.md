@@ -95,6 +95,8 @@ If you are using IntelliJ, here are some additional setup steps for running the 
 #### Plugins
 IntelliJ has plugins which make TDD with Karma and Protractor highly productive.
 
+- Karma
+
 The IntelliJ Karma plugin makes Javascript testing really nice. First make sure you have the Karma plugin installed.
 If not, it's easy to do:
 
@@ -109,7 +111,6 @@ Once you have installed the plugins setup the following run configurations:
 - protractor
 
 protractor tricks for running in jenkins
-selenium driver jar issue
 
 #### Running the tests
 Launch each of the four tools and pin them in the Run window. This includes the web server and mountebank, which will
@@ -129,11 +130,45 @@ run configrations for:
 details here
 karma, http server, mountebank, protractor
 
-###
+#### Karma Test Run Configuration
+Configure Karma with the "Run/Debug Configurations" window.
 
-Http server, new run configuration, node, javascript=node_modules/http-server
+- Add Karma
+- Configuration file: ./karma.conf.js
+
+#### Http server run configuration
+Configure an Http server with the "Run/Debug Configurations" window.
+
+- Add Node.js
+- Name: Server
+- Javascript file: node_modules/http-server/bin/http-server.js
+- OK
+- Run
+- Pin in Run panel
 
 Then you can go to http://localhost:8080/app/index.html
+
+#### Mountebank mock transit service APIs
+
+- Add Node.js
+- Name: Mountebank
+- Javascript file: node_modules/mountebank/mb
+- Save
+- Run
+- Pin
+
+#### Protractor
+- Add Protractor (not Kotlin)
+- Name: Protractor
+- Configuration file: ./protractor/config.js
+- OK
+- Run
+
+selenium driver jar issue
+
+- node_modules/protractor/bin/webdriver-manager update
+
+may need to update chromedriver: https://www.swtestacademy.com/install-chrome-driver-on-mac/
 
 ### BDD with Protractor and IntellIJ
 
