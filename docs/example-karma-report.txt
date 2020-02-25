@@ -1,0 +1,334 @@
+test fixture
+    xml builder
+      emits
+        ✓ single tag
+        ✓ nested tags
+        ✓ an attribute
+        ✓ two attributes
+        ✓ two children
+
+  feed sfmuni
+    parser
+      ✓ should accept special characters
+    stops
+      ✓ should get stops for route
+      ✓ should sort by name
+      - should remove duplicates
+      ✓ details
+      - should get allstops
+      nexuses
+        ✓ should get all
+        ✓ should get with route, direction, tag
+        ✓ should merge stops for permuted intersection
+    predictions
+      ✓ should get predictions for stop id
+      ✓ should get rides between two stops
+      ✓ should get for multistops
+      rides
+        ✓ should get rides between two stops and correctly match vehicles by time
+        ✓ should error for no stops
+        - should error for backend error
+        ✓ error for no sfmuni origin stops
+        ✓ error for no sfmuni destination stops
+        ✓ should get a ride for multi stops
+        ✓ should not be duplicate
+      duplicate filter
+        ✓ does initial
+        ✓ distinct vehicle
+        ✓ distinct time
+        ✓ merge time
+    utilities
+      permute stop streets
+        with &
+          ✓ should match
+          ✓ should flip
+
+  feed bart
+    ✓ get all stops
+    ✓ get rides for segment
+
+  domain agency
+    create
+      validation error
+        ✓ when no name
+        ✓ when no api
+      value
+        ✓ is type Agency
+        ✓ has name
+        ✓ has api
+    gets
+      ✓ agencies
+
+  itinerary chart
+    canvas properties
+      ✓ noop on empty span
+    canvas height
+      ✓ for one segment
+      ✓ for two segments
+    time ticks
+      lines
+        for one segment
+          ✓ draws major
+          ✓ should draw a tick
+          ✓ should draw all ticks for span
+          ✓ should draw minor tick
+          ✓ should draw major tick
+        for two segments
+          ✓ draws major
+      legend
+        ✓ should draw at 15 minute mark
+    waypoint legend
+      ✓ draw first
+      ✓ draw second
+      ✓ draw third
+    rides
+      fields
+        ✓ should draw two fields
+        ✓ should draw first offset field
+        ✓ should draw second offset field
+      paths
+        ✓ first segment first ride
+        ✓ first segment second ride
+        ✓ second segment first ride
+    1200 x 200
+      - should have ticks for entire length
+
+  plan date
+    ✓ should format phantomjs
+    ✓ should format others
+
+  domain itinerary
+    create
+      validation error
+        ✓ when no trip given
+      value
+        ✓ has trip
+        ✓ can create with segments
+        - error when trip waypoints do not match segments
+        ✓ has empty span
+        ✓ can set span
+    segments
+      ✓ should have two segments for one inner waypoint
+      ✓ should have segment with empty rides
+    create segments from nexuses
+      validation error
+        ✓ when no nexuses given
+        ✓ when nexuses not Array type
+        ✓ when nexuses less than 2
+        ✓ when nexuses not Nexus type
+        ✓ when duplicated adjacent
+      values
+        ✓ has one segment of type Segment
+        ✓ has two segment
+        agencies
+          ✓ are from matching stops
+
+  domain nexus
+    create
+      ✓ should have Nexus type
+      ✓ should have canonical name
+      ✓ should have lat
+      ✓ should have lon
+      ✓ should have empty stops
+      stops
+        ✓ should add one
+      from waypoint
+        ✓ error when no waypoint given
+        ✓ error when waypoint not Waypoint type
+    merge
+      nearby stops
+        ✓ should count 1 nexus
+        nexus
+          ✓ should have 2 stops
+          ✓ should have merged name
+          first stop info
+            ✓ should have agency id
+            ✓ should have stop id
+      other stops
+        ✓ should count 2 nexuses
+        ✓ should count 1 stop in a nexus
+      stops
+        ✓ empty
+        ✓ single
+        ✓ two nearby
+        ✓ two not nearby
+
+  plan controller
+    ✓ should show segment builder
+    build a segment
+      - should make one
+      - should update itinerary on rides refresh
+    itinerary from trip
+      ✓ segment
+    saved trips
+      ✓ show list
+      ✓ select one
+    refresh rides
+      ✓ no agancies
+      ✓ for one segment
+      ✓ for one bart segment
+      ✓ for two sfmuni segments
+      ✓ for a sfmuni and a bart segment
+
+  domain ride
+    create
+      validation error
+        ✓ when no agency
+        ✓ when no route id
+        ✓ when no vehicle id
+        ✓ when no start time
+        ✓ when start time not Date type
+        ✓ when no end time
+        ✓ when end time not Date type
+      value
+        ✓ has agency
+        ✓ has route id
+        ✓ has vehicle id
+        ✓ has start time
+        ✓ has end time
+
+  plan scaling
+    configuration
+      ✓ should reject bad times
+      ✓ should reject equal times
+    error exceptions
+      ✓ should detect no initialization
+      ✓ should detect missing parameter
+    transform
+      ✓ should translate time to x
+      ✓ should extrapolate before
+      ✓ should extrapolate after
+
+  domain segment
+    create
+      validation error
+        ✓ error if origin nexus not given
+        ✓ error if origin nexus not Nexus type
+        ✓ error if no destination nexus given
+        ✓ error if destination nexus not Nexus type
+      value
+        ✓ has origin nexus
+        ✓ has destination nexus
+        ✓ has empty rides
+        ✓ has empty agencies
+        ✓ can set agangies
+        rides
+          ✓ can set rides
+
+  domain stop
+    create
+      validation error
+        ✓ when no name
+        ✓ when no agency id
+        ✓ when no route id
+        ✓ when no stop id
+        ✓ when no lat
+        ✓ when no lon
+        ✓ when invalid lat
+        ✓ when invalid lon
+      value
+        ✓ has initial name
+        ✓ has initial agency id
+        ✓ has initial route id
+        ✓ has initial stop id
+        ✓ has initial lat
+        ✓ has initial lon
+        ✓ accepts zero lat and lon
+        ✓ can set stop tag
+        ✓ has default stop tag
+        ✓ has stop tag
+
+  domain system
+    initialized
+      ✓ has no agencies
+      ✓ has no nexuses
+      ✓ error on find nexus
+    nexuses
+      find
+        ✓ error on nexus not found
+        ✓ finds a nexus
+
+  trip builder
+    initial
+      ✓ has empty waypoints
+      ✓ has default agencies
+      ✓ has default nexuses
+      ✓ is incomplete
+      ✓ can extend
+    for one agency
+      ✓ has waypoints
+      select waypoint
+        ✓ one waypoint
+        ✓ two waypoint
+    add one waypoint
+      ✓ has one waypoint
+      ✓ is incomplete
+      ✓ can extend
+    add two waypoints
+      ✓ has two waypoints
+      ✓ is complete
+      ✓ can extend
+
+  domain trip
+    create
+      validation error
+        ✓ when no origin
+        ✓ when origin not Waypoint type
+        ✓ when no destination
+        ✓ when destination not Waypoint type
+      value
+        ✓ has initial origin
+        ✓ has initial destination
+        ✓ has no initial inner waypoints
+        name
+          ✓ has generated name
+          ✓ has unique generated name
+          ✓ can set name
+    creation from waypoints
+      validation
+        ✓ error when no waypoints list given
+        ✓ error when waypoints list empty
+        ✓ error when waypoints list single
+        ✓ error when not Waypoint type
+      values
+        ✓ has copied waypoints
+        ✓ has inner waypoints
+        ✓ has initial origin
+        ✓ has initial destination
+        ✓ has the waypoints
+    waypoints
+      ✓ can be set
+      - are immutable from setter
+      - are immutable from getter
+      ✓ has all
+      - type preserved by getter
+
+  trip folder
+    deserialize
+      ✓ error on parsing
+      ✓ trip name
+      ✓ origin
+      ✓ destination
+      waypoint
+        - it is a Waypoint
+        ✓ has name
+        ✓ has lat
+        ✓ has lon
+    list
+      ✓ has trip
+
+  domain waypoint
+    create
+      validation error
+        ✓ when no name
+        ✓ when no lat
+        ✓ when no lon
+      value
+        ✓ has initial name
+        ✓ has initial lat
+        ✓ has initial lon
+
+HeadlessChrome 80.0.3987 (Linux 0.0.0): Executed 200 of 211 (skipped 11) SUCCESS (0.999 secs / 0.847 secs)
+TOTAL: 200 SUCCESS
+
+Finished: SUCCESS

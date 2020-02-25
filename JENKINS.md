@@ -1,20 +1,41 @@
-Did an experiment running in Jenkins
-was successful
+# Jenkins
+For continuous integration, this project can be tested on Jenkins.
 
-Bitnami Jenkins on VirtualBox
+Jenkins can be run locally, in a VM, and in the cloud. This exercise used a bitnami 
+image running in a local VirtualBox VM.
 
-Jenkins 1.6.35
-node -v v0.10.25
-npm -v 1.3.10
+## Setup Jenkins in local VM
+The follow steps are needed to get up and running:
 
-## New
-https://bitnami.com/stack/jenkins/virtual-machine
+- install Oracle VirtualBox
+- download the bitnami jenkins .ova
+- create a vm instance from the .ova
+- install Google Chrome Browser on the VM instance
+- create and configure a Jenkins job
+- run the job
 
-Tips:
+### Download the bitnami jenkins
+This page has links: https://bitnami.com/stack/jenkins
 
-Under Build Environment:
+### Google Chrome
+Google Chrome can be installed manually as follows:
 
-Select the option "Provide Node & npm bin/ folder to PATH"
+- login to the VM instance
+- get the latest stable package: ``wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb``
+- install it ``sudo apt install ./google-chrome-stable_current_amd64.deb``
+- verify the it's installed ``ls -l /usr/bin/google-chrome``
 
-For "Cache location, select the option "Local to the workspace"
+### Create and configure a jenkins job
+After creating a new job, the following configuration:
+
+- Source code management, git, ``https://github.com/fweiss/Etappe.git``
+- under "Build Environment": Select the option "Provide Node & npm bin/ folder to PATH"
+- for "Cache location", select the option "Local to the workspace"
+- create a shell step ``npm install``
+- create a shell step ``CHROME_BIN=/usr/bin/google-chrome npm test``
+
+### Run the job
+Click the "Build now" link.
+
+TODO configure a report, add coverage report
 
