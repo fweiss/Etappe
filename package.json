@@ -9,16 +9,16 @@
   },
   "devDependencies": {
     "angular-mocks": "1.6.6",
-    "http-server": "^0.10.0",
+    "http-server": "^0.12.1",
     "jasmine-spec-reporter": "^4.2.1",
-    "karma": "^1.7.1",
+    "karma": "^4.4.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.1",
     "karma-jasmine": "^1.1.2",
     "karma-junit-reporter": "^1.2.0",
     "karma-spec-reporter": "0.0.31",
-    "mountebank": "^1.13.0",
-    "protractor": "^5.4.2",
+    "mountebank": "^2.2.0",
+    "protractor": "^5.4.3",
     "request": "^2.67.0"
   },
   "scripts": {
@@ -32,6 +32,6 @@
     "mountebank": "node node_modules/mountebank/bin/mb"
   },
   "dependencies": {
-    "karma-jasmine-html-reporter": "^1.4.2"
+    "karma-jasmine-html-reporter": "^1.5.2"
   }
 }
