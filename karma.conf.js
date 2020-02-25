@@ -1,4 +1,8 @@
 //jshint strict: false
+
+const os = require('os');
+const chromeHeadlessSupported = os.platform() !== 'win32' || Number((os.release().match(/^(\d+)/) || ['0', '0'])[1]) >= 10;
+
 module.exports = function(config) {
     config.set({
 
@@ -23,11 +27,17 @@ module.exports = function(config) {
         frameworks: ['jasmine'],
 
         browsers: [
-            'Chrome'
+            chromeHeadlessSupported ? 'ChromeHeadless' : 'Chrome'
             //'Firefox'
             //'PhantomJS'
             //'Safari' // don't have current version for Windows
         ],
+        customLaunchers: {
+            ChromeHeadless: {
+                base: 'Chrome',
+                flags: ['--no-sandbox', '--headless', '--disable-gpu', '--remote-debugging-port=9222']
+            }
+        },
         plugins: [
             'karma-chrome-launcher',
             'karma-junit-reporter',
