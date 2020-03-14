@@ -116,7 +116,7 @@ describe('itinerary chart', function() {
                     setItineraryAndApply(itinerary);
                     expect(ctx.lineTo).toHaveBeenCalledWith(0, canvasHeight);
                 });
-                it('should draw a tick', function() {
+                it('draws a tick', function() {
                     itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
                     setItineraryAndApply(itinerary);
                     // 5 minute span 600 px 4/5 of 600 = 480
@@ -126,18 +126,18 @@ describe('itinerary chart', function() {
                     expect(ctx.lineTo).toHaveBeenCalledWith(x, canvasHeight);
                     expect(ctx.stroke).toHaveBeenCalled();
                 });
-                it('should draw all ticks for span', function() {
+                it('draws all ticks for span', function() {
                     itinerary.setSpan(spanStart, addMinutes(spanStart, 60));
                     setItineraryAndApply(itinerary);
                     expect(ctx.moveTo.calls.count()).toBe(12);
                 });
                 // can't spy on strokeStyle property
-                it('should draw minor tick', function() {
+                it('draws minor tick', function() {
                     itinerary.setSpan(addMinutes(spanStart, 1), addMinutes(spanStart, 6));
                     setItineraryAndApply(itinerary);
                     expect(ctx.strokeStyle).toBe('rgba(0, 0, 0, 0.1)');
                 });
-                it('should draw major tick', function() {
+                it('draws major tick', function() {
                     itinerary.setSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
                     setItineraryAndApply(itinerary);
                     expect(ctx.strokeStyle).toBe('rgba(0, 0, 0, 0.5)');
@@ -156,7 +156,7 @@ describe('itinerary chart', function() {
             });
          });
         describe('legend', function() {
-            it('should draw at 15 minute mark', function() {
+            it('draws at 15 minute mark', function() {
                 itinerary.setSpan(addMinutes(spanStart, 12), addMinutes(spanStart, 16));
                 setItineraryAndApply(itinerary);
                 expect(ctx.fillText).toHaveBeenCalledWith('1:15 PM', 452, 10);
@@ -190,14 +190,14 @@ describe('itinerary chart', function() {
                 itinerary.setSpan(new Date(1), new Date(2));
                 setItineraryAndApply(itinerary);
             });
-            it('should draw two fields', function() {
+            it('draws two', function() {
                 expect(ctx.fillRect.calls.count()).toEqual(2);
             });
-            it('should draw first offset field', function() {
+            it('draws first offset', function() {
                 expect(ctx.translate).toHaveBeenCalledWith(0, config.tickLegendHeight + config.waypointLegendHeight);
                 expect(ctx.fillRect).toHaveBeenCalledWith(0, 0, canvasWidth, config.pathFieldHeight);
             });
-            it('should draw second offset field', function() {
+            it('draws second offset', function() {
                 expect(ctx.translate).toHaveBeenCalledWith(0, config.tickLegendHeight + 2 * config.waypointLegendHeight + config.pathFieldHeight);
                 expect(ctx.fillRect).toHaveBeenCalledWith(0, 0, canvasWidth, config.pathFieldHeight);
             });
