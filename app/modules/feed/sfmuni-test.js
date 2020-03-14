@@ -31,7 +31,7 @@ describe('feed sfmuni', function() {
         Segment = segment;
     }));
     describe('parser', function() {
-        it('should accept special characters', function () {
+        it('accepts special characters', function () {
             var xml = '<body><route><stop title="16th & Potrero"></stop><direction><stop></stop></direction></route></body>';
             mockBackend('routeConfig', 55, xml);
             SfMuni.getStopsForRoute('55').then(function (response) {
@@ -49,7 +49,7 @@ describe('feed sfmuni', function() {
         beforeEach(function() {
             xml = '<body><route><stop tag="2345" title="16th and Mission" stopId="12345"></stop><stop title="16th and Potrero"></stop><direction><stop></stop></direction></route></body>';
         });
-        it('should get stops for route', function() {
+        it('get stops for route', function() {
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig&r=55').respond(xml);
             SfMuni.getStopsForRoute('55').then(function(response) {
                 var stops = response.data;
@@ -61,7 +61,7 @@ describe('feed sfmuni', function() {
             });
             httpBackend.flush();
         });
-        it('should sort by name', function() {
+        it('sort by name', function() {
             xml = '<body><route><stop title="16th and Mission" stopId="12345"></stop><stop title="16th and Harrison"></stop><direction><stop></stop></direction></route></body>';
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig&r=55').respond(xml);
             SfMuni.getStopsForRoute('55').then(function(response) {
@@ -74,7 +74,7 @@ describe('feed sfmuni', function() {
             httpBackend.flush();
         });
         // this doesn't really work because it drops stopIds
-        xit('should remove duplicates', function() {
+        xit('remove duplicates', function() {
             var xml2 = '<body><route tag="33"><stop title="16th and Mission" stopId="12345" lat="1.2" lon="2.3"></stop><stop title="16th and Mission" stopId="12346" lat="1.2" lon="2.3"></stop><stop title="16th and Mission" stopId="12345" lat="1.2" lon="2.3"></stop></route></body>';
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml2);
             SfMuni.getAllStops().then(function(response) {
@@ -101,7 +101,7 @@ describe('feed sfmuni', function() {
             httpBackend.flush();
         });
         // FIXME add lat lon parse errors
-        xit('should get allstops', function() {
+        xit('get allstops', function() {
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml);
             SfMuni.getAllStops().then(function(response) {
                 var stops = response.data;
@@ -113,7 +113,7 @@ describe('feed sfmuni', function() {
             httpBackend.flush();
         });
         describe('nexuses', function() {
-            it('should get all', function() {
+            it('get all', function() {
                 var xml1 = '<body><route tag="T"><stop title="16th and Mission" stopId="12345" lat="1" lon="2"></stop><stop title="16th and Mission" stopId="12346" lat="1" lon="2"></stop><stop title="16th and Mission" stopId="12345" lat="1" lon="2"></stop></route></body>';
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
                 SfMuni.getAllNexus().then(function(response) {
@@ -125,7 +125,7 @@ describe('feed sfmuni', function() {
                 });
                 httpBackend.flush();
             });
-            it('should get with route, direction, tag', function() {
+            it('get with route, direction, tag', function() {
                 var xml1 = '<body><route tag="F"><stop tag="2345" title="16th and Mission" stopId="12345" lat="1" lon="2"></stop></route></body>';
                 httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
                 SfMuni.getAllNexus().then(function(response) {
@@ -141,7 +141,7 @@ describe('feed sfmuni', function() {
                 httpBackend.flush();
             });
             // parse '&'
-            it('should merge stops for permuted intersection', function() {
+            it('merge stops for permuted intersection', function() {
                 // FIXME allow &
                 var xml1 = '<body><route tag="F"><stop tag="2345" title="16th & Mission" stopId="12345" lat="1" lon="2"></stop></route><route tag="G"><stop tag="2345" title="Mission & 16th" stopId="12345" lat="1" lon="2"></stop></route></body>';
                 //httpBackend.whenGET(baseUrl + '?a=sf-muni&command=routeConfig').respond(xml1);
@@ -178,7 +178,7 @@ describe('feed sfmuni', function() {
                 + prediction(2357, 33, '6596789')
                 + '</direction></predictions></body>';
         });
-        it('should get predictions for stop id', function() {
+        it('get predictions for stop id', function() {
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=13293').respond(xmlOrigin);
             SfMuni.getPredictionsForStopId('13293').then(function(response) {
                 var predictions = response.data;
@@ -191,7 +191,7 @@ describe('feed sfmuni', function() {
             });
             httpBackend.flush();
         });
-        it('should get rides between two stops', function() {
+        it('get rides between two stops', function() {
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=3293').respond(xmlOrigin);
             httpBackend.whenGET(baseUrl + '?a=sf-muni&command=predictions&stopId=7324').respond(xmlDestination);
             SfMuni.getRides('3293', '7324').then(function(response) {
@@ -206,7 +206,7 @@ describe('feed sfmuni', function() {
             });
             httpBackend.flush();
         });
-        it('should get for multistops', function() {
+        it('get for multistops', function() {
             var now = new Date();
             var predictionXml = '<body><predictions routeTag="N"><direction>' + prediction('4444', 0, '55555') + '</direction></predictions>'
                 + '<predictions routeTag="J"><direction><prediction></prediction></direction></predictions></body>';
@@ -263,7 +263,7 @@ describe('feed sfmuni', function() {
                 superSegment = Segment.createSegment(originNexus, destinationNexus);
 
             });
-            it('should get rides between two stops and correctly match vehicles by time', function() {
+            it('get rides between two stops and correctly match vehicles by time', function() {
                 epochMilliSeconds = now.getTime();
                 xmlOrigin = '<body><predictions routeTag="55"><direction>'
                     + prediction(2356, 11, '6596789')
@@ -287,7 +287,7 @@ describe('feed sfmuni', function() {
                 });
                 httpBackend.flush();
             });
-            it('should error for no stops', function() {
+            it('error for no stops', function() {
                 var originNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w1', 1, 2));
                 var destinationNexus = Nexus.createFromWaypoint(Waypoint.createWaypoint('w2', 1, 3));
                 expect(function() {
@@ -295,7 +295,7 @@ describe('feed sfmuni', function() {
                 }).toThrow(new Error('segment does not specify any stops'));
             });
             // needs $http.interrceptors
-            xit('should error for backend error', function() {
+            xit('error for backend error', function() {
                 var xml = '<body copyright="All data copyright San Francisco Muni 2016.">'
                     + '<Error shouldRetry="false">The stop \'NA|\' was invalid because it did not contain a route, optional dir, and stop tag</Error>'
                 + '</body>';
@@ -330,7 +330,7 @@ describe('feed sfmuni', function() {
                     SfMuni.getRidesForSegment(segment);
                 }).toThrow(new Error('segment does not specify any stops'));
             });
-            it('should get a ride for multi stops', function() {
+            it('get a ride for multi stops', function() {
                 whenGetPredictionsForMultiStops('N|2222').respond(predictionsForRoute('N', [
                     { vehicle: '4444', tripTag: '44444', epochTime: offsetTimeMinutes(0) }
                 ]));
@@ -358,7 +358,7 @@ describe('feed sfmuni', function() {
 
                 httpBackend.flush();
             });
-            it('should not be duplicate', function() {
+            it('not be duplicate', function() {
                 // observed that the muni predictions are duplicated, route 37, but it's the prediction time off by seconds
 
                 whenGetPredictionsForMultiStops('R1|ST1').respond(predictionsForRoute('R1', [
@@ -415,11 +415,11 @@ describe('feed sfmuni', function() {
     describe('utilities', function() {
         describe('permute stop streets', function() {
             describe('with &', function() {
-                it('should match', function() {
+                it('for matching', function() {
                     var title = SfMuni.unPermuteStopTitle('x & y');
                     expect(title).toBe('x & y');
                 });
-                it('should flip', function() {
+                it('for flipped', function() {
                     var title = SfMuni.unPermuteStopTitle('y & x');
                     expect(title).toBe('x & y');
                 });
