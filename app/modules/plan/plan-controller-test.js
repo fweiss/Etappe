@@ -45,7 +45,7 @@ describe('plan controller', function() {
         requestHandler = $httpBackend.whenGET(new RegExp('.*'));
 
     }));
-    it('should show segment builder', function() {
+    it('shows segment builder', function() {
 
     });
     describe('build a segment', function() {

@@ -15,23 +15,23 @@ describe('domain nexus', function() {
             var waypoint = Waypoint.createWaypoint('abc', 15, -31);
             nexus = NexusService.createFromWaypoint(waypoint);
         });
-        it('should have Nexus type', function() {
+        it('has Nexus type', function() {
             expect(nexus.constructor.name).toBe('Nexus');
         });
-        it('should have canonical name', function() {
+        it('has canonical name', function() {
             expect(nexus.getName() ).toBe('abc');
         });
-        it('should have lat', function() {
+        it('has lat', function() {
             expect(nexus.getLat()).toBe(15);
         });
-        it('should have lon', function() {
+        it('has lon', function() {
             expect(nexus.getLon()).toBe(-31);
         });
-        it('should have empty stops', function() {
+        it('has empty stops', function() {
             expect(nexus.getStops().length).toBe(0);
         });
         describe('stops', function() {
-            it('should add one', function() {
+            it('add one', function() {
                 nexus.addStop({ name: 's1' });
                 expect(nexus.getStops().length).toBe(1);
             });

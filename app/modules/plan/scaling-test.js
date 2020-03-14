@@ -11,12 +11,12 @@ describe('plan scaling', function() {
     beforeEach(module('plan'));
     describe('configuration', function () {
         var e1 = 'chart: end must be greater than start';
-        it('should reject bad times', inject(function (chart) {
+        it('rejects bad times', inject(function (chart) {
             expect(function () {
                 chart.setTimeSpan(1, 0);
             }).toThrow(e1);
         }));
-        it('should reject equal times', inject(function (chart) {
+        it('rejects equal times', inject(function (chart) {
             expect(function () {
                 chart.setTimeSpan(1, 1);
             }).toThrow(e1);
@@ -30,7 +30,7 @@ describe('plan scaling', function() {
                 chart.timeToX(0);
             }).toThrowError(e1);
         }));
-        it('should detect missing parameter', inject(function (chart) {
+        it('detects missing parameter', inject(function (chart) {
             chart.setTimeSpan(spanStart, spanEnd);
             expect(function () {
                 chart.timeToX();
@@ -44,15 +44,15 @@ describe('plan scaling', function() {
             chart.setWidth(601);
             chart.setTimeSpan(spanStart, spanEnd);
         }));
-        it('should translate time to x', function () {
+        it('translates time to x', function () {
             var time = new Date('2013-02-22T13:30');
             expect(chart.timeToX(time)).toBe(300);
         });
-        it('should extrapolate before', function () {
+        it('extrapolates before', function () {
             var time = new Date('2013-02-22T12:45');
             expect(chart.timeToX(time)).toBe(-151);
         });
-        it('should extrapolate after', function () {
+        it('extrapolates after', function () {
             var time = new Date('2013-02-22T14:45');
             expect(chart.timeToX(time)).toBe(600 + 451);
         });

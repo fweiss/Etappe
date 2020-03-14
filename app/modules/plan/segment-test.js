@@ -14,19 +14,19 @@ describe('domain segment', function() {
             beforeEach(function() {
                 nexus = Nexus.create('n', 1, 2);
             });
-            it('error if origin nexus not given', function() {
+            it('when origin nexus not given', function() {
                 var e1 = new Error('createSegment: requires origin nexus');
                 expect(function() { Segment.createSegment(); }).toThrow(e1);
             });
-            it('error if origin nexus not Nexus type', function() {
+            it('when origin nexus not Nexus type', function() {
                 var e1 = new Error('createSegment: origin nexus not Nexus type');
                 expect(function() { Segment.createSegment({}); }).toThrow(e1);
             });
-            it('error if no destination nexus given', function() {
+            it('when no destination nexus given', function() {
                 var e1 = new Error('createSegment: requires destination nexus');
                 expect(function() { Segment.createSegment(nexus); }).toThrow(e1);
             });
-            it('error if destination nexus not Nexus type', function() {
+            it('when destination nexus not Nexus type', function() {
                 var e1 = new Error('createSegment: destination nexus not Nexus type');
                 expect(function() { Segment.createSegment(nexus, {}); }).toThrow(e1);
             });
@@ -52,7 +52,7 @@ describe('domain segment', function() {
             it('has empty agencies', function() {
                 expect(segment.getAgencies()).toEqual([]);
             });
-            it('can set agangies', function() {
+            it('can set agencies', function() {
                 segment.setAgencies([ 'a' ]);
                 expect (segment.getAgencies()).toEqual([ 'a' ]);
             });
