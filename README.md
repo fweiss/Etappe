@@ -170,6 +170,14 @@ selenium driver jar issue
 
 may need to update chromedriver: https://www.swtestacademy.com/install-chrome-driver-on-mac/
 
+### Updating test environment
+From time to time, it's necessary to update compoents of th test environment. 
+Follwoing are some of the common issue.
+
+#### This version of ChromeDriver only supports Chrome version 78
+- [Webdriver from Chrome](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+- node_modules/protractor/bin/webdriver-manager update
+
 ### BDD with Protractor and IntellIJ
 
 The Protractor tests are not fully end-to-end because the data that would come from the transit servers varies over time.
