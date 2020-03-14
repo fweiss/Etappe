@@ -3,7 +3,7 @@ describe('etappe', function() {
         browser.get('http://localhost:8080/app/index.html');
         browser.executeScript('window.localStorage.clear()')
     })
-    fdescribe('trip storage', function() {
+    describe('trip storage', function() {
         it('has navigate button', function() {
             expect(element(by.id('showSavedTrips')).isPresent()).toBe(true)
         })
