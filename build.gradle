@@ -19,10 +19,10 @@ task sketchPublish(type: Copy) {
     from('app') {
         include '**/*.*'
         exclude '**/*-test.*'
-        exclude 'README.MD'
+        exclude 'README.md'
         exclude 'mock.html'
     }
-    into '$sketchDir/etappe'
+    into "$sketchDir/etappe"
 }
 // TODO: use plugin to remove platform dependency
 import org.apache.tools.ant.taskdefs.condition.Os
