@@ -15,22 +15,14 @@ ant.taskdef(
     classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
     classPath: configurations.scp.asPath
 )
-
-task awsPublish() {
-    doLast {
-        ant.scp(
-            todir: "$awsUserid@$awsHostname:$awsDocroot",
-            keyfile: "$awsKeyfile",
-            trust: 'true',
-            passphrase: '',
-            verbose: 'true'
-        ) {
-            fileset(dir: 'app') {
-                include(name: '**/*.*')
-                exclude(name: '**/*-test.*')
-            }
-        }
+task sketchPublish(type: Copy) {
+    from('app') {
+        include '**/*.*'
+        exclude '**/*-test.*'
+        exclude 'README.MD'
+        exclude 'mock.html'
     }
+    into '$sketchDir/etappe'
 }
 // TODO: use plugin to remove platform dependency
 import org.apache.tools.ant.taskdefs.condition.Os
