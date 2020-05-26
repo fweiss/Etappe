@@ -6,7 +6,7 @@ describe('feed bart', function() {
     var Stop;
 
     var httpBackend;
-    var baseUrl = 'http://api.bart.gov/api';
+    var baseUrl = 'https://api.bart.gov/api';
 
     beforeEach(module('agencies', 'plan'));
     beforeEach(inject(function(bart, $httpBackend, waypoint, segment, nexus, stop) {
@@ -52,7 +52,8 @@ describe('feed bart', function() {
             + '<trip origin="RICH" destination="FRMT" origTimeMin="10:57 AM" origTimeDate="09/23/2016" destTimeMin="11:22 AM" destTimeDate="09/23/2016"></trip>'
             + '</request></schedule>'
             + '</root>';
-        httpBackend.whenGET('http://api.bart.gov/api/sched.aspx?a=4&cmd=depart&date=now&dest=FRMT&key=MW9S-E7SL-26DU-VV8V&orig=RICH').respond(xml);
+        // FIXME duplicate code
+        httpBackend.whenGET('https://api.bart.gov/api/sched.aspx?a=4&cmd=depart&date=now&dest=FRMT&key=MW9S-E7SL-26DU-VV8V&orig=RICH').respond(xml);
         var n1 = Nexus.createFromWaypoint(w1);
         n1.addStop(Stop.createStop('Richmond', 'bart', 'r1', 'RICH', 2, 3));
         var n2 = Nexus.createFromWaypoint(w2);

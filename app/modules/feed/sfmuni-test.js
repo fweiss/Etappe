@@ -2,7 +2,7 @@
 "use strict";
 
 describe('feed sfmuni', function() {
-    var baseUrl = 'http://webservices.nextbus.com/service/publicXMLFeed';
+    var baseUrl = 'https://webservices.nextbus.com/service/publicXMLFeed';
     var SfMuni;
     var httpBackend;
     var rootScope;

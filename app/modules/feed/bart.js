@@ -2,7 +2,7 @@ angular.module('agencies')
 .service('bart', [ '$q', '$http', 'stop', 'ride', function($q, $http, Stop, Ride) {
     var $ = $ || angular.element;
     var parser = new DOMParser();
-    var baseUrl = 'http://api.bart.gov/api';
+    var baseUrl = 'https://api.bart.gov/api';
     // a bit too simple to unit test?
     function convertToDate(date, time) {
         var datetime = new Date();
