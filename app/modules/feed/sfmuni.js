@@ -141,7 +141,6 @@ angular.module('agencies', [ 'sfmuni.config' ])
                 var config = {
                     url: baseUrl,
                     params: params,
-                    headers: { 'Referrer-Policy' : 'no-referrer-when-downgrade'},
                     transformResponse: function(response) {
                         var root = $(parser.parseFromString(response, 'text/xml'));
                         return transform(root);

@@ -30,18 +30,6 @@ describe('feed sfmuni', function() {
         Stop = stop;
         Segment = segment;
     }));
-    describe('request header', function() {
-        // sfmuni appears to enforce this for https-to-https api
-        it('has referrer policy', function() {
-            var xml = '<body><route><stop title="16th & Potrero"></stop><direction><stop></stop></direction></route></body>';
-            httpBackend.expectGET(baseUrl + '?a=sf-muni&command=routeConfig', function(headers) {
-                return  headers['Referrer-Policy'] === 'no-referrer-when-downgrade';
-            }).respond(200, '');
-            SfMuni.getAllStops().then(function (response) {
-            });
-            httpBackend.flush();
-        });
-    });
     describe('parser', function() {
         it('accepts special characters', function () {
             var xml = '<body><route><stop title="16th & Potrero"></stop><direction><stop></stop></direction></route></body>';
