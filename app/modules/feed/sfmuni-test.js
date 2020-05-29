@@ -35,7 +35,7 @@ describe('feed sfmuni', function() {
         it('has referrer policy', function() {
             var xml = '<body><route><stop title="16th & Potrero"></stop><direction><stop></stop></direction></route></body>';
             httpBackend.expectGET(baseUrl + '?a=sf-muni&command=routeConfig', function(headers) {
-                return  headers['Referrer-Policy'] !== 'no-referrer-when-downgrade';
+                return  headers['Referrer-Policy'] === 'no-referrer-when-downgrade';
             }).respond(200, '');
             SfMuni.getAllStops().then(function (response) {
             });
