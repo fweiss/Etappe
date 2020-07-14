@@ -4,3 +4,4 @@ node_modules
 mb.log
 mb.pid
 coverage
+gradle.properties

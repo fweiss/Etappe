@@ -171,12 +171,20 @@ selenium driver jar issue
 may need to update chromedriver: https://www.swtestacademy.com/install-chrome-driver-on-mac/
 
 ### Updating test environment
-From time to time, it's necessary to update compoents of th test environment. 
-Follwoing are some of the common issue.
+From time to time, it's necessary to update compoents of the test environment. 
+Following are some of the common issues.
 
-#### This version of ChromeDriver only supports Chrome version 78
-- [Webdriver from Chrome](https://sites.google.com/a/chromium.org/chromedriver/downloads)
-- `` node node_modules/protractor/bin/webdriver-manager update``
+#### This version of ChromeDriver only supports Chrome version nn
+You may encounter this error when running the Protractor tests.
+ChromeDriver depends Chrome installed on the system.
+Chrome usually updates automatically, therefore it can get ahead of the ChromeDriver version.
+The solution is to manually upgrade ChromeDriver as follows:
+
+- open Chrome and note the version, such as '83' 
+- go to [Webdriver for Chrome](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+- download the version that matches the version of Chrome
+- (mac) ``sudo mv ~/Downloads/chromedriver /usr/ocal/bin``
+- node_modules/protractor/bin/webdriver-manager update
 
 ### BDD with Protractor and IntellIJ
 

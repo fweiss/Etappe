@@ -13,7 +13,7 @@
  * @returns {{}}
  */
 angular.module('sfmuni.config', [])
-    .value('config', { baseUrl: 'http://webservices.nextbus.com/service/publicXMLFeed' });
+    .value('config', { baseUrl: 'https://webservices.nextbus.com/service/publicXMLFeed' });
 
 angular.module('agencies', [ 'sfmuni.config' ])
     .service('sfMuni', [ 'config', '$http', '$q', 'stop', 'ride', function(config, $http, $q, Stop, Ride) {
