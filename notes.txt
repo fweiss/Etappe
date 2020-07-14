@@ -26,5 +26,24 @@ angularjs notes;
 
 http://toddmotto.com/opinionated-angular-js-styleguide-for-teams/
 
+https://groups.google.com/forum/#!forum/nextbus-api-discuss
+
+https://kurtraschke.com/2013/11/nextbus-api/
+
+industry-standard SIRI or GTFS-realtime formats
+
+https://transitfeeds.com/p/sfmta/60
+
+https://www.bart.gov/schedules/developers/gtfs-realtime
+
+BART has GTFS+realtime
+SFMUNI has only GTFS
+
+## 511.org
+
+https://transitdata.net/a-cheat-sheet-for-bay-area-511-gtfs-rt-feeds/
+
+
+
 
 

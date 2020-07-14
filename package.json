@@ -19,7 +19,7 @@
     "karma-spec-reporter": "0.0.31",
     "mountebank": "^2.2.0",
     "protractor": "^5.4.3",
-    "request": "^2.67.0"
+    "request": "^2.88.2"
   },
   "scripts": {
     "postinstall": "cd app && npm install",

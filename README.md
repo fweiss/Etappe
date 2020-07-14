@@ -176,7 +176,7 @@ Follwoing are some of the common issue.
 
 #### This version of ChromeDriver only supports Chrome version 78
 - [Webdriver from Chrome](https://sites.google.com/a/chromium.org/chromedriver/downloads)
-- node_modules/protractor/bin/webdriver-manager update
+- `` node node_modules/protractor/bin/webdriver-manager update``
 
 ### BDD with Protractor and IntellIJ
 
