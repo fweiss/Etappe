@@ -8,7 +8,7 @@ image running in a local VirtualBox VM.
 The follow steps are needed to get up and running:
 
 - install Oracle VirtualBox
-- download the bitnami jenkins .ova
+- download the bitnami jenkins .ova file
 - create a vm instance from the .ova
 - install Google Chrome Browser on the VM instance
 - create and configure a Jenkins job
@@ -16,6 +16,10 @@ The follow steps are needed to get up and running:
 
 ### Download the bitnami jenkins
 This page has links: https://bitnami.com/stack/jenkins
+
+### Create a VM instance
+In VirtualBox, sleect File > Import Appliance and choose the .ova file.
+The defaults are pretty reasonable.
 
 ### Google Chrome
 Google Chrome can be installed manually as follows:

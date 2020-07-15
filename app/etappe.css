@@ -1,5 +1,6 @@
 body {
     font-family: sans-serif;
+    padding: 2px;
 }
 canvas {
     border: 1px solid black;
