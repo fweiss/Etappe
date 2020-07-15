@@ -32,3 +32,8 @@ Why? Orgaize tests/specs by domain. Hence in the tree structure the domain is at
 the childres on that break out the api functionaliy.
 One of the cheif funtions is the creational methods.
 Others are getters/setters, transformational, query.
+
+## Karma test report
+The Karma Server tab has a text report that can be copied to the clipboard.
+
+How to get the test report that shows those that are missing expectation?
